@@ -19,18 +19,16 @@
                 <tr>
                     <td>Hello</td>
                     <td>
-                        <div class="dropdown show">
-                            <a class="btn btn-primary btn-sm dropdown-toggle" href="#" role="button"
-                                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Action
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="{{ route('academic-year') }}">Edit</a>
-                                <a class="dropdown-item" href="{{ route('academic-year') }}">Delete</a>
-                            </div>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Edit</a></li>
+                                <li><a class="dropdown-item" href="#">Delete</a></li>
+                            </ul>
                         </div>
-
                     </td>
                 </tr>
 
