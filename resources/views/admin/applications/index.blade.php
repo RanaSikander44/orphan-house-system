@@ -4,6 +4,7 @@
 <div class="container-fluid px-4">
     <h3 class="mt-4">Applications</h3>
 
+    <a href="{{route('application.add')}}" class="btn btn-sm btn-primary float-end">Add New Student</a>
     <div class="card bg-white p-3 mt-5 border-0 shadow-sm rounded">
         <table class="table table-striped">
             <thead class="bg-light">
@@ -13,10 +14,15 @@
                     <th scope="col">Father Name</th>
                     <th scope="col">Date Of Birth</th>
                     <th scope="col">Gender</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <td>Hello</td>
+                    <td>Hello</td>
+                    <td>Hello</td>
+                    <td>Hello</td>
                     <td>Hello</td>
                     <td>
                         <div class="dropdown show">
