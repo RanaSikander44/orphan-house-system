@@ -8,17 +8,19 @@
                     Dashboard
                 </a>
                 <div class="sb-sidenav-menu-heading">Applications</div>
+                <a class="nav-link {{ request()->is('academic-year') ? 'active' : '' }}"
+                    href="{{ route('academic-year') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-graduation-cap"></i></div>
+                    Academic Years
+                </a>
+                
                 <a class="nav-link {{ request()->is('application') ? 'active' : '' }}"
                     href="{{ route('applications') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                     Applications
                 </a>
 
-                <a class="nav-link {{ request()->is('academic-year') ? 'active' : '' }}"
-                    href="{{ route('academic-year') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-graduation-cap"></i></div>
-                    Academic Years
-                </a>
+
             </div>
         </div>
 
