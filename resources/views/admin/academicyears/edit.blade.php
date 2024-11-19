@@ -3,7 +3,6 @@
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-
 <div class="container-fluid px-4 ">
     <h3 class="mt-4">Academic years</h3>
     <div class="row">
@@ -11,27 +10,29 @@
             <div class="card bg-white border-0 shadow-sm p-1 mt-5 mb-5">
                 <div class="card-body">
                     <h5 class="">Add Academic Year</h5>
-                    <form action="{{route('academic-year.save')}}" method="post">
+                    <form action="{{route('academic-year.update', $rowforedit->id)}}" method="post">
                         @csrf
                         <label for="year" class="text-muted mt-2 mb-2">Year <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="year" placeholder="Enter Year" required>
+                        <input type="number" class="form-control" name="year" placeholder="Enter Year"
+                            value="{{$rowforedit->year}}" required>
 
                         <label for="Year Title" class="text-muted mt-3 mb-2">Year Title <span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="title" placeholder="Enter Year Title" required>
+                        <input type="text" class="form-control" name="title" placeholder="Enter Year Title"
+                            value="{{$rowforedit->title}}" required>
 
                         <label for="Starting Date" class="text-muted mt-3 mb-2">Starting Date <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control dateselector" name="starting_date"
-                            placeholder="Select Starting Date" required>
+                            placeholder="Select Starting Date" value="{{$rowforedit->starting_date}}" required>
 
                         <label for="Ending Date" class="text-muted mt-3 mb-2">Ending Date <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control dateselector" name="ending_date"
-                            placeholder="Select Ending Date" required>
+                            placeholder="Select Ending Date" value="{{$rowforedit->ending_date}}" required>
 
                         <button class="p-2 btn btn-primary btn-sm mt-4 ms-5">
-                            <i class="fas fa-check"></i> Save
+                            <i class="fas fa-check"></i> Update
                         </button>
                     </form>
                 </div>
