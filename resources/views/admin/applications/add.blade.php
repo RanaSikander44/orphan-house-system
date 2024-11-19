@@ -1,10 +1,6 @@
 @extends('admin.default')
 @section('content')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <div class="container-fluid px-4">
     <h3 class="mt-4">Add New Application</h3>
 
@@ -30,6 +26,7 @@
             <div class="tab-pane fade show active" style="width : 100%;" id="home">
                 <div class="p-3">
                     <div class="row d-flex">
+                        <!-- Academic Informations -->
                         <div class="col-6">
                             <div class="card bg-light border-0 shadow-none">
                                 <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
@@ -41,27 +38,69 @@
                                         <div class="col-6 mb-2">
                                             <label for="" class="text-muted mb-2 ">Academic Year </label>
                                             <div class="cp_wrapper">
-                                                <select class="select2" name="color">
-                                                    <option value="black">Black</option>
-                                                    <option value="white">White</option>
-                                                    <option value="gold">Gold</option>
+                                                <select class="select2" name="year_id">
+                                                    @forelse ($years as $list)
+                                                        <option value="{{$list->id}}">
+                                                            {{$list->title . ' [' . $list->year . ']'}}
+                                                        </option>
+                                                    @empty
+                                                        <option value="">No Years available</option>
+                                                    @endforelse
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <label for="" class="text-muted mb-2 ">Admission Number </label>
-                                            <input type="text" class="form-control">
+                                            <label for="" class="text-muted mb-2 ">Admission Number</label>
+                                            <input type="text" class="form-control" name="admission_no"
+                                                value="{{$newAdmissionNumber}}">
+                                        </div>
+
+                                        <div class="col-6 mt-3">
+                                            <label for="" class="text-muted mb-2 ">Admission Date</label>
+                                            <input type="text" class="form-control dateselector" name="admission_date"
+                                                placeholder="Select Admission Date" required>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
+                        <!-- Personal Informations -->
                         <div class="col-6">
-                            <div class="card bg-light border-0">
+                            <div class="card bg-light border-0 shadow-none">
+                                <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                    <p class="text-muted">Personal Information</p>
+                                    <hr class="w-100" style="font-weight : 200px;">
+                                </div>
                                 <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6 mb-2">
+                                            <label for="" class="text-muted mb-2 ">First Name </label>
+                                            <input type="text" class="form-control" placeholder="Enter First Name" name="first_name">
+                                        </div>
+
+                                        <div class="col-6 mb-2">
+                                            <label for="" class="text-muted mb-2 ">Last Name </label>
+                                            <input type="text" class="form-control" placeholder="Enter Last Name" name="last_name">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="" class="text-muted mb-2 ">Admission Number</label>
+                                            <input type="text" class="form-control" name="admission_no"
+                                                value="{{$newAdmissionNumber}}">
+                                        </div>
+
+                                        <div class="col-6 mt-3">
+                                            <label for="" class="text-muted mb-2 ">Admission Date</label>
+                                            <input type="text" class="form-control dateselector" name="admission_date"
+                                                placeholder="Select Admission Date" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -116,51 +155,18 @@
 <script>
     $(document).ready(function () {
         $('.select2').select2({
-            dropdownParent: $('.cp_wrapper') // Replace `.cp_wrapper` with your container
+            dropdownParent: $('.cp_wrapper')
         });
     });
 </script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    $(".dateselector").flatpickr({
+        dateFormat: "Y-m-d", // Define the desired date format
+    });
+</script>
+
 @endsection
-
-
-
-
-<style>
-    .select2-container {
-        width: 100% !important;
-    }
-
-    .select2-container .select2-selection--single {
-        height: 40px !important;
-        /* Adjust height */
-        line-height: 48px !important;
-        /* Center text vertically */
-        padding: 5px 5px !important;
-        /* Adjust padding */
-        border: 1px solid #C0C0C0 !important;
-        /* Ensure border styling */
-        border-radius: 5px !important;
-        /* Rounded corners */
-        background-color: #FFFFFF !important;
-    }
-
-    .select2-container .select2-selection__rendered {
-        color: #000000 !important;
-        font-size: 16px !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 40px !important;
-        width: 40px !important;
-    }
-
-    .select2-container .select2-dropdown {
-        border-radius: 5px !important;
-        border: 1px solid #C0C0C0 !important;
-    }
-
-    .select2-container .select2-search--dropdown .select2-search__field {
-        padding: 5px !important;
-        font-size: 12px !important;
-    }
-</style>
