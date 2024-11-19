@@ -21,3 +21,14 @@
     font-weight: bolder;
     text-align: start;
 }
+
+
+/* Css for the admission student pills menues */
+
+#menuTabs .nav-item a {
+
+    width: 74%;
+
+}
+
+

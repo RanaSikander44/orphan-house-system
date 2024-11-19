@@ -4,6 +4,8 @@
 <div class="container-fluid px-4">
     <h3 class="mt-4">Applications</h3>
 
+    <a href="{{ route('application.add') }}" class="btn btn-sm btn-primary float-end">Add New Student</a>
+
     <div class="card bg-white p-3 mt-5 border-0 shadow-sm rounded">
         <table class="table table-striped">
             <thead class="bg-light">
@@ -18,10 +20,13 @@
             <tbody>
                 <tr>
                     <td>Hello</td>
+                    <td>Hello</td>
+                    <td>Hello</td>
+                    <td>Hello</td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 Action
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
