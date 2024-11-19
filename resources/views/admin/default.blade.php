@@ -18,6 +18,7 @@
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="{{asset('backend/js/toast.js')}}"></script>
+    <link rel="stylesheet" href="{{asset('backend/css/dashboard.css')}}">
 </head>
 
 <body class="sb-nav-fixed bg-light">
