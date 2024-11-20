@@ -4,7 +4,10 @@
 <div class="container-fluid px-4">
     <h3 class="mt-4">Applications</h3>
 
+    <a href="{{ route('application.add') }}" class="btn btn-sm btn-primary float-end">Add New Student</a>
+
     <div class="card bg-white p-3 mt-5 border-0 shadow-sm rounded">
+        <h5 class="text-muted mb-3">Applications List</h5>
         <table class="table table-striped">
             <thead class="bg-light">
                 <tr>
@@ -16,22 +19,41 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Hello</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Action
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                <li><a class="dropdown-item" href="#">Delete</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-
+                @forelse ($students as $list)
+                    <tr>
+                        <td>{{$list->admission_no}}</td>
+                        <td>{{$list->first_name}}</td>
+                        <td>{{$list->last_name}}</td>
+                        <td>{{$list->dob->format('d M, Y')}}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                    id="dropdownMenuButton{{ $list->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Action
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('students.edit', $list->id) }}"
+                                            title="Edit Student">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('students.destroy', $list->id) }}"
+                                            title="Delete Student"
+                                            onclick="return confirm('Are you sure you want to delete this student?')">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td class="text-center" colspan="5">No Applications Found!</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
 
