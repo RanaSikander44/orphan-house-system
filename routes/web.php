@@ -41,6 +41,7 @@ Route::get('academic-year/delete/{id}', [AcademicYearController::class, 'delete'
 
 
 // Students Applications
-Route::get('application', [ApplicationController::class, 'index'])->name('applications');
-Route::get('application/add', [ApplicationController::class, 'add'])->name('application.add');
+Route::get('applications', [ApplicationController::class, 'index'])->name('applications');
+Route::get('applications/add', [ApplicationController::class, 'add'])->name('application.add');
+Route::post('applications/store', [ApplicationController::class, 'store'])->name('application.store');
 
