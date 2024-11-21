@@ -11,6 +11,23 @@ Route::get('/', function () {
 });
 
 
+// Register routes
+Route::view('register', 'register')->name('register');
+Route::post('registerSave', [UserController::class, 'register'])->name('registerSave');
+
+// Login routes
+Route::view('login', 'login')->name('login');
+Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
+
+// Dashboard route (protected)
+Route::get('admin/dashboard', [UserController::class, 'dashboardPage'])->middleware('auth')->name('admin.Dashboard');
+
+// Logout
+Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+
+
+
+
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -26,18 +43,4 @@ Route::get('academic-year/delete/{id}', [AcademicYearController::class, 'delete'
 // Students Applications
 Route::get('application', [ApplicationController::class, 'index'])->name('applications');
 Route::get('application/add', [ApplicationController::class, 'add'])->name('application.add');
-
-// Register routes
-Route::view('register', 'register')->name('register');
-Route::post('registerSave', [UserController::class, 'register'])->name('registerSave');
-
-// Login routes
-Route::view('login', 'login')->name('login');
-Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
-
-// Dashboard route (protected)
-Route::get('admin/dashboard', [UserController::class, 'dashboardPage'])->middleware('auth')->name('admin.Dashboard');
-
-// Logout
-Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
 
