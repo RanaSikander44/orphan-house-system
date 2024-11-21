@@ -65,10 +65,11 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" href="{{ route('academic-year.edit', $list->id) }}">
+                                                <i class="fa fa-edit"></i> Edit</a>
                                             <a class="dropdown-item"
-                                                href="{{ route('academic-year.edit', $list->id) }}">Edit</a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('academic-year.delete', $list->id) }}">Delete</a>
+                                                href="{{ route('academic-year.delete', $list->id) }}">
+                                                <i class="fa fa-trash"></i> Delete</a>
                                         </div>
                                     </div>
 

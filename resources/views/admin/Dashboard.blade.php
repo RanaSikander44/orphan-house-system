@@ -2,10 +2,6 @@
 
 @section('content')
 <div class="container-fluid px-4">
-  
-    <ol class="breadcrumb mb-4">
-       
-    </ol>
     <div class="row">
         <div class="col-12">
             <div class="card bg-white text-dark mb-4 rounded-2">
