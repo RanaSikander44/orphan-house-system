@@ -2,10 +2,8 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Dashboard</h3>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
+    <h4 class="mt-4">Welcome  {{ Auth::user()->name }}</h4>
+
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
