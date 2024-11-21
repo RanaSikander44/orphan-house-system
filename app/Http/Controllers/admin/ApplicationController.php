@@ -5,8 +5,11 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
 use App\Models\student;
+use App\Models\ParentModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 
 
@@ -29,7 +32,7 @@ class ApplicationController extends Controller
 
     public function store(Request $req)
     {
-
+        // dd($req->all());
         $validator = Validator::make($req->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -49,11 +52,18 @@ class ApplicationController extends Controller
             'weight' => 'nullable|numeric',
         ]);
 
+
         if ($validator->fails()) {
             return redirect()->route('application.add')
                 ->withErrors($validator)
                 ->withInput();
         }
+
+
+        $image = $req->file('student_image');
+        $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('backend/images/students');
+        $image->move($destinationPath, $uniqueName);
 
         //  dd($req->all());
         $application = new Student();
@@ -73,7 +83,44 @@ class ApplicationController extends Controller
         $application->blood_group = $req->blood_group;
         $application->height = $req->height;
         $application->weight = $req->weight;
+        $application->student_image = $uniqueName;
+
         $application->save();
+
+
+        if ($req->parent_status === 'guardian') {
+            $data = new ParentModel();
+            $data->student_id = $application->id;
+            $data->guardian_name = $req->guardian_name;
+            $data->guardian_last_name = $req->guardian_last_name;
+            $data->guardian_gender = $req->guardian_gender;
+            $data->guardian_email = $req->guardian_email;
+            $data->guardian_occupation = $req->guardian_occupation;
+            $data->guardian_phone_no = $req->guardian_phone_no;
+            $data->save();
+        } elseif ($req->parent_status === "mother") {
+
+            $data = new ParentModel();
+            $data->student_id = $application->id;
+            $data->mother_name = $req->guardian_name;
+            $data->mother_last_name = $req->guardian_last_name;
+            $data->mother_email = $req->mother_email;
+            $data->mother_occupation = $req->mother_occupation;
+            $data->mother_phone_no = $req->mother_phone_no;
+            $data->save();
+
+        } elseif ($req->parent_status === "father") {
+
+            $data = new ParentModel();
+            $data->student_id = $application->id;
+            $data->father_name = $req->father_name;
+            $data->father_last_name = $req->father_last_name;
+            $data->father_email = $req->father_email;
+            $data->father_occupation = $req->father_occupation;
+            $data->father_phone_no = $req->father_phone_no;
+            $data->save();
+
+        }
 
         if ($application->save()) {
             return redirect()->route('applications')->with('success', 'Student Added !');

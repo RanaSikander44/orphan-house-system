@@ -1,6 +1,7 @@
 @extends('admin.default')
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <div class="container-fluid px-4">
     <h3 class="mt-4">Add New Application</h3>
 
@@ -21,7 +22,7 @@
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
         <!-- Tab Content -->
-        <form method="post" action="{{route('application.store')}}">
+        <form method="post" action="{{route('application.store')}}" enctype="multipart/form-data">
             @csrf
             <div class="tab-content">
 
@@ -43,8 +44,7 @@
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" placeholder="Enter First Name"
-                                                    name="first_name">
+                                                <input type="text" class="form-control" name="first_name">
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -54,8 +54,7 @@
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" placeholder="Enter Last Name"
-                                                    name="last_name">
+                                                <input type="text" class="form-control" name="last_name">
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -81,8 +80,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector" name="dob"
-                                                    placeholder="Select Admission Date">
+                                                <input type="text" class="form-control dateselector" name="dob">
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -108,8 +106,7 @@
                                             <!-- Caste -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Caste</label>
-                                                <input type="text" class="form-control" name="caste"
-                                                    placeholder="caste">
+                                                <input type="text" class="form-control" name="caste">
                                             </div>
                                         </div>
                                     </div>
@@ -162,11 +159,28 @@
                                                 <label for="" class="text-muted mb-2">Admission Date <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector"
-                                                    name="admission_date" placeholder="Select Admission Date">
+                                                    name="admission_date">
 
                                                 @error('admission_date')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
+                                            </div>
+
+                                           <div class="col-6"></div>
+
+                                            <div class="col-6 mt-3">
+                                                <label for="" class="text-muted mb-2">Student Image</label>
+                                                <div class="image-input">
+                                                    <input type="file" accept="image/*" id="imageInput"
+                                                        name="student_image" class="d-none">
+                                                    <label for="imageInput" class="image-button"><i
+                                                            class="far fa-image"></i> Choose image</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <img src="" class="image-preview"
+                                                    style="width : 100px; height: 80px; display : none; margin-left : 40px;">
                                             </div>
                                         </div>
                                     </div>
@@ -185,30 +199,26 @@
                                             <!-- Academic Year -->
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Email Address</label>
-                                                <input type="email" class="form-control" name="email"
-                                                    placeholder="Enter email address">
+                                                <input type="email" class="form-control" name="email">
                                             </div>
 
                                             <!-- Admission Number -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="number" class="text-muted form-control"
-                                                    placeholder="Enter phone number">
+                                                <input type="number" class="text-muted form-control">
                                             </div>
 
                                             <!-- Admission Date -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Current Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
-                                                    name="current_address" class="form-control" rows="3"
-                                                    placeholder="Enter your permanent address"></textarea>
+                                                    name="current_address" class="form-control" rows="3"></textarea>
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <label for="permanentAddress" class="text-muted mb-2">Permanent
                                                     Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
-                                                    name="permanent_address" class="form-control" rows="3"
-                                                    placeholder="Enter your permanent address"></textarea>
+                                                    name="permanent_address" class="form-control" rows="3"></textarea>
                                             </div>
 
                                         </div>
@@ -264,7 +274,7 @@
                     </div>
                 </div>
 
-                <!-- Other Tabs -->
+                <!-- Guardain Tab -->
                 <div class="tab-pane fade" id="menu1">
                     <div class="p-3">
                         <div class="row">
@@ -276,9 +286,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <!-- Academic Year -->
+                                            <!-- Guardain Type -->
                                             <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Father Status</label>
+                                                <label for="" class="text-muted mb-2">Guardain Type</label>
                                                 <div>
                                                     <label for="father" class="form-check-label">
                                                         <input type="radio" name="parent_status" value="father"
@@ -301,7 +311,6 @@
                                                     </label>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
 
@@ -319,22 +328,22 @@
                                             <!-- Academic Year -->
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">First Name</label>
-                                                <input type="email" class="form-control" name="father_name"
-                                                    placeholder="Enter Father Name">
+                                                <input type="text" class="form-control" name="guardian_name">
                                             </div>
 
                                             <!-- Admission Number -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="text-muted form-control"
-                                                    placeholder="Enter Occupation">
+                                                    name="guardian_last_name">
                                             </div>
 
                                             <!-- Admission Date -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Gender</label>
                                                 <div class="cp_wrapperGg">
-                                                    <select class="select2Gg form-control" name="religion">
+                                                    <select class="select2Gg form-control" name="guardian_gender">
+                                                        <option value=""> --Select-- </option>
                                                         <option value="Male">Male</option>
                                                         <option value="Female">Female</option>
                                                     </select>
@@ -343,18 +352,18 @@
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Email</label>
-                                                <input type="email" class="form-control" name="email">
+                                                <input type="email" class="form-control" name="guardian_email">
                                             </div>
 
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Occupation</label>
-                                                <input type="email" class="form-control" name="email">
+                                                <input type="text" class="form-control" name="guardian_occupation">
                                             </div>
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="email" class="form-control" name="email">
+                                                <input type="text" class="form-control" name="guardian_phone_no">
                                             </div>
 
                                         </div>
@@ -375,22 +384,22 @@
                                             <div class="col-6 mb-2">
                                                 <label for="mother_first_name" class="text-muted mb-2">First
                                                     Name</label>
-                                                <input type="text" class="form-control" name="mother_first_name"
-                                                    id="mother_first_name" placeholder="Enter Mother's First Name">
+                                                <input type="text" class="form-control" name="mother_name"
+                                                    id="mother_first_name">
                                             </div>
 
                                             <!-- Last Name -->
                                             <div class="col-6">
                                                 <label for="mother_last_name" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="form-control" name="mother_last_name"
-                                                    id="mother_last_name" placeholder="Enter Mother's Last Name">
+                                                    id="mother_last_name">
                                             </div>
 
                                             <!-- Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="mother_email" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="mother_email"
-                                                    id="mother_email" placeholder="Enter Mother's Email">
+                                                    id="mother_email">
                                             </div>
 
                                             <!-- Occupation -->
@@ -398,14 +407,14 @@
                                                 <label for="mother_occupation"
                                                     class="text-muted mb-2">Occupation</label>
                                                 <input type="text" class="form-control" name="mother_occupation"
-                                                    id="mother_occupation" placeholder="Enter Mother's Occupation">
+                                                    id="mother_occupation">
                                             </div>
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
                                                 <label for="mother_phone" class="text-muted mb-2">Phone Number</label>
-                                                <input type="text" class="form-control" name="mother_phone"
-                                                    id="mother_phone" placeholder="Enter Mother's Phone Number">
+                                                <input type="text" class="form-control" name="mother_phone_no"
+                                                    id="mother_phone">
                                             </div>
                                         </div>
                                     </div>
@@ -425,22 +434,22 @@
                                             <div class="col-6 mb-2">
                                                 <label for="father_first_name" class="text-muted mb-2">First
                                                     Name</label>
-                                                <input type="text" class="form-control" name="father_first_name"
-                                                    id="father_first_name" placeholder="Enter Father's First Name">
+                                                <input type="text" class="form-control" name="father_name"
+                                                    id="father_first_name">
                                             </div>
 
                                             <!-- Last Name -->
                                             <div class="col-6">
                                                 <label for="father_last_name" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="form-control" name="father_last_name"
-                                                    id="father_last_name" placeholder="Enter Father's Last Name">
+                                                    id="father_last_name">
                                             </div>
 
                                             <!-- Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="father_email" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="father_email"
-                                                    id="father_email" placeholder="Enter Father's Email">
+                                                    id="father_email">
                                             </div>
 
                                             <!-- Occupation -->
@@ -448,14 +457,14 @@
                                                 <label for="father_occupation"
                                                     class="text-muted mb-2">Occupation</label>
                                                 <input type="text" class="form-control" name="father_occupation"
-                                                    id="father_occupation" placeholder="Enter Father's Occupation">
+                                                    id="father_occupation">
                                             </div>
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
                                                 <label for="father_phone" class="text-muted mb-2">Phone Number</label>
-                                                <input type="text" class="form-control" name="father_phone"
-                                                    id="father_phone" placeholder="Enter Father's Phone Number">
+                                                <input type="text" class="form-control" name="father_phone_no"
+                                                    id="father_phone">
                                             </div>
                                         </div>
                                     </div>
@@ -465,6 +474,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane fade" id="menu2">
                     <div class="p-3">
                         <h5>Menu 2</h5>
@@ -512,6 +522,7 @@
     </div>
 </div>
 
+
 <script>
     $(document).ready(function () {
         $('.select2').select2({
@@ -540,29 +551,55 @@
     });
 </script>
 
-<!-- Add JavaScript for Toggling -->
+
 <script>
-document.querySelectorAll('input[name="parent_status"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        if (this.value === 'father') {
-            document.getElementById('father-info').classList.remove('d-none');
-            document.getElementById('mother-info').classList.add('d-none');
-            document.getElementById('guardian-info').classList.add('d-none');
-        } else if (this.value === 'mother') {
-            document.getElementById('mother-info').classList.remove('d-none');
-            document.getElementById('father-info').classList.add('d-none');
-            document.getElementById('guardian-info').classList.add('d-none');
-        } else if (this.value === 'guardian') {
-            document.getElementById('guardian-info').classList.remove('d-none');
-            document.getElementById('father-info').classList.add('d-none');
-            document.getElementById('mother-info').classList.add('d-none');
-        } else {
-            document.getElementById('father-info').classList.add('d-none');
-            document.getElementById('mother-info').classList.add('d-none');
-            document.getElementById('guardian-info').classList.add('d-none');
+    $('#imageInput').on('change', function () {
+        $input = $(this);
+        if ($input.val().length > 0) {
+            fileReader = new FileReader();
+            fileReader.onload = function (data) {
+                $('.image-preview').attr('src', data.target.result);
+            }
+            fileReader.readAsDataURL($input.prop('files')[0]);
+            $('.image-preview').css('display', 'block');
+            $('.change-image').css('display', 'block');
         }
     });
-});
+
+    $('.change-image').on('click', function () {
+        $control = $(this);
+        $('#imageInput').val('');
+        $preview = $('.image-preview');
+        $preview.attr('src', '');
+        $preview.css('display', 'none');
+        $control.css('display', 'none');
+        $('.image-button').css('display', 'block');
+    });
+</script>
+
+<!-- Add JavaScript for Toggling -->
+<script>
+    document.querySelectorAll('input[name="parent_status"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === 'father') {
+                document.getElementById('father-info').classList.remove('d-none');
+                document.getElementById('mother-info').classList.add('d-none');
+                document.getElementById('guardian-info').classList.add('d-none');
+            } else if (this.value === 'mother') {
+                document.getElementById('mother-info').classList.remove('d-none');
+                document.getElementById('father-info').classList.add('d-none');
+                document.getElementById('guardian-info').classList.add('d-none');
+            } else if (this.value === 'guardian') {
+                document.getElementById('guardian-info').classList.remove('d-none');
+                document.getElementById('father-info').classList.add('d-none');
+                document.getElementById('mother-info').classList.add('d-none');
+            } else {
+                document.getElementById('father-info').classList.add('d-none');
+                document.getElementById('mother-info').classList.add('d-none');
+                document.getElementById('guardian-info').classList.add('d-none');
+            }
+        });
+    });
 </script>
 
 
