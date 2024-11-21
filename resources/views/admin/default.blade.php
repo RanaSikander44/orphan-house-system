@@ -1,81 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Dashboard - SB Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="{{ asset('backend/css/styles.css') }}" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <!-- jQuery (required for Toastr) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="{{asset('backend/js/toast.js')}}"></script>
-    <link rel="stylesheet" href="{{asset('backend/css/dashboard.css')}}">
-    <!-- select 2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <base href="{{url('/')}}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  <title>{{ config('app.name', 'Property Cam') }} | @yield('title', $page_title ?? '')</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
+  <link href="{{asset('assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/plugins/custom/custom-scrollbar/jquery.mCustomScrollbar.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <link href="{{asset('assets/css/themes/layout/header/base/light.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/css/themes/layout/header/menu/light.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/css/themes/layout/brand/light.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/css/themes/layout/aside/light.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/plugins/custom/jquery-autocomplete/css/jquery.autocomplete.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet" type="text/css" />
+
+  <link rel="shortcut icon" href="{{asset('assets/media/logos/favicon.ico')}}" />
+  @stack('css')
+  @include('layouts.blocks.cssStyles')
+
+<style>
+  /* Force scroll bars to be always visible in Chrome */
+  ::-webkit-scrollbar {
+      width: 10px; /* Adjust width as needed */
+  }
+  ::-webkit-scrollbar-thumb {
+      background-color: #888678; /* Scroll bar color */
+  }
+</style>
+  
 </head>
-
-<body class="sb-nav-fixed bg-light">
-
-    @include('admin.header')
-
-    <div id="layoutSidenav">
-
-        @include('admin.sidebar')
-        <div id="layoutSidenav_content">
-
-            <main>
-                @yield('content')
-            </main>
-
-            @include('admin.footer')
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed   aside-minimize-hoverable page-loading }}">
+  @include('layouts.blocks.mobileheader')
+  <div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+      @include('layouts.blocks.sidebar')
+      <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        @include('layouts.blocks.topbar')
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+          @include('layouts.blocks.toastr')
+          <div class="container my-4">
+            @yield('content')
+          </div>
         </div>
+        @include('layouts.blocks.footer')
+      </div>
     </div>
+  </div>
+  <div id="kt_scrolltop" class="scrolltop">
+    <span class="svg-icon">
+      <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Up-2.svg-->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <polygon points="0 0 24 0 24 24 0 24" />
+          <rect fill="#000000" opacity="0.3" x="11" y="10" width="2" height="10" rx="1" />
+          <path d="M6.70710678,12.7071068 C6.31658249,13.0976311 5.68341751,13.0976311 5.29289322,12.7071068 C4.90236893,12.3165825 4.90236893,11.6834175 5.29289322,11.2928932 L11.2928932,5.29289322 C11.6714722,4.91431428 12.2810586,4.90106866 12.6757246,5.26284586 L18.6757246,10.7628459 C19.0828436,11.1360383 19.1103465,11.7686056 18.7371541,12.1757246 C18.3639617,12.5828436 17.7313944,12.6103465 17.3242754,12.2371541 L12.0300757,7.38413782 L6.70710678,12.7071068 Z" fill="#000000" fill-rule="nonzero" />
+        </g>
+      </svg>
+      <!--end::Svg Icon-->
+    </span>
+  </div>
 
+	<script>
+    var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1400 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#3699FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#E4E6EF", "dark": "#181C32" }, "light": { "white": "#ffffff", "primary": "#E1F0FF", "secondary": "#EBEDF3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#3F4254", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#EBEDF3", "gray-300": "#E4E6EF", "gray-400": "#D1D3E0", "gray-500": "#B5B5C3", "gray-600": "#7E8299", "gray-700": "#5E6278", "gray-800": "#3F4254", "gray-900": "#181C32" } }, "font-family": "Poppins" };
+  </script>
+  <script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"></script>
+  <script src="{{asset('assets/plugins/global/jquery.pjax.js')}}"></script>
+  <script src="{{asset('assets/plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
+  <script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
+	<script src="{{asset('assets/js/pages/widgets.js')}}"></script>
+  <script src="{{asset('assets/plugins/custom/custom-scrollbar/jquery.mCustomScrollbar.js')}}"></script>
+  <script src="{{asset('assets/plugins/custom/sweetalert2/sweetalert2.all.js')}}"></script>
+  <script src="{{asset('assets/plugins/custom/jquery-autocomplete/js/jquery.autocomplete.js')}}"></script>
+  <script src="https://unpkg.com/@webcreate/infinite-ajax-scroll@3.0.0-rc.1/dist/infinite-ajax-scroll.min.js"></script>
+  <script src="{{asset('assets/js/custom.js?v=1.0.0.2')}}"></script>
+  <!--script src="{{asset('assets/plugins/custom/autoscroll/jquery-ias.min.js')}}"></script-->
 
-
-    <script>
-        @if (session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
-
-        @if (session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-
-        @if (session('info'))
-            toastr.info("{{ session('info') }}");
-        @endif
-
-        @if (session('warning'))
-            toastr.warning("{{ session('warning') }}");
-        @endif
-    </script>
-
-
-    <!-- select 2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="{{ asset('backend/js/scripts.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="{{ asset('backend/assets/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('backend/assets/demo/chart-bar-demo.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-        crossorigin="anonymous"></script>
-    <script src="{{ asset('backend/js/datatables-simple-demo.js') }}"></script>
+  @stack('js')
+  @include('layouts.blocks.jscripts')
+  
+ 
 </body>
-
 </html>

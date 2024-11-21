@@ -10,6 +10,9 @@ Route::get('/', function () {
 });
 
 
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+
 
 Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 

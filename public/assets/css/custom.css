@@ -1,0 +1,92 @@
+.myProgress{
+  margin-top:3px;
+  border: 1px solid #ccc;
+}
+.myBar {
+    width: 0%;
+    height: 10px;
+    background-color: #4CAF50;
+    text-align: center; /* To center it horizontally (if you want) */
+    line-height: 11px; /* To center it vertically */
+    color: white;
+    font-size: 10px;
+}
+.blockui.no-citm{display: block;padding: 5px;}
+
+td .label i{font-size: 95%;}
+.input-group-text.img-icon{padding:0.35rem 1rem;}
+
+.scp .card-header{padding: .55rem .75rem .0rem;}
+.scp .card-body{padding: .5rem .75rem .0rem;}
+.scp .btn-tool{padding: .0rem .5rem .25rem}
+.card label{padding: 0 5px 0 0;}
+.card label input{margin: 0 5px 0 0;}
+
+
+.multi-tabs .card.card-custom .card-header{padding: 1rem 0.75rem;min-height: 30px;}
+.multi-tabs .card.card-custom .card-body{padding: 1rem 1.25rem;}
+.multi-tabs .card.card-custom > .card-header .card-toolbar,
+.multi-tabs .card.card-custom > .card-header .card-title,
+.multi-tabs .card.card-custom > .card-header .card-title label{margin: 0;}
+/*.multi-tabs .btn.btn-icon.btn-sm, .btn-group-sm > .btn.btn-icon{height: calc(0.35em + 0.1rem + 2px);}*/
+
+.activity-logger-card .nav.nav-tabs.nav-tabs-line .nav-link{margin: 0 .3rem; padding-bottom: .5rem !important; padding-top:1rem !important;}
+.activity-logger-card .card.card-custom > .card-header.card-header-tabs-line .nav .nav-link{padding-bottom: .5rem !important;}
+
+.with-activity > .card-body.multi-tabs{padding: 2rem 1.25rem;}
+
+.activity-logger-card .form-group{margin-bottom: 0.75rem;}
+
+.activity-logger-card .card-body{padding: 1rem 0.8rem !important;}
+
+.custom-file .custom-file-label{padding: 9px;}
+
+ul#stages-container{width: 100%;margin: 0;padding: 0;list-style: none;position: relative !important;}
+ul#stages-container li {cursor: move;}
+ul#stages-container li.ui-sortable-helper {border-color: #3498db;}
+ul#stages-container li.placeholder {height: 50px;background: #eee;border: 2px dashed #bbb;display: block;opacity: 0.6;border-radius: 2px;-moz-border-radius: 2px;-webkit-border-radius: 2px;}
+ul#stages-container {}
+
+.kanban-board .kanban-drag{padding: 10px !important;}
+.kanban-item{padding: 0px !important;}
+.kanban-item .card-header{min-height:20px !important;padding: 0.1rem 0.55rem;}
+.kanban-item .card-header .btn.btn-icon.btn-sm, .btn-group-sm > .btn.btn-icon{height: calc(1.35em + 0.1rem + 1px);width: calc(0.35em + 1.1rem + 2px);}
+.kanban-item .card-header .navi .navi-item .navi-link{padding: 0.25rem 0.7rem;}
+.kanban-item .card.card-custom > .card-footer{padding: 3px 0px;}
+
+@media (min-width: 992px){
+.container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {padding: 0 10px;}
+}
+@media (min-width: 992px){
+.content {padding: 15px 0;}
+}
+
+@media (min-width: 992px){
+.header-fixed.subheader-fixed.subheader-enabled .wrapper {padding-top: 60px;}
+}
+
+.table .btn.btn-icon.btn-sm, .table .btn-group-sm > .btn.btn-icon {
+    height: calc(1.35em + 1.1rem + 2px);
+    width: calc(0.75em + 1.1rem + 2px);
+}
+.descp-truncate{}
+
+.btn i{padding-right: 0rem !important;}
+
+#dynamic-field-container .card.card-custom.bg-light > .card-header{min-height: 20px;}
+.card.card-custom.bg-light.p-2 > .card-header{min-height: 20px;}
+ul#form-fields{width: 100%;margin: 0;padding: 0;list-style: none;position: relative !important;
+}
+ul#form-fields li {cursor: move;}
+ul#form-fields li.ui-sortable-helper {border-color: #3498db;}
+ul#form-fields li.placeholder {height: 50px;background: #eee;border: 2px dashed #bbb;display: block;opacity: 0.6;border-radius: 2px;-moz-border-radius: 2px;-webkit-border-radius: 2px;}
+#inputOpts a.inputype{color:#000;}
+.affix {top: 0;z-index: 9999 !important;}
+
+label.dd-pdtypes{width:19%;}
+
+ul#frmFlds{width: 100%;margin: 0;padding: 0;list-style: none;position: relative !important;}
+ul#frmFlds li {cursor: move;}
+ul#frmFlds li.ui-sortable-helper {border-color: #3498db;}
+ul#frmFlds li.placeholder {height: 50px;background: #eee;border: 2px dashed #bbb;display: block;opacity: 0.6;border-radius: 2px;-moz-border-radius: 2px;-webkit-border-radius: 2px;}
+ul#frmFlds {}
