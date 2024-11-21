@@ -19,8 +19,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                     Applications
                 </a>
-
-
+                
             </div>
         </div>
 

@@ -4,9 +4,9 @@
 <div class="container-fluid px-4">
     <div class="row">
         <div class="col-12">
-            <div class="card bg-white text-dark mb-4 rounded-2">
+            <div class="card bg-white text-dark mb-4 rounded-2 mt-4">
                 <div class="card-body">
-                    <h5 class="ms-4">Welcome - User</h5>
+                    <h5 class="ms-1">Welcome - User | Admin Dashboard</h5>
                     <div class="row mt-4">
                         <div class="col-md-3">
                             <div class="card bg-info text-white rounded-2 bg-gradient" style="border: none;">
