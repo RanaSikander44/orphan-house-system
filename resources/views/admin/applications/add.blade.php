@@ -13,7 +13,8 @@
                     <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">Personal Info</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">Parents & Guardian Info</a>
+                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">Parents & Guardian
+                        Info</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">Documents </a>
@@ -166,7 +167,7 @@
                                                 @enderror
                                             </div>
 
-                                           <div class="col-6"></div>
+                                            <div class="col-6"></div>
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Student Image</label>
@@ -390,7 +391,8 @@
 
                                             <!-- Last Name -->
                                             <div class="col-6">
-                                                <label for="mother_last_name" class="text-muted mb-2">Last Name</label>
+                                                <label for="mother_last_name" class="text-muted mb-2">Last
+                                                    Name</label>
                                                 <input type="text" class="form-control" name="mother_last_name"
                                                     id="mother_last_name">
                                             </div>
@@ -412,7 +414,8 @@
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="mother_phone" class="text-muted mb-2">Phone Number</label>
+                                                <label for="mother_phone" class="text-muted mb-2">Phone
+                                                    Number</label>
                                                 <input type="text" class="form-control" name="mother_phone_no"
                                                     id="mother_phone">
                                             </div>
@@ -440,7 +443,8 @@
 
                                             <!-- Last Name -->
                                             <div class="col-6">
-                                                <label for="father_last_name" class="text-muted mb-2">Last Name</label>
+                                                <label for="father_last_name" class="text-muted mb-2">Last
+                                                    Name</label>
                                                 <input type="text" class="form-control" name="father_last_name"
                                                     id="father_last_name">
                                             </div>
@@ -462,7 +466,8 @@
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="father_phone" class="text-muted mb-2">Phone Number</label>
+                                                <label for="father_phone" class="text-muted mb-2">Phone
+                                                    Number</label>
                                                 <input type="text" class="form-control" name="father_phone_no"
                                                     id="father_phone">
                                             </div>
@@ -477,41 +482,40 @@
 
                 <div class="tab-pane fade" id="menu2">
                     <div class="p-3">
-                        <h5>Menu 2</h5>
-                        <p>This is some demo content for Menu 2.</p>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="menu3">
-                    <div class="p-3">
-                        <h5>Menu 3</h5>
-                        <p>This is some demo content for Menu 3.</p>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="menu4">
-                    <div class="p-3">
-                        <h5>Menu 4</h5>
-                        <p>This is some demo content for Menu 4.</p>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="menu5">
-                    <div class="p-3">
-                        <h5>Menu 5</h5>
-                        <p>This is some demo content for Menu 5.</p>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="menu6">
-                    <div class="p-3">
-                        <h5>Menu 6</h5>
-                        <p>This is some demo content for Menu 6.</p>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="menu7">
-                    <div class="p-3">
-                        <h5>Menu 7</h5>
-                        <p>This is some demo content for Menu 7.</p>
-                    </div>
-                </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card bg-light border-0 shadow-sm">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">Upload Documents</p>
+                                        <hr class="w-100">
+                                    </div>
+                                    <div class="card-body">
 
+                                        <div class="form-group">
+                                            @for($i = 1; $i <= 4; $i++)
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="title{{ $i }}" class="text-muted mb-2">Title
+                                                            {{ $i }}</label>
+                                                        <input type="text" name="document_titles[]" id="title{{ $i }}"
+                                                            class="form-control" placeholder="Enter document title">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="fileUpload{{ $i }}" class="text-muted mb-2">Document
+                                                            {{ $i }}</label>
+                                                        <input type="file" name="document_names[]" id="fileUpload{{ $i }}"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
             <div class="text-end mt-3">
                 <button class="btn btn-primary btn-sm" type="submit">
@@ -521,6 +525,8 @@
         </form>
     </div>
 </div>
+
+
 
 
 <script>

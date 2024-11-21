@@ -9,6 +9,7 @@ use App\Models\ParentModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Models\StudentDocuments;
 
 
 
@@ -32,7 +33,7 @@ class ApplicationController extends Controller
 
     public function store(Request $req)
     {
-        // dd($req->all());
+        dd($req->all());
         $validator = Validator::make($req->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -58,7 +59,6 @@ class ApplicationController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
 
         $image = $req->file('student_image');
         $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -121,6 +121,31 @@ class ApplicationController extends Controller
             $data->save();
 
         }
+
+
+        // Documents start 
+        $titles = $req->input('document_titles');
+        $documents = $req->file('document_names');
+
+        foreach ($titles as $index => $title) {
+            if (isset($documents[$index])) {
+                // Generate a unique file name with extension
+                $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
+
+                // Define the upload path
+                $uploadPath = 'backend/documents';
+
+                // Move the file to the specified folder
+                $documents[$index]->storeAs($uploadPath, $uniqueName);
+
+                // Save the document details to the database
+                StudentDocuments::create([
+                    'title' => $title,
+                    'file_path' => $uniqueName,
+                ]);
+            }
+        }
+        // Documents End
 
         if ($application->save()) {
             return redirect()->route('applications')->with('success', 'Student Added !');
