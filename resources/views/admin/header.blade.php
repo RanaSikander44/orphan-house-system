@@ -1,7 +1,8 @@
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3 pt-2" href="{{ route('dashboard') }}">
-        <img src="{{asset('backend/images/logo.png')}}" style="width : 100px;" alt="">
+        Wisdom
+        <!-- <img src="{{asset('backend/images/logo.png')}}" style="width : 100px;" alt=""> -->
     </a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
