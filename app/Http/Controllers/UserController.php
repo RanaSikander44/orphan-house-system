@@ -34,11 +34,17 @@ class UserController extends Controller
     
         // Attempt login
         if (Auth::attempt($credentials)) {
-            return redirect()->route('admin.Dashboard');  // Redirect to dashboard after successful login
+            return response()->json(['message' => 'Login Successful'], 200);  // Redirect to dashboard after successful login
         }
+
+        // Check email exist (for invalid usename)
+        $user = User::where('email', $request->email)->first();
     
-        // If login fails, redirect back with an error message
-        return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+        if(!$user){
+            return response()->json(['message' => 'Invalid username'], 400);
+        } else {
+            return response()->json(['message' => 'Invalid password'], 401);
+        }
     }
     
 

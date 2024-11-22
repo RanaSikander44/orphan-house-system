@@ -7,6 +7,11 @@
     <title>Login Form</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery Toast Plugin -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
     <style>
         body {
             background-image: url('/backend/images/bg-login.jpg');
@@ -26,6 +31,7 @@
 
         .form-heading {
             margin-bottom: 60px; /* 60px gap below the heading */
+            font-weight: bold;   /* Bolder heading */
         }
     </style>
 </head>
@@ -36,7 +42,7 @@
             <div class="col-md-12">
                 <div class="border rounded p-4 shadow form-container">
                     <h3 class="text-center form-heading">Login</h3>
-                    <form action="{{ route('loginMatch') }}" method="POST">
+                    <form id="loginForm" action="{{ route('loginMatch') }}" method="POST">
                         @csrf
                         <div class="mb-4">
                             <label for="useremail" class="form-label">Email</label>
@@ -44,28 +50,72 @@
                                 placeholder="Enter your email" required>
                         </div>
                         <div class="mb-4">
-                            <label for="userpassword" class="form-label">Password</label>
+                            <label for="password" class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" id="password"
                                 placeholder="Enter your password" required>
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex justify-content-end mb-2">
                             <button type="submit" class="btn btn-primary">Login</button>
                         </div>
                     </form>
                 </div>
-
-                @if ($errors->any())
-                    <div class="mt-3 alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#loginForm").on("submit", function(event) {
+                event.preventDefault();
+
+                var email = $("#useremail").val();
+                var password = $("#password").val();
+
+                $.ajax({
+                    url: "{{ route('loginMatch') }}",  // Your login route
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        email: email,
+                        password: password
+                    },
+                    success: function(response) {
+                        // Redirect or other actions on successful login
+                        window.location.href = "/admin.Dashboard";  
+                    },
+                    error: function(xhr) {
+                        // Show specific toast messages for invalid username or password
+                        if (xhr.status === 400) {
+                            $.toast({
+                                heading: 'Error',
+                                text: 'Invalid username. Please try again.',
+                                showHideTransition: 'fade',
+                                icon: 'error',
+                                position: 'top-right'  // Toast will appear at the top-right
+                            });
+                        } else if (xhr.status === 401) {
+                            $.toast({
+                                heading: 'Error',
+                                text: 'Invalid password. Please try again.',
+                                showHideTransition: 'fade',
+                                icon: 'error',
+                                position: 'top-right'  // Toast will appear at the top-right
+                            });
+                        } else {
+                            // Handle other error cases here
+                            $.toast({
+                                heading: 'Error',
+                                text: 'An error occurred. Please try again.',
+                                showHideTransition: 'fade',
+                                icon: 'error',
+                                position: 'top-right'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 
     <!-- Bootstrap JS (Optional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
