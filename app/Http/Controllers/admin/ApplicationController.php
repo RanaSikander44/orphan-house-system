@@ -33,7 +33,6 @@ class ApplicationController extends Controller
 
     public function store(Request $req)
     {
-        dd($req->all());
         $validator = Validator::make($req->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -60,10 +59,7 @@ class ApplicationController extends Controller
                 ->withInput();
         }
 
-        $image = $req->file('student_image');
-        $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
-        $destinationPath = public_path('backend/images/students');
-        $image->move($destinationPath, $uniqueName);
+
 
         //  dd($req->all());
         $application = new Student();
@@ -83,7 +79,12 @@ class ApplicationController extends Controller
         $application->blood_group = $req->blood_group;
         $application->height = $req->height;
         $application->weight = $req->weight;
-        $application->student_image = $uniqueName;
+        if ($image = $req->file('student_image')) {
+            $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('backend/images/students');
+            $image->move($destinationPath, $uniqueName);
+            $application->student_image = $uniqueName ? $uniqueName : 'null';
+        }
 
         $application->save();
 
@@ -119,29 +120,38 @@ class ApplicationController extends Controller
             $data->father_occupation = $req->father_occupation;
             $data->father_phone_no = $req->father_phone_no;
             $data->save();
-
+        }else{
+            $data = new ParentModel();
+            $data->student_id = $application->id;
+            $data->save();
         }
 
 
         // Documents start 
-        $titles = $req->input('document_titles');
-        $documents = $req->file('document_names');
+        $titles = $req->input('document_titles'); // Document titles from the request
+        $documents = $req->file('document_names'); // Uploaded files from the request
 
         foreach ($titles as $index => $title) {
             if (isset($documents[$index])) {
-                // Generate a unique file name with extension
+                // Generate a unique name for the file with its original extension
                 $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                // Define the upload path
-                $uploadPath = 'backend/documents';
+                // Define the destination folder
+                $uploadPath = public_path('backend/documents');
 
-                // Move the file to the specified folder
-                $documents[$index]->storeAs($uploadPath, $uniqueName);
+                // Ensure the directory exists
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0777, true);
+                }
+
+                // Move the uploaded file to the destination folder
+                $documents[$index]->move($uploadPath, $uniqueName);
 
                 // Save the document details to the database
                 StudentDocuments::create([
+                    'student_id' => $application->id,
                     'title' => $title,
-                    'file_path' => $uniqueName,
+                    'name' => $uniqueName, // Path relative to the public directory
                 ]);
             }
         }
