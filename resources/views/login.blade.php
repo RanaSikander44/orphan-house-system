@@ -81,7 +81,7 @@
                     },
                     success: function(response) {
                         // Redirect or other actions on successful login
-                        window.location.href = "/admin.Dashboard";  
+                        window.location.href = "admin/dashboard";  
                     },
                     error: function(xhr) {
                         // Show specific toast messages for invalid username or password
