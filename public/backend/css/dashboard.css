@@ -21,3 +21,50 @@
     font-weight: bolder;
     text-align: start;
 }
+
+
+/* Css for the admission student pills menues */
+
+#menuTabs .nav-item a {
+    width: 74%;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 37px !important;
+    /* Adjust height */
+    line-height: 48px !important;
+    /* Center text vertically */
+    padding: 4px 5px !important;
+    /* Adjust padding */
+    border: 1px solid #C0C0C0 !important;
+    /* Ensure border styling */
+    border-radius: 5px !important;
+    /* Rounded corners */
+    background-color: #FFFFFF !important;
+}
+
+.select2-container .select2-selection__rendered {
+    color: #000000 !important;
+    font-size: 16px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 35px !important;
+    width: 40px !important;
+}
+
+.select2-container .select2-dropdown {
+    border-radius: 5px !important;
+    border: 1px solid #C0C0C0 !important;
+}
+
+.select2-container .select2-search--dropdown .select2-search__field {
+    padding: 5px !important;
+    font-size: 12px !important;
+}
+
+

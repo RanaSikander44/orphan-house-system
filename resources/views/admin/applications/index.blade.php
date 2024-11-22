@@ -4,7 +4,10 @@
 <div class="container-fluid px-4">
     <h3 class="mt-4">Applications</h3>
 
+    <a href="{{ route('application.add') }}" class="btn btn-sm btn-primary float-end">Add New Student</a>
+
     <div class="card bg-white p-3 mt-5 border-0 shadow-sm rounded">
+        <h5 class="text-muted mb-3">Applications List</h5>
         <table class="table table-striped">
             <thead class="bg-light">
                 <tr>
@@ -16,36 +19,50 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Hello</td>
-                    <td>
-                        <div class="dropdown show">
-                            <a class="btn btn-primary btn-sm dropdown-toggle" href="#" role="button"
-                                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Action
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="{{ route('academic-year') }}">Edit</a>
-                                <a class="dropdown-item" href="{{ route('academic-year') }}">Delete</a>
+                @forelse ($students as $list)
+                    <tr>
+                        <td>{{$list->admission_no}}</td>
+                        <td>{{$list->first_name}}</td>
+                        <td>{{$list->last_name}}</td>
+                        <td>{{ \Carbon\Carbon::parse($list->dob)->format('d  M Y') }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                    id="dropdownMenuButton{{ $list->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Action
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
+                                    <li>
+                                        <a class="dropdown-item" href="students" title="Edit Student">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="list" title="Delete Student"
+                                            onclick="return confirm('Are you sure you want to delete this student?')">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-
-                    </td>
-                </tr>
-
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td class="text-center" colspan="5">No Applications Found!</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
-
         <div class="d-flex justify-content-between mt-3 align-items-center">
             <!-- Left side: Showing results -->
             <div class="small text-muted">
-                Showing to of results
+                Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} results
             </div>
 
             <!-- Right side: Pagination links -->
             <div>
-
+                {{ $students->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
