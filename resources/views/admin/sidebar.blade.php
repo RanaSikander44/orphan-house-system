@@ -14,13 +14,12 @@
                     Academic Years
                 </a>
                 
-                <a class="nav-link {{ request()->is('application') ? 'active' : '' }}"
+                <a class="nav-link {{ request()->is('applications') || request()->is('applications/add') ? 'active' : '' }}"
                     href="{{ route('applications') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                     Applications
                 </a>
-
-
+                
             </div>
         </div>
 

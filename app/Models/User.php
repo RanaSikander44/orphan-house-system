@@ -2,47 +2,39 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable; // Important import for Authentication
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+
+    // Disable timestamps (created_at, updated_at)
+    public $timestamps = false;
+
+    // Add mass-assignable fields
+    protected $fillable = ['name', 'email', 'password'];
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Automatically hash the password before saving to the database
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public static function boot()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        parent::boot();
+
+        static::creating(function ($user) {
+            // Hash the password before saving the user
+            if ($user->password) {
+                $user->password = Hash::make($user->password);
+            }
+        });
+
+        static::updating(function ($user) {
+            // Hash the password before updating the user
+            if ($user->password) {
+                $user->password = Hash::make($user->password);
+            }
+        });
     }
 }

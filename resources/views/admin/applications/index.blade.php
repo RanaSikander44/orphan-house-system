@@ -24,7 +24,7 @@
                         <td>{{$list->admission_no}}</td>
                         <td>{{$list->first_name}}</td>
                         <td>{{$list->last_name}}</td>
-                        <td>{{$list->dob->format('d M, Y')}}</td>
+                        <td>{{ \Carbon\Carbon::parse($list->dob)->format('d  M Y') }}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -33,14 +33,17 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('students.edit', $list->id) }}"
-                                            title="Edit Student">
+                                        <a class="dropdown-item" href="{{ route('student.view' ,  $list->id) }}" title="View Student">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="students" title="Edit Student">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('students.destroy', $list->id) }}"
-                                            title="Delete Student"
+                                        <a class="dropdown-item" href="list" title="Delete Student"
                                             onclick="return confirm('Are you sure you want to delete this student?')">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
@@ -56,16 +59,15 @@
                 @endforelse
             </tbody>
         </table>
-
         <div class="d-flex justify-content-between mt-3 align-items-center">
             <!-- Left side: Showing results -->
             <div class="small text-muted">
-                Showing to of results
+                Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} results
             </div>
 
             <!-- Right side: Pagination links -->
             <div>
-
+                {{ $students->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

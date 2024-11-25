@@ -5,24 +5,64 @@
         <!-- <img src="{{asset('backend/images/logo.png')}}" style="width : 100px;" alt=""> -->
     </a>
     <!-- Sidebar Toggle-->
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+            class="fas fa-bars"></i></button>
     <!-- Navbar Search-->
     <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
         <div class="input-group">
-            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
+                aria-describedby="btnNavbarSearch" />
             <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
         </div>
     </form>
     <!-- Navbar-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">Settings</a></li>
-                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#!">Logout</a></li>
-            </ul>
-        </li>
-    </ul>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <button class="btn btn-primary" id="sidebarTogglee">
+                <i class="fas fa-user fa-fw"></i>
+            </button>
+        </div>
+    </nav>
 </nav>
+<!-- Sidebar -->
+<div id="sidebar">
+    <div class="bg-white border-end sidebar-content">
+        <ul class="list-group list-group-flush my-ul pt-2">
+            <li class="list-group-item first-li">
+                <h4 class="text-capitalize">Admin profile</h4>
+                <span id="cross" class="" style="cursor : pointer;"><i class="fa-solid fa-xmark"></i></span>
+            </li>
+            <li class="avatar">
+                <div class="image"><img src="" alt="avatar" /></div>
+                <div class="name-login">
+                <h5>{{ auth()->user()->name }}</h5>
+                <a href="#"><i class="fa-solid fa-envelope"></i> {{ Auth()->user()->email }}</a>
+                    <a href="{{ route('logout') }}" class="text-capitalize d-block mt-2 my-btn text-dark" style="width  : 40%;">sign out</a>
+                </div>
+            </li>
+            <li class="third-li">
+                <i class="fa-solid fa-lock my-lock"></i>
+                <ul class="px-2">
+                    <li class="fw-bold text-capitalize">security</li>
+                    <li>change your password <span class="my-cng text-dark">change</span></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+</nav>
+
+
+<script>
+    const sidebarTogglee = document.getElementById("sidebarTogglee");
+    const sidebar = document.getElementById("sidebar");
+    const cross = document.getElementById("cross");
+
+    sidebarTogglee.addEventListener("click", () => {
+        sidebar.classList.toggle("show");
+    });
+
+    cross.addEventListener("click", () => {
+        sidebar.classList.remove("show");
+    });
+</script>
