@@ -167,7 +167,9 @@ class ApplicationController extends Controller
     public function studentView($id)
     {
         $student = student::where('id', $id)->first();
-        return view('admin.applications.student_view', compact('student'));
+        $parents = ParentModel::where('student_id', $student->id)->first();
+        $documents = StudentDocuments::where('student_id' , $student->id)->get();
+        return view('admin.applications.student_view', compact('student' , 'parents' , 'documents'));
     }
 
 }
