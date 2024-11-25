@@ -168,8 +168,20 @@ class ApplicationController extends Controller
     {
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = StudentDocuments::where('student_id' , $student->id)->get();
-        return view('admin.applications.student_view', compact('student' , 'parents' , 'documents'));
+        $documents = StudentDocuments::where('student_id', $student->id)->get();
+        return view('admin.applications.student_view', compact('student', 'parents', 'documents'));
     }
 
+    public function studentEdit($id)
+    {
+
+        $years = academicyear::all();
+        $lastAdmissionNumber = Student::max('admission_no');
+        $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
+        $student = student::where('id', $id)->first();
+        $parents = ParentModel::where('student_id', $student->id)->first();
+        $documents = StudentDocuments::where('student_id', $student->id)->get();
+        return view('admin.applications.student_edit', compact('student' , 'parents' , 'documents' , 'years' ,'newAdmissionNumber'));
+
+    }
 }
