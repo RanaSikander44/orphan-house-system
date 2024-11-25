@@ -69,7 +69,7 @@ class ApplicationController extends Controller
         $application->admission_date = $req->admission_date;
         $application->caste = $req->caste;
         $application->admission_no = $req->admission_no;
-        $application->gender = $req->admission_no;
+        $application->gender = $req->gender;
         $application->dob = $req->dob;
         $application->religion = $req->religion;
         $application->email = $req->email;
@@ -120,7 +120,7 @@ class ApplicationController extends Controller
             $data->father_occupation = $req->father_occupation;
             $data->father_phone_no = $req->father_phone_no;
             $data->save();
-        }else{
+        } else {
             $data = new ParentModel();
             $data->student_id = $application->id;
             $data->save();
@@ -161,6 +161,15 @@ class ApplicationController extends Controller
             return redirect()->route('applications')->with('success', 'Student Added !');
         }
 
+    }
+
+
+    public function studentView($id)
+    {
+        $student = student::where('id', $id)->first();
+        $parents = ParentModel::where('student_id', $student->id)->first();
+        $documents = StudentDocuments::where('student_id' , $student->id)->get();
+        return view('admin.applications.student_view', compact('student' , 'parents' , 'documents'));
     }
 
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+    <title>School Management System</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery Toast Plugin -->
@@ -25,13 +25,17 @@
         .form-container {
             width: 420px;
             height: 390px;
-            background-color: #f4fcff; /* Changed background color to skyblue */
-            border-radius: 8px; /* Optional: Adds rounded corners for a softer look */
+            background-color: #f4fcff;
+            /* Changed background color to skyblue */
+            border-radius: 8px;
+            /* Optional: Adds rounded corners for a softer look */
         }
 
         .form-heading {
-            margin-bottom: 60px; /* 60px gap below the heading */
-            font-weight: bold;   /* Bolder heading */
+            margin-bottom: 60px;
+            /* 60px gap below the heading */
+            font-weight: bold;
+            /* Bolder heading */
         }
     </style>
 </head>
@@ -64,8 +68,8 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            $("#loginForm").on("submit", function(event) {
+        $(document).ready(function () {
+            $("#loginForm").on("submit", function (event) {
                 event.preventDefault();
 
                 var email = $("#useremail").val();
@@ -79,11 +83,30 @@
                         email: email,
                         password: password
                     },
-                    success: function(response) {
+                    success: function (response) {
                         // Redirect or other actions on successful login
-                        window.location.href = "admin/dashboard";  
+                        window.location.href = "admin/dashboard";
+                        // $.toast({
+                        //     heading: 'Success',
+                        //     text: '<strong>Login Successful!</strong><br>Welcome back, John Doe. <a href="/dashboard" style="color: #fff; text-decoration: underline;">Go to Dashboard</a>',
+                        //     showHideTransition: 'slide', // Can use 'fade', 'slide', or 'plain'
+                        //     icon: 'success', // Dynamically set 'success', 'error', 'info', or 'warning'
+                        //     position: 'top-right', // Toast will appear at the top-right
+                        //     loader: true, // Enable progress bar
+                        //     loaderBg: '#4CAF50', // Custom loader background color
+                        //     bgColor: '#1E88E5', // Background color
+                        //     textColor: '#ffffff', // Text color
+                        //     hideAfter: 5000, // Auto close after 5 seconds
+                        //     stack: 5, // Allow stacking up to 5 toasts
+                        //     allowToastClose: true, // Allow users to close manually
+                        //     afterHidden: function () {
+                        //         console.log('Toast closed. Executing callback...');
+                        //         // Perform any action after the toast is hidden
+                        //     }
+                        // });
+
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         // Show specific toast messages for invalid username or password
                         if (xhr.status === 400) {
                             $.toast({

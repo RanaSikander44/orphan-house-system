@@ -67,4 +67,86 @@
     font-size: 12px !important;
 }
 
+.my-ul {
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
+.my-ul .first-li,
+.my-ul .avatar {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.my-ul .third-li {
+    display: flex;
+    align-items: center;
+}
+
+.my-ul .third-li ul li {
+    list-style: none;
+}
+
+.my-ul li {
+    border: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.my-btn {
+    color: #8bb7e3;
+    outline: 0;
+    border: 0;
+    background-color: #e1f1fa;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.my-cng {
+    color: #8bb7e3;
+    outline: 0;
+    border: 0;
+    background-color: #e1f1fa;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+.my-ul li .name-login a {
+    text-decoration: none;
+}
+
+.my-ul .avatar .image {
+    width: 40%;
+}
+
+.my-ul .avatar .name-login {
+    width: 60%;
+}
+
+.my-ul .avatar {
+    margin: 15px 0 25px 0;
+}
+
+.my-ul li .my-lock {
+    color: #3699fe;
+    background-color: #e1f1fa;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#sidebar {
+    width: 350px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: -350px;
+    z-index: 1050;
+    background-color: white;
+    border-left: 1px solid #ddd;
+    transition: right 0.5s ease;
+}
+
+#sidebar.show {
+    right: 0;
+}
