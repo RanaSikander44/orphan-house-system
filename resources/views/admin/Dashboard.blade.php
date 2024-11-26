@@ -30,10 +30,10 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card text-white rounded-2 bg-gradient"   style="border: none; background-color: #DC4BF1;">
-                                <h5 class="ms-3 mt-3">Staffs</h5>
-                                <p class="ms-3 mt-2">Total Staffs</p>
-                                <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none" href="#">2</a>
+                            <div class="card text-white rounded-2 bg-gradient" style="border: none; background-color: #DC4BF1;">
+                                <h5 class="ms-3 mt-3">Users</h5>
+                                <p class="ms-3 mt-2">Total Users</p>
+                                <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none" href="{{ route('users') }}">{{ $userCount }}</a>
                             </div>
                         </div>
                     </div>

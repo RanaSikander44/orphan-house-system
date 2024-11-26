@@ -20,6 +20,12 @@
                     Applications
                 </a>
                 
+                <a class="nav-link {{ request()->is('users') || request()->is('users/add') ? 'active' : '' }}"
+                    href="{{ route('users') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Users
+                </a>
+                
             </div>
         </div>
 
