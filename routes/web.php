@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ApplicationController;
 use App\Http\Controllers\admin\AcademicYearController;
-use App\Http\Controllers\UserController;
+
 
 Route::get('/', function () {
     return view('login');
@@ -24,6 +27,17 @@ Route::get('admin/dashboard', [UserController::class, 'dashboardPage'])->middlew
 
 // Logout
 Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Define the routes for the RoleController
+Route::resource('roles', RoleController::class);
+
+// Custom delete route for roles
+Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+// Custom update route for roles
+Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+ 
+
 
 
 
@@ -49,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('applications', [ApplicationController::class, 'index'])->name('applications');
     Route::get('applications/add', [ApplicationController::class, 'add'])->name('application.add');
     Route::post('applications/store', [ApplicationController::class, 'store'])->name('application.store');
+
+ 
+
 
 });
 
