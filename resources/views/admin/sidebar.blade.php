@@ -20,16 +20,6 @@
                     Applications
                 </a>
                 
-                <a class="nav-link {{ request()->routeIs('posts.index') || request()->routeIs('posts.*') ? 'active' : '' }}"
-                    href="{{ route('roles.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
-                    Roles
-                 </a>
-                 
-                 
-                 
-                 
-
             </div>
         </div>
 
