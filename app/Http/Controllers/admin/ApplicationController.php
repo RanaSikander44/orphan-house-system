@@ -181,7 +181,135 @@ class ApplicationController extends Controller
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
         $documents = StudentDocuments::where('student_id', $student->id)->get();
-        return view('admin.applications.student_edit', compact('student' , 'parents' , 'documents' , 'years' ,'newAdmissionNumber'));
+        return view('admin.applications.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
 
     }
+
+    public function studentUpdate(Request $req, $id)
+    {
+        // Validate the input
+        $validator = Validator::make($req->all(), [
+            'first_name' => 'nullable|string',
+            'last_name' => 'nullable|string',
+            'year_id' => 'nullable|integer',
+            'admission_date' => 'nullable|date',
+            'caste' => 'nullable|string',
+            'admission_no' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'dob' => 'nullable|date',
+            'religion' => 'nullable|string',
+            'email' => 'nullable|email',
+            'phone_no' => 'nullable|string',
+            'current_address' => 'nullable|string',
+            'permanent_address' => 'nullable|string',
+            'blood_group' => 'nullable|string',
+            'height' => 'nullable|numeric',
+            'weight' => 'nullable|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('application.edit', ['id' => $id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Fetch the existing student record
+        $application = Student::findOrFail($id);
+
+        // Update student details only if provided
+        $fieldsToUpdate = [
+            'first_name',
+            'last_name',
+            'year_id',
+            'admission_date',
+            'caste',
+            'admission_no',
+            'gender',
+            'dob',
+            'religion',
+            'email',
+            'phone_no',
+            'current_address',
+            'permanent_address',
+            'blood_group',
+            'height',
+            'weight'
+        ];
+
+        foreach ($fieldsToUpdate as $field) {
+            if ($req->filled($field)) {
+                $application->$field = $req->$field;
+            }
+        }
+
+        // Update student image if provided
+        if ($image = $req->file('student_image')) {
+            $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('backend/images/students');
+            $image->move($destinationPath, $uniqueName);
+            $application->student_image = $uniqueName;
+        }
+
+        $application->save();
+
+        // Update parent information
+        $data = ParentModel::where('student_id', $id)->firstOrNew();
+
+        if ($req->parent_status === 'guardian') {
+            $data->guardian_name = $req->guardian_name ?? $data->guardian_name;
+            $data->guardian_last_name = $req->guardian_last_name ?? $data->guardian_last_name;
+            $data->guardian_gender = $req->guardian_gender ?? $data->guardian_gender;
+            $data->guardian_email = $req->guardian_email ?? $data->guardian_email;
+            $data->guardian_occupation = $req->guardian_occupation ?? $data->guardian_occupation;
+            $data->guardian_phone_no = $req->guardian_phone_no ?? $data->guardian_phone_no;
+        } elseif ($req->parent_status === 'mother') {
+            $data->mother_name = $req->mother_name ?? $data->mother_name;
+            $data->mother_last_name = $req->mother_last_name ?? $data->mother_last_name;
+            $data->mother_email = $req->mother_email ?? $data->mother_email;
+            $data->mother_occupation = $req->mother_occupation ?? $data->mother_occupation;
+            $data->mother_phone_no = $req->mother_phone_no ?? $data->mother_phone_no;
+        } elseif ($req->parent_status === 'father') {
+            $data->father_name = $req->father_name ?? $data->father_name;
+            $data->father_last_name = $req->father_last_name ?? $data->father_last_name;
+            $data->father_email = $req->father_email ?? $data->father_email;
+            $data->father_occupation = $req->father_occupation ?? $data->father_occupation;
+            $data->father_phone_no = $req->father_phone_no ?? $data->father_phone_no;
+        }
+        $data->student_id = $application->id;
+        $data->save();
+
+        // Update documents
+        if ($req->has('document_titles')) {
+            $titles = $req->input('document_titles');
+            $documents = $req->file('document_names');
+
+            foreach ($titles as $index => $title) {
+                if (isset($documents[$index])) {
+                    // Generate a unique name for the file
+                    $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
+
+                    // Define the destination folder
+                    $uploadPath = public_path('backend/documents');
+
+                    // Ensure the directory exists
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0777, true);
+                    }
+
+                    // Move the uploaded file to the destination folder
+                    $documents[$index]->move($uploadPath, $uniqueName);
+
+                    // Save or update the document
+                    StudentDocuments::updateOrCreate(
+                        ['student_id' => $application->id, 'title' => $title],
+                        ['name' => $uniqueName]
+                    );
+                }
+            }
+        }
+
+        return redirect()->route('applications')->with('success', 'Student details updated successfully.');
+    }
+
+
 }

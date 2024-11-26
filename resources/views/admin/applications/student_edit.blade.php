@@ -23,7 +23,7 @@
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
         <!-- Tab Content -->
-        <form method="post" action="{{route('application.store')}}" enctype="multipart/form-data">
+        <form method="post" action="{{route('student.update' , $student->id)}}" enctype="multipart/form-data">
             @csrf
             <div class="tab-content">
 
@@ -285,44 +285,33 @@
                 <div class="tab-pane fade" id="menu1">
                     <div class="p-3">
                         <div class="row">
-                            <div class="col-6">
-                                <div class="card bg-light border-0 shadow-none">
-                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">Guardian Information</p>
-                                        <hr class="w-100" style="font-weight: 200px;">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <!-- Guardain Type -->
-                                            <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Guardain Type</label>
-                                                <div>
-                                                    <label for="father" class="form-check-label">
-                                                        <input type="radio" name="parent_status" value="father"
-                                                            id="father" class="form-check-input">
-                                                        Father
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label for="mother" class="form-check-label">
-                                                        <input type="radio" name="parent_status" value="mother"
-                                                            id="mother" class="form-check-input">
-                                                        Mother
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label for="guardian" class="form-check-label">
-                                                        <input type="radio" name="parent_status" value="guardian"
-                                                            id="guardian" class="form-check-input">
-                                                        Guardian
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                            <!-- Guardian Type -->
+                            <div class="col-6 mb-2">
+                                <label for="" class="text-muted mb-2">Guardian Type</label>
+                                <div>
+                                    <label for="father" class="form-check-label">
+                                        <input type="radio" name="parent_status" value="father" id="father"
+                                            class="form-check-input" @if(!empty($parents->father_name)) checked @endif>
+                                        Father
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="mother" class="form-check-label">
+                                        <input type="radio" name="parent_status" value="mother" id="mother"
+                                            class="form-check-input" @if(!empty($parents->mother_name)) checked @endif>
+                                        Mother
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="guardian" class="form-check-label">
+                                        <input type="radio" name="parent_status" value="guardian" id="guardian"
+                                            class="form-check-input" @if(!empty($parents->guardian_name)) checked
+                                            @endif>
+                                        Guardian
+                                    </label>
                                 </div>
                             </div>
+
                             <!-- Guardian Information -->
                             <div class="col-6 d-none" id="guardian-info">
                                 <div class="card bg-light border-0 shadow-none">
@@ -335,14 +324,16 @@
                                             <!-- Academic Year -->
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">First Name</label>
-                                                <input type="text" class="form-control" name="guardian_name">
+                                                <input type="text" class="form-control" name="guardian_name"
+                                                    value="{{ $parents->guardian_name }}">
                                             </div>
 
                                             <!-- Admission Number -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="text-muted form-control"
-                                                    name="guardian_last_name">
+                                                    name="guardian_last_name"
+                                                    value="{{ $parents->guardian_last_name }}">
                                             </div>
 
                                             <!-- Admission Date -->
@@ -351,26 +342,29 @@
                                                 <div class="cp_wrapperGg">
                                                     <select class="select2Gg form-control" name="guardian_gender">
                                                         <option value=""> --Select-- </option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
+                                                        <option value="Male" {{ $parents->guardian_gender === "Male" ? 'Selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ $parents->guardian_gender === "Female" ? 'Selected' : '' }}>Female</option>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Email</label>
-                                                <input type="email" class="form-control" name="guardian_email">
+                                                <input type="email" class="form-control" name="guardian_email"
+                                                    value="{{ $parents->guardian_email }}">
                                             </div>
 
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Occupation</label>
-                                                <input type="text" class="form-control" name="guardian_occupation">
+                                                <input type="text" class="form-control" name="guardian_occupation"
+                                                    value="{{ $parents->guardian_occupation }}">
                                             </div>
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="text" class="form-control" name="guardian_phone_no">
+                                                <input type="text" class="form-control" name="guardian_phone_no"
+                                                    value="{{ $parents->guardian_phone_no }}">
                                             </div>
 
                                         </div>
@@ -392,7 +386,7 @@
                                                 <label for="mother_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="mother_name"
-                                                    id="mother_first_name">
+                                                    id="mother_first_name" value="{{ $parents->mother_name }}">
                                             </div>
 
                                             <!-- Last Name -->
@@ -400,14 +394,14 @@
                                                 <label for="mother_last_name" class="text-muted mb-2">Last
                                                     Name</label>
                                                 <input type="text" class="form-control" name="mother_last_name"
-                                                    id="mother_last_name">
+                                                    id="mother_last_name" value="{{ $parents->mother_last_name }}">
                                             </div>
 
                                             <!-- Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="mother_email" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="mother_email"
-                                                    id="mother_email">
+                                                    id="mother_email" value="{{ $parents->mother_email }}">
                                             </div>
 
                                             <!-- Occupation -->
@@ -415,7 +409,7 @@
                                                 <label for="mother_occupation"
                                                     class="text-muted mb-2">Occupation</label>
                                                 <input type="text" class="form-control" name="mother_occupation"
-                                                    id="mother_occupation">
+                                                    id="mother_occupation" value="{{ $parents->mother_occupation }}">
                                             </div>
 
                                             <!-- Phone Number -->
@@ -423,7 +417,7 @@
                                                 <label for="mother_phone" class="text-muted mb-2">Phone
                                                     Number</label>
                                                 <input type="text" class="form-control" name="mother_phone_no"
-                                                    id="mother_phone">
+                                                    id="mother_phone" value="{{ $parents->mother_phone_no }}">
                                             </div>
                                         </div>
                                     </div>
@@ -444,7 +438,7 @@
                                                 <label for="father_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="father_name"
-                                                    id="father_first_name">
+                                                    id="father_first_name" value="{{ $parents->father_name }}">
                                             </div>
 
                                             <!-- Last Name -->
@@ -452,14 +446,14 @@
                                                 <label for="father_last_name" class="text-muted mb-2">Last
                                                     Name</label>
                                                 <input type="text" class="form-control" name="father_last_name"
-                                                    id="father_last_name">
+                                                    id="father_last_name" value="{{ $parents->father_last_name }}">
                                             </div>
 
                                             <!-- Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="father_email" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="father_email"
-                                                    id="father_email">
+                                                    id="father_email" value="{{ $parents->father_email }}">
                                             </div>
 
                                             <!-- Occupation -->
@@ -467,7 +461,7 @@
                                                 <label for="father_occupation"
                                                     class="text-muted mb-2">Occupation</label>
                                                 <input type="text" class="form-control" name="father_occupation"
-                                                    id="father_occupation">
+                                                    id="father_occupation" value="{{ $parents->father_occupation }}">
                                             </div>
 
                                             <!-- Phone Number -->
@@ -475,7 +469,7 @@
                                                 <label for="father_phone" class="text-muted mb-2">Phone
                                                     Number</label>
                                                 <input type="text" class="form-control" name="father_phone_no"
-                                                    id="father_phone">
+                                                    id="father_phone" value="{{ $parents->father_phone_no }}">
                                             </div>
                                         </div>
                                     </div>
@@ -498,22 +492,29 @@
                                     <div class="card-body">
 
                                         <div class="form-group">
-                                            @for($i = 1; $i <= 4; $i++)
+                                            @foreach ($documents as $index => $list)
                                                 <div class="row mb-3">
+                                                    <!-- Document Title -->
                                                     <div class="col-md-6">
-                                                        <label for="title{{ $i }}" class="text-muted mb-2">Title
-                                                            {{ $i }}</label>
-                                                        <input type="text" name="document_titles[]" id="title{{ $i }}"
-                                                            class="form-control" placeholder="Enter document title">
+                                                        <label for="title{{ $index }}" class="text-muted mb-2">Title
+                                                            {{ $index + 1 }}</label>
+                                                        <input type="text" name="document_titles[]" id="title{{ $index }}"
+                                                            class="form-control" placeholder="Enter document title"
+                                                            value="{{ $list->title }}">
                                                     </div>
+
+                                                    <!-- Document File Upload -->
                                                     <div class="col-md-6">
-                                                        <label for="fileUpload{{ $i }}" class="text-muted mb-2">Document
-                                                            {{ $i }}</label>
-                                                        <input type="file" name="document_names[]" id="fileUpload{{ $i }}"
-                                                            class="form-control">
-                                                    </div>
+                                                        <label for="fileUpload{{ $index }}" class="text-muted mb-2">Document
+                                                            {{ $index + 1 }}</label>
+                                                        <input type="file" name="document_names[]"
+                                                            id="fileUpload{{ $index }}" class="form-control" value="">
+                                                        <p class="text-muted mt-2">{{ $list->name }}</p>
+                                                        </div>
                                                 </div>
-                                            @endfor
+                                            @endforeach
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -591,28 +592,31 @@
 
 <!-- Add JavaScript for Toggling -->
 <script>
+    function toggleSectionsBasedOnSelection() {
+        const selectedValue = document.querySelector('input[name="parent_status"]:checked')?.value;
+
+        document.getElementById('father-info').classList.add('d-none');
+        document.getElementById('mother-info').classList.add('d-none');
+        document.getElementById('guardian-info').classList.add('d-none');
+
+        if (selectedValue === 'father') {
+            document.getElementById('father-info').classList.remove('d-none');
+        } else if (selectedValue === 'mother') {
+            document.getElementById('mother-info').classList.remove('d-none');
+        } else if (selectedValue === 'guardian') {
+            document.getElementById('guardian-info').classList.remove('d-none');
+        }
+    }
+
+    // Trigger the logic on radio button change
     document.querySelectorAll('input[name="parent_status"]').forEach(radio => {
-        radio.addEventListener('change', function () {
-            if (this.value === 'father') {
-                document.getElementById('father-info').classList.remove('d-none');
-                document.getElementById('mother-info').classList.add('d-none');
-                document.getElementById('guardian-info').classList.add('d-none');
-            } else if (this.value === 'mother') {
-                document.getElementById('mother-info').classList.remove('d-none');
-                document.getElementById('father-info').classList.add('d-none');
-                document.getElementById('guardian-info').classList.add('d-none');
-            } else if (this.value === 'guardian') {
-                document.getElementById('guardian-info').classList.remove('d-none');
-                document.getElementById('father-info').classList.add('d-none');
-                document.getElementById('mother-info').classList.add('d-none');
-            } else {
-                document.getElementById('father-info').classList.add('d-none');
-                document.getElementById('mother-info').classList.add('d-none');
-                document.getElementById('guardian-info').classList.add('d-none');
-            }
-        });
+        radio.addEventListener('change', toggleSectionsBasedOnSelection);
     });
+
+    // Initial trigger on page load
+    document.addEventListener('DOMContentLoaded', toggleSectionsBasedOnSelection);
 </script>
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
