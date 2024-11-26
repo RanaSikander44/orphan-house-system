@@ -49,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('applications', [ApplicationController::class, 'index'])->name('applications');
     Route::get('applications/add', [ApplicationController::class, 'add'])->name('application.add');
     Route::post('applications/store', [ApplicationController::class, 'store'])->name('application.store');
+    Route::get('applications/student-view/{id}', [ApplicationController::class, 'studentView'])->name('student.view');
+
 
 
      // Users Routes

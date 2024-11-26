@@ -34,22 +34,23 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
+
         // Attempt login
         if (Auth::attempt($credentials)) {
             return response()->json(['message' => 'Login Successful'], 200);  // Redirect to dashboard after successful login
+            // return redirect()->route('admin.dashboard')->with('success', 'Login Successfull !');
         }
 
         // Check email exist (for invalid usename)
         $user = User::where('email', $request->email)->first();
-    
-        if(!$user){
+
+        if (!$user) {
             return response()->json(['message' => 'Invalid username'], 400);
         } else {
             return response()->json(['message' => 'Invalid password'], 401);
         }
     }
-    
+
 
     public function dashboardPage()
     {
@@ -60,13 +61,14 @@ class UserController extends Controller
         }
     }
 
-    
+
     public function logout()
     {
-            Auth::logout();
-            return redirect()->route('login');         
-        
+        Auth::logout();
+        return redirect()->route('login');
+
     }
+<<<<<<< HEAD
     
 
 
@@ -93,6 +95,9 @@ class UserController extends Controller
 public function edit(User $user)
 {
     return view('users.edit', compact('user'));  // Passing the user to the view
+=======
+
+>>>>>>> 2818b959c01757e554d4d941e477a30e37d86c98
 }
 
 
