@@ -68,37 +68,6 @@ class UserController extends Controller
         return redirect()->route('login');
 
     }
-<<<<<<< HEAD
-    
-
-
-
-
-
-
-
-
-
-    public function index()
-    {
-       // Paginate users - this will get 10 users per page, you can adjust the number as needed
-       $users = User::paginate(3);
-       return view('users.index', compact('users'));
-    }
-    
-    public function create()
-    {
-        return view('users.create');  // Assuming your create form is in resources/views/users/create.blade.php
-    }
-   
-  
-public function edit(User $user)
-{
-    return view('users.edit', compact('user'));  // Passing the user to the view
-=======
-
->>>>>>> 2818b959c01757e554d4d941e477a30e37d86c98
-}
 
 
 public function update(Request $request, User $user)
