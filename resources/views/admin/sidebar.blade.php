@@ -19,7 +19,20 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                     Applications
                 </a>
-                
+
+                <a class="nav-link {{ request()->is('users') || request()->is('users/add') ? 'active' : '' }}"
+                    href="{{ route('users') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Users
+                </a>
+
+                <a class="nav-link {{ request()->is('roles') || request()->is('roles') ? 'active' : '' }}"
+                    href="{{ route('roles.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
+                    Roles
+                </a>
+
+
             </div>
         </div>
 

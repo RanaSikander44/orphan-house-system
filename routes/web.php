@@ -23,7 +23,7 @@ Route::view('login', 'login')->name('login');
 Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 
 // Dashboard route (protected)
-Route::get('admin/dashboard', [UserController::class, 'dashboardPage'])->middleware('auth')->name('admin.Dashboard');
+// Route::get('admin/dashboard', [UserController::class, 'dashboard'])->middleware('auth')->name('admin.Dashboard');
 
 // Logout
 Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
@@ -84,6 +84,6 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    // Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 });
 
