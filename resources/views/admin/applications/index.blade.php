@@ -33,12 +33,14 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('student.view' ,  $list->id) }}" title="View Student">
+                                        <a class="dropdown-item" href="{{ route('student.view', $list->id) }}"
+                                            title="View Student">
                                             <i class="fa fa-eye"></i> View
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="students" title="Edit Student">
+                                        <a class="dropdown-item" href="{{ route('student.edit', $list->id)  }}"
+                                            title="Edit Student">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
                                     </li>
