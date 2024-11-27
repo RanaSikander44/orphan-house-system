@@ -47,7 +47,7 @@ Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.upda
 Route::middleware(['auth'])->group(function () {
 
 
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 
     // Academic Year 

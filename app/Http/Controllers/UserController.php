@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -15,13 +16,16 @@ class UserController extends Controller
     public function index()
     {
         // Paginate users - this will get 10 users per page, you can adjust the number as needed
-        $users = User::paginate(3);
+        $users = User::orderBy('id' , 'desc')->paginate(10);
         return view('users.index', compact('users'));
+
     }
 
     public function create()
     {
-        return view('users.create');  // Assuming your create form is in resources/views/users/create.blade.php
+
+        $roles = Role::all();
+        return view('users.create', compact('roles'));  // Assuming your create form is in resources/views/users/create.blade.php
     }
 
     public function edit(User $user)
@@ -29,8 +33,6 @@ class UserController extends Controller
         return view('users.edit', compact('user'));  // Passing the user to the view
 
     }
-
-
 
 
 
@@ -135,21 +137,30 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate incoming request
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed', // password confirmation validation
-            'role' => 'required|in:admin,user,donor', // Ensure the role is one of the valid options
+            'role_id' => 'required', // Ensure the role is one of the valid options
         ]);
 
-        // Create and save the new user in the 'users' table
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']), // Hash the password before saving
-            'role' => $validated['role'], // Save the selected role
-        ]);
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->role_id = $request->role_id;
+        $user->save();
+
+
+        // // Create and save the new user in the 'users' table
+        // $user = User::create([
+        //     'name' => $validated['name'],
+        //     'email' => $validated['email'],
+        //     'password' => bcrypt($validated['password']), // Hash the password before saving
+        //     'role_id' => $validated['role_id'], // Save the selected role
+        // ]);
 
         // Redirect to the users index page with a success message
         return redirect()->route('users')->with('success', 'User created successfully!');

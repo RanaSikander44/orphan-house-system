@@ -20,7 +20,7 @@ class User extends Authenticatable
     ];
     // Add mass-assignable fields
     // protected $fillable = ['name', 'email', 'password','role'];
-    protected $table = 'users'; 
+    protected $table = 'users';
     /**
      * Automatically hash the password before saving to the database
      */
@@ -41,5 +41,10 @@ class User extends Authenticatable
                 $user->password = Hash::make($user->password);
             }
         });
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }
