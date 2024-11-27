@@ -25,22 +25,9 @@ Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 // Dashboard route (protected)
 // Route::get('admin/dashboard', [UserController::class, 'dashboard'])->middleware('auth')->name('admin.Dashboard');
 
-// Logout
+
+
 Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
-
-// Define the routes for the RoleController
-Route::resource('roles', RoleController::class);
-
-// Custom delete route for roles
-Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
-
-// Custom update route for roles
-Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
- 
-
-
-
-
 
 
 
@@ -67,23 +54,25 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-     // Users Routes
+    // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users');    // List users
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');  // Show create user form
     Route::post('/users', [UserController::class, 'store'])->name('users.store');    // Store new user
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit'); // Edit user
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update'); // Update user
 
-    
-    
+
+
     // Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::put('/users/{id}/update-role', [UserController::class, 'updateRole'])->name('users.updateRole');
-
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     // Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 
 
-    // Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    // Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    // Roles
+    Route::resource('roles', RoleController::class);
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+
 });
 
