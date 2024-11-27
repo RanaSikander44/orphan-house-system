@@ -1,40 +1,111 @@
-<div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-            <div class="nav">
-                <div class="sb-sidenav-menu-heading">Core</div>
-                <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Dashboard
+<div class="page-wrapper chiller-theme toggled">
+    <nav id="sidebare" class="sidebar-wrapper bg-white">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <a href="{{ route('dashboard') }}">
+                    <img src="{{ asset('backend/images/wisdom-logo.png.webp') }}" style="width: 60%; height: auto;"
+                        alt="Wisdom Logo">
                 </a>
-                <div class="sb-sidenav-menu-heading">Applications</div>
-                <a class="nav-link {{ request()->is('academic-year') ? 'active' : '' }}"
-                    href="{{ route('academic-year') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-graduation-cap"></i></div>
-                    Academic Years
-                </a>
+                <!-- <img src="" alt=""> -->
+                <div id="close-sidebar" class="sidebarToggle">
+                    <i class="fa-solid fa-angles-right text-black"></i>
+                </div>
+            </div>
 
-                <a class="nav-link {{ request()->is('applications') || request()->is('applications/add') ? 'active' : '' }}"
-                    href="{{ route('applications') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
-                    Applications
-                </a>
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="sidebar-dropdown">
+                        <a href="{{ route('dashboard') }}">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
 
-                <a class="nav-link {{ request()->is('users') || request()->is('users/add') ? 'active' : '' }}"
-                    href="{{ route('users') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                    Users
-                </a>
-
-                <a class="nav-link {{ request()->is('roles') || request()->is('roles') ? 'active' : '' }}"
-                    href="{{ route('roles.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
-                    Roles
-                </a>
-
-
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>E-commerce</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">Products</a>
+                                </li>
+                                <li>
+                                    <a href="#">Orders</a>
+                                </li>
+                                <li>
+                                    <a href="#">Credit cart</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="far fa-gem"></i>
+                            <span>Components</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">General</a>
+                                </li>
+                                <li>
+                                    <a href="#">Panels</a>
+                                </li>
+                                <li>
+                                    <a href="#">Tables</a>
+                                </li>
+                                <li>
+                                    <a href="#">Icons</a>
+                                </li>
+                                <li>
+                                    <a href="#">Forms</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-chart-line"></i>
+                            <span>Charts</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">Pie chart</a>
+                                </li>
+                                <li>
+                                    <a href="#">Line chart</a>
+                                </li>
+                                <li>
+                                    <a href="#">Bar chart</a>
+                                </li>
+                                <li>
+                                    <a href="#">Histogram</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-globe"></i>
+                            <span>Maps</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">Google maps</a>
+                                </li>
+                                <li>
+                                    <a href="#">Open street map</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
-
     </nav>
 </div>
+

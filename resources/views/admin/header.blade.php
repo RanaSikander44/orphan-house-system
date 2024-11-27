@@ -1,28 +1,28 @@
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav id="layoutHeader" class="sb-topnav navbar navbar-expand navbar-dark bg-white">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3 pt-2" href="{{ route('dashboard') }}">
-        Wisdom
-        <!-- <img src="{{asset('backend/images/logo.png')}}" style="width : 100px;" alt=""> -->
-    </a>
+    <a class="navbar-brand ps-3 text-black" href="index.html">Clients</a>
+
     <!-- Sidebar Toggle-->
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
-            class="fas fa-bars"></i></button>
+    <!-- <button
+        class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 "
+        id="sidebarToggle"
+        href="#!"
+      > -->
+    <!-- <i class="fas fa-bars"></i> -->
+    </button>
     <!-- Navbar Search-->
     <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
         <div class="input-group">
             <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
                 aria-describedby="btnNavbarSearch" />
-            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+            <button class="btn btn-primary" id="btnNavbarSearch" type="button">
+                <i class="fas fa-search"></i>
+            </button>
         </div>
     </form>
     <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <button class="btn btn-primary" id="sidebarTogglee">
-                <i class="fas fa-user fa-fw"></i>
-            </button>
-        </div>
-    </nav>
+    <!-- Navbar-->
+
 </nav>
 <!-- Sidebar -->
 <div id="sidebar">
@@ -35,9 +35,10 @@
             <li class="avatar">
                 <div class="image"><img src="" alt="avatar" /></div>
                 <div class="name-login">
-                <h5>{{ auth()->user()->name }}</h5>
-                <a href="#"><i class="fa-solid fa-envelope"></i> {{ Auth()->user()->email }}</a>
-                    <a href="{{ route('logout') }}" class="text-capitalize d-block mt-2 my-btn text-dark" style="width  : 40%;">sign out</a>
+                    <h5>{{ auth()->user()->name }}</h5>
+                    <a href="#"><i class="fa-solid fa-envelope"></i> {{ Auth()->user()->email }}</a>
+                    <a href="{{ route('logout') }}" class="text-capitalize d-block mt-2 my-btn text-dark"
+                        style="width  : 40%;">sign out</a>
                 </div>
             </li>
             <li class="third-li">
