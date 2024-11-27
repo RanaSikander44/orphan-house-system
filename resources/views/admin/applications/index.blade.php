@@ -45,8 +45,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="list" title="Delete Student"
-                                            onclick="return confirm('Are you sure you want to delete this student?')">
+                                        <a class="dropdown-item" href="javascript:void(0);" title="Delete Student" onclick="deleteStu()">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
                                     </li>
@@ -78,3 +77,25 @@
 </div>
 
 @endsection
+
+
+
+
+<script>
+    function deleteStu() {
+        Swal.fire({
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Make the AJAX request
+                window.location.href = "{{ route('student.delete', $list->id ?? '') }}";
+
+            }
+        });
+    }
+</script>

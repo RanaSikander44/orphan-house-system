@@ -30,7 +30,7 @@
                             </td>
                             <td>
                                 <!-- Edit Button -->
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm text-white btn-warning">Edit</a>
 
                                 <!-- Delete Button -->
                                 <button type="button" class="btn btn-sm btn-danger"
