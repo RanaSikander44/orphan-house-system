@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         // Paginate users - this will get 10 users per page, you can adjust the number as needed
-        $users = User::orderBy('id' , 'desc')->paginate(10);
+        $users = User::orderBy('id', 'desc')->paginate(10);
         return view('users.index', compact('users'));
 
     }
@@ -30,8 +30,8 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));  // Passing the user to the view
-
+        $roles = Role::all();
+        return view('users.edit', compact('user', 'roles'));  // Passing the user to the view
     }
 
 
@@ -54,6 +54,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+
         // Validate login credentials
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -95,19 +96,31 @@ class UserController extends Controller
     }
 
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,user,donor',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role_id' => 'required',
+            'change_password' => 'nullable|string|min:8', // Validate only if provided and ensure at least 8 characters
         ]);
+        
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role_id = $request->role_id;
+
+        // Update password only if `change_password` is provided
+        if ($request->filled('change_password')) {
+            $user->password = bcrypt($request->change_password); // Hash the password
+        }
+
+        // Save the updated user details
+        $user->save();
+
 
         return redirect()->route('users')->with('success', 'User updated successfully.');
     }

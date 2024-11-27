@@ -2,6 +2,19 @@
 @extends('admin.default')
 
 @section('content')
+
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
 <div class="container-fluid px-4">
     <h3 class="mt-4">Edit User</h3>
 
@@ -21,18 +34,34 @@
                 <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
             </div>
 
+            <!-- change Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Change Password</label>
+                <input type="password" class="form-control" id="email" name="change_password">
+            </div>
+
+
             <!-- Role -->
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role" name="role" required>
+                <select class="form-select" id="role" name="role_id" required>
                     <option value="" disabled>Select a role</option>
-                    <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
-                    <option value="donor" {{ $user->role === 'donor' ? 'selected' : '' }}>Donor</option>
+                    @foreach ($roles as $list)
+                        <option value="{{ $list->id }}" {{ isset($user) && $list->id == $user->role_id ? 'selected' : '' }}>
+                            {{ $list->role }}
+                        </option>
+                    @endforeach
                 </select>
+
+                </select>
+
             </div>
 
-            <button type="submit" class="btn btn-primary">Update User</button>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-sm btn-primary px-4 py-2">
+                    <i class="fa fa-check"></i> Update
+                </button>
+            </div>
         </div>
     </form>
 </div>
