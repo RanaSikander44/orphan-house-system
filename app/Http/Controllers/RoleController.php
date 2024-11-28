@@ -23,15 +23,22 @@ class RoleController extends Controller
     // Store a newly created role in storage
     public function store(Request $request)
     {
+
         // Validate input - no predefined options for roles
         $request->validate([
-            'role' => 'required|string|max:255', // Allow any string, no restrictions
+            'name' => 'required', // Allow any string, no restrictions
         ]);
+
+
+        $role =  New Role();
+        $role->name = $request->name;
+        $role->guard_name = 'web';
+        $role->save();
     
         // Create a new role
-        Role::create([
-            'role' => $request->role,
-        ]);
+        // Role::create([
+        //     'name' => $request->role,
+        // ]);
     
         // Redirect back with a success message
         return redirect()->route('roles.index')->with('success', 'Role added successfully.');
@@ -48,11 +55,11 @@ class RoleController extends Controller
     {
         // Validate the incoming request - no restrictions
         $request->validate([
-            'role' => 'required|string|max:255', // Allow any string, no restrictions
+            'name' => 'required', // Allow any string, no restrictions
         ]);
 
         // Update the role's name
-        $role->role = $request->input('role');
+        $role->name = $request->input('name');
         $role->save();
 
         // Redirect back with a success message
