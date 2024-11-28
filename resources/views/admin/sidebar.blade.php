@@ -21,6 +21,7 @@
                         </a>
 
                     </li>
+                    
                     <li class="sidebar-dropdown">
                         <a href="#">
                             <i class="fa fa-shopping-cart"></i>
@@ -66,7 +67,7 @@
                         </div>
                     </li>
                     <li class="sidebar-dropdown">
-                        <a href="#">
+                        <a href="#" class="dropdown-toggle">
                             <i class="fa fa-chart-line"></i>
                             <span>Charts</span>
                         </a>
@@ -88,7 +89,7 @@
                         </div>
                     </li>
                     <li class="sidebar-dropdown">
-                        <a href="#">
+                        <a href="#" class="dropdown-toggle">
                             <i class="fa fa-globe"></i>
                             <span>Maps</span>
                         </a>
@@ -102,6 +103,7 @@
                                 </li>
                             </ul>
                         </div>
+                                 
                     </li>
                 </ul>
             </div>
@@ -109,3 +111,53 @@
     </nav>
 </div>
 
+
+<style>
+    /* Drodown Css */
+
+    .sidebar-submenu {
+        overflow: hidden;
+        height: 0;
+        transition: height 0.5s ease;
+        /* Smooth animation over 0.5 seconds */
+    }
+
+    .sidebar-submenu ul {
+        list-style: none;
+        padding: 0;
+        background-color: white;
+    }
+
+    .sidebar-submenu ul li a {
+        text-decoration: none;
+        color: #333;
+        display: block;
+    }
+
+    .sidebar-dropdown.active .sidebar-submenu {
+        display: block;
+    }
+</style>
+
+
+<script>
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+    dropdownToggles.forEach((toggle) => {
+        toggle.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+
+            const parentLi = toggle.parentElement;
+
+            // Toggle the clicked menu
+            const submenu = parentLi.querySelector('.sidebar-submenu');
+            if (parentLi.classList.contains('active')) {
+                parentLi.classList.remove('active');
+                if (submenu) submenu.style.height = '0'; // Collapse the menu
+            } else {
+                parentLi.classList.add('active');
+                if (submenu) submenu.style.height = submenu.scrollHeight + 'px'; // Expand to full height
+            }
+        });
+    });
+</script>
