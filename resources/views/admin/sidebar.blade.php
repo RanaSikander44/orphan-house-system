@@ -6,7 +6,6 @@
                     <img src="{{ asset('backend/images/wisdom-logo.png.webp') }}" style="width: 60%; height: auto;"
                         alt="Wisdom Logo">
                 </a>
-                <!-- <img src="" alt=""> -->
                 <div id="close-sidebar" class="sidebarToggle">
                     <i class="fa-solid fa-angles-right text-black"></i>
                 </div>
@@ -14,102 +13,72 @@
 
             <div class="sidebar-menu">
                 <ul>
-                    <li class="sidebar-dropdown">
+                    <li class="sidebar-dropdown {{ request()->is('dashboard') ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}">
                             <i class="fa fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
+                    </li>
 
-                    </li>
-                    
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="fa fa-shopping-cart"></i>
-                            <span>E-commerce</span>
+                    <div class="sb-sidenav-menu-heading mt-2 mb-2 fw-bold text-muted"
+                        style="margin-left: 15px; font-size: 12px;">
+                        APPLICATIONS
+                    </div>
+
+                    <li class="sidebar-dropdown {{ request()->is('academic-year') ? 'active' : '' }}">
+                        <a href="{{ route('academic-year') }}">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Sessions</span>
                         </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">Products</a>
-                                </li>
-                                <li>
-                                    <a href="#">Orders</a>
-                                </li>
-                                <li>
-                                    <a href="#">Credit cart</a>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="far fa-gem"></i>
-                            <span>Components</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">General</a>
-                                </li>
-                                <li>
-                                    <a href="#">Panels</a>
-                                </li>
-                                <li>
-                                    <a href="#">Tables</a>
-                                </li>
-                                <li>
-                                    <a href="#">Icons</a>
-                                </li>
-                                <li>
-                                    <a href="#">Forms</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="sidebar-dropdown">
+
+                    <li class="sidebar-dropdown {{ request()->is('applications*') ? 'active' : '' }}">
                         <a href="#" class="dropdown-toggle">
-                            <i class="fa fa-chart-line"></i>
-                            <span>Charts</span>
+                            <i class="fas fa-envelope"></i>
+                            <span>Applications</span>
                         </a>
-                        <div class="sidebar-submenu">
+                        <div class="sidebar-submenu"
+                            style="{{ request()->is('applications*') ? 'height: auto;' : '' }}">
                             <ul>
                                 <li>
-                                    <a href="#">Pie chart</a>
+                                    <a href="{{ route('applications') }}"
+                                        class="{{ request()->is('applications') ? 'active' : '' }}">
+                                        Applications List
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="#">Line chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Bar chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Histogram</a>
+                                    <a href="{{ route('application.add') }}"
+                                        class="{{ request()->is('applications/add') ? 'active' : '' }}">
+                                        Add New
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                    <li class="sidebar-dropdown">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="fa fa-globe"></i>
-                            <span>Maps</span>
+
+                    <li
+                        class="sidebar-dropdown {{ request()->is('users') || request()->is('users/create') ? 'active' : '' }}">
+                        <a class="nav-link " href="{{ route('users') }}">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
                         </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">Google maps</a>
-                                </li>
-                                <li>
-                                    <a href="#">Open street map</a>
-                                </li>
-                            </ul>
-                        </div>
-                                 
                     </li>
+
+
+                    <li class="sidebar-dropdown {{ request()->is('roles') || request()->is('roles') ? 'active' : '' }}">
+                        <a class="nav-link " href="{{ route('roles.index') }}">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+
+
                 </ul>
             </div>
         </div>
     </nav>
 </div>
+
 
 
 <style>
@@ -136,6 +105,20 @@
 
     .sidebar-dropdown.active .sidebar-submenu {
         display: block;
+    }
+
+    .sidebar-menu .active>a {
+        color: #007bff;
+        /* Highlighted text color */
+        /* font-weight: bold; */
+        /* Optional */
+    }
+
+    .sidebar-menu .active .sidebar-submenu ul li a.active {
+        color: #007bff;
+        /* Highlighted submenu link color */
+        /* font-weight: bold; */
+        /* Optional */
     }
 </style>
 

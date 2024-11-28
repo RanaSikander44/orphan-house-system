@@ -1,14 +1,18 @@
 @extends('admin.default')
 
+@section('Page-title' , 'Users')
+
+
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Users</h3>
-
-    <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary float-end">Add New User</a>
-
-    <div class="card bg-white p-3 mt-5 border-0 shadow-sm rounded">
-        <h5 class="text-muted mb-3">User List</h5>
+    <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="text-muted">Users List</h5>
+            <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
+                Add New
+            </a>
+        </div>
 
         @if($users->count())
             <table class="table table-bordered table-striped">
@@ -30,7 +34,8 @@
                             </td>
                             <td>
                                 <!-- Edit Button -->
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm text-white btn-warning">Edit</a>
+                                <a href="{{ route('users.edit', $user->id) }}"
+                                    class="btn btn-sm text-white btn-warning">Edit</a>
 
                                 <!-- Delete Button -->
                                 <button type="button" class="btn btn-sm btn-danger"

@@ -1,9 +1,14 @@
 @extends('admin.default')
+
+
+@section('Page-title' , 'Add New Application')
+
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Add New Application</h3>
+    <!-- <h3 class="mt-4">Add New Application</h3> -->
 
     <div class="card bg-white p-3 mt-4 border-0 shadow-sm rounded">
         <div class="student-buttons pt-3">
