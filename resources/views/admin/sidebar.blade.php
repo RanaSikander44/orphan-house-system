@@ -118,6 +118,10 @@
         /* font-weight: bold; */
         /* Optional */
     }
+
+    .sidebar-wrapper.collapsed .dropdown-toggle::after {
+        content: none;
+    }
 </style>
 
 
