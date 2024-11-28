@@ -22,7 +22,7 @@
 
                     <div class="sb-sidenav-menu-heading mt-2 mb-2 fw-bold text-muted"
                         style="margin-left: 15px; font-size: 12px;">
-                        APPLICATIONS
+                        <span>APPLICATIONS</span>
                     </div>
 
                     <li class="sidebar-dropdown {{ request()->is('academic-year') ? 'active' : '' }}">
@@ -71,8 +71,6 @@
                             <span>Roles</span>
                         </a>
                     </li>
-
-
                 </ul>
             </div>
         </div>

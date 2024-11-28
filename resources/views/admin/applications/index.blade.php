@@ -1,5 +1,8 @@
 @extends('admin.default')
 
+
+@section('Page-title' , 'Applications')
+
 @section('content')
 <div class="container-fluid px-4">
     <!-- <h3 class="mt-4">Applications</h3>
