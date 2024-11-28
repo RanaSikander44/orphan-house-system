@@ -64,13 +64,20 @@
                         </a>
                     </li>
 
-
                     <li class="sidebar-dropdown {{ request()->is('roles') || request()->is('roles') ? 'active' : '' }}">
                         <a class="nav-link " href="{{ route('roles.index') }}">
                             <i class="fas fa-user-shield"></i>
                             <span>Roles</span>
                         </a>
                     </li>
+
+                    <li class="sidebar-dropdown {{ request()->is('permissions') || request()->is('permissions') ? 'active' : '' }}">
+                        <a class="nav-link " href="{{ route('permissions.index') }}">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Permissions</span>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>

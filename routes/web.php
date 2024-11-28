@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\PermissionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
@@ -76,6 +77,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+
+
+    // permission
+    Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::post('permissions/add', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::put('/permissions/{id}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::delete('/permissions/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
+
+
+    // assign permissions please
+    Route::get('assign-roles/{id}' , [PermissionController::class , 'assign'])->name('assign');
+
+
+
 
 });
 
