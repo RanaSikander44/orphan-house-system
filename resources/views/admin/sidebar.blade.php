@@ -20,29 +20,31 @@
             <div class="sidebar-menu">
                 <ul>
                     @foreach ($sidebar as $menu)
-                        <li class="sidebar-dropdown {{ request()->routeIs($menu->route ?? '') ? 'active' : '' }}">
-                            <a href="{{ $menu->route ? route($menu->route) : '#' }}"
-                                class="{{ $menu->is_dropdown && $menu->children->count() ? 'dropdown-toggle' : '' }}">
-                                <i class="{{ $menu->icon }}"></i>
-                                <span>{{ $menu->title }}</span>
-                            </a>
+                        @can($menu->permission)
+                            <li class="sidebar-dropdown {{ request()->routeIs($menu->route ?? '') ? 'active' : '' }}">
+                                <a href="{{ $menu->route ? route($menu->route) : '#' }}"
+                                    class="{{ $menu->is_dropdown && $menu->children->count() ? 'dropdown-toggle' : '' }}">
+                                    <i class="{{ $menu->icon }}"></i>
+                                    <span>{{ $menu->title }}</span>
+                                </a>
 
-                            @if ($menu->is_dropdown && $menu->children->count())
-                                <div class="sidebar-submenu"
-                                    style="{{ request()->is($menu->route . '*') ? 'height: auto;' : '' }}">
-                                    <ul>
-                                        @foreach ($menu->children as $child)
-                                            <li>
-                                                <a href="{{ route($child->route) }}"
-                                                    class="{{ request()->routeIs($child->route) ? 'active' : '' }}">
-                                                    {{ $child->title }}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                        </li>
+                                @if ($menu->is_dropdown && $menu->children->count())
+                                    <div class="sidebar-submenu"
+                                        style="{{ request()->is($menu->route . '*') ? 'height: auto;' : '' }}">
+                                        <ul>
+                                            @foreach ($menu->children as $child)
+                                                <li>
+                                                    <a href="{{ route($child->route) }}"
+                                                        class="{{ request()->routeIs($child->route) ? 'active' : '' }}">
+                                                        {{ $child->title }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            </li>
+                        @endcan
                     @endforeach
                 </ul>
             </div>
