@@ -15,9 +15,9 @@
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="text-muted">Role List</h5>
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+            <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary">
                 Add New Role
-            </button>
+            </a>
         </div>
 
 
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Add Modal -->
-    <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">

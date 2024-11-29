@@ -23,7 +23,6 @@ class UserController extends Controller
 
     public function create()
     {
-
         $roles = Role::all();
         return view('users.create', compact('roles'));  // Assuming your create form is in resources/views/users/create.blade.php
     }

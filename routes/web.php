@@ -74,7 +74,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Roles
-    Route::resource('roles', RoleController::class);
+    Route::get('roles', [RoleController::class , 'index'] );
+    Route::get('roles/add', [RoleController::class, 'create'])->name('roles.create');
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
 
@@ -87,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // assign permissions please
-    Route::get('assign-roles/{id}' , [PermissionController::class , 'assign'])->name('assign');
+    Route::get('assign-roles/{id}', [PermissionController::class, 'assign'])->name('assign');
 
 
 

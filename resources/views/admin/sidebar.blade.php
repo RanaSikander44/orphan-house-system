@@ -1,3 +1,8 @@
+@php
+    use App\Models\Menu;
+
+    $sidebar = Menu::with('children')->whereNull('parent_id')->orderBy('order')->get();
+@endphp
 <div class="page-wrapper chiller-theme toggled">
     <nav id="sidebare" class="sidebar-wrapper bg-white">
         <div class="sidebar-content">
@@ -11,75 +16,112 @@
                 </div>
             </div>
 
+
             <div class="sidebar-menu">
                 <ul>
-                    <li class="sidebar-dropdown {{ request()->is('dashboard') ? 'active' : '' }}">
-                        <a href="{{ route('dashboard') }}">
-                            <i class="fa fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
+                    @foreach ($sidebar as $menu)
+                        <li class="sidebar-dropdown {{ request()->routeIs($menu->route ?? '') ? 'active' : '' }}">
+                            <a href="{{ $menu->route ? route($menu->route) : '#' }}"
+                                class="{{ $menu->is_dropdown && $menu->children->count() ? 'dropdown-toggle' : '' }}">
+                                <i class="{{ $menu->icon }}"></i>
+                                <span>{{ $menu->title }}</span>
+                            </a>
 
-                    <div class="sb-sidenav-menu-heading mt-2 mb-2 fw-bold text-muted"
-                        style="margin-left: 15px; font-size: 12px;">
-                        <span>APPLICATIONS</span>
-                    </div>
-
-                    <li class="sidebar-dropdown {{ request()->is('academic-year') ? 'active' : '' }}">
-                        <a href="{{ route('academic-year') }}">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span>Sessions</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-dropdown {{ request()->is('applications*') ? 'active' : '' }}">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="fas fa-envelope"></i>
-                            <span>Applications</span>
-                        </a>
-                        <div class="sidebar-submenu"
-                            style="{{ request()->is('applications*') ? 'height: auto;' : '' }}">
-                            <ul>
-                                <li>
-                                    <a href="{{ route('applications') }}"
-                                        class="{{ request()->is('applications') ? 'active' : '' }}">
-                                        Applications List
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('application.add') }}"
-                                        class="{{ request()->is('applications/add') ? 'active' : '' }}">
-                                        Add New
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li
-                        class="sidebar-dropdown {{ request()->is('users') || request()->is('users/create') ? 'active' : '' }}">
-                        <a class="nav-link " href="{{ route('users') }}">
-                            <i class="fas fa-users"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-dropdown {{ request()->is('roles') || request()->is('roles') ? 'active' : '' }}">
-                        <a class="nav-link " href="{{ route('roles.index') }}">
-                            <i class="fas fa-user-shield"></i>
-                            <span>Roles</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-dropdown {{ request()->is('permissions') || request()->is('permissions') ? 'active' : '' }}">
-                        <a class="nav-link " href="{{ route('permissions.index') }}">
-                            <i class="fas fa-user-shield"></i>
-                            <span>Permissions</span>
-                        </a>
-                    </li>
-
+                            @if ($menu->is_dropdown && $menu->children->count())
+                                <div class="sidebar-submenu"
+                                    style="{{ request()->is($menu->route . '*') ? 'height: auto;' : '' }}">
+                                    <ul>
+                                        @foreach ($menu->children as $child)
+                                            <li>
+                                                <a href="{{ route($child->route) }}"
+                                                    class="{{ request()->routeIs($child->route) ? 'active' : '' }}">
+                                                    {{ $child->title }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </li>
+                    @endforeach
                 </ul>
             </div>
+
+
+
+
+
+
+
+            <!-- <div class="sidebar-menu">
+                    <ul>
+                        <li class="sidebar-dropdown {{ request()->is('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard') }}">
+                                <i class="fa fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <div class="sb-sidenav-menu-heading mt-2 mb-2 fw-bold text-muted"
+                            style="margin-left: 15px; font-size: 12px;">
+                            <span>APPLICATIONS</span>
+                        </div>
+
+                        <li class="sidebar-dropdown {{ request()->is('academic-year') ? 'active' : '' }}">
+                            <a href="{{ route('academic-year') }}">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>Sessions</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-dropdown {{ request()->is('applications*') ? 'active' : '' }}">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fas fa-envelope"></i>
+                                <span>Applications</span>
+                            </a>
+                            <div class="sidebar-submenu"
+                                style="{{ request()->is('applications*') ? 'height: auto;' : '' }}">
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('applications') }}"
+                                            class="{{ request()->is('applications') ? 'active' : '' }}">
+                                            Applications List
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('application.add') }}"
+                                            class="{{ request()->is('applications/add') ? 'active' : '' }}">
+                                            Add New
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li
+                            class="sidebar-dropdown {{ request()->is('users') || request()->is('users/create') ? 'active' : '' }}">
+                            <a class="nav-link " href="{{ route('users') }}">
+                                <i class="fas fa-users"></i>
+                                <span>Users</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-dropdown {{ request()->is('roles') || request()->is('roles') ? 'active' : '' }}">
+                            <a class="nav-link " href="{{ route('roles.index') }}">
+                                <i class="fas fa-user-shield"></i>
+                                <span>Roles</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-dropdown {{ request()->is('permissions') || request()->is('permissions') ? 'active' : '' }}">
+                            <a class="nav-link " href="{{ route('permissions.index') }}">
+                                <i class="fas fa-user-shield"></i>
+                                <span>Permissions</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div> -->
         </div>
     </nav>
 </div>
