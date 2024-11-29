@@ -34,9 +34,6 @@
                             <button class="btn btn-sm btn-danger" onclick="openDeleteModal({{ $permission->id }})">
                                 Delete
                             </button>
-                            <a class="btn btn-sm btn-warning" href="{{ route('assign' , $permission->id) }}">
-                                Assign Permissions
-                            </a>
                         </td>
                     </tr>
                 @empty

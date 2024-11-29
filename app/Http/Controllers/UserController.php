@@ -38,13 +38,20 @@ class UserController extends Controller
     // Register method
     public function register(Request $request)
     {
+
+        dd($request);
         $data = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed',
         ]);
 
-        $user = User::create($data);
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->save();
+
 
         if ($user) {
             return redirect()->route('login');
@@ -155,15 +162,17 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed', // password confirmation validation
-            'role_id' => 'required', // Ensure the role is one of the valid options
+            'role' => 'required', // Ensure the role is one of the valid options
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->role_id = $request->role_id;
         $user->save();
+
+        $user->assignRole($request->role);
+
 
 
         // // Create and save the new user in the 'users' table

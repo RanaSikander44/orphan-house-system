@@ -34,8 +34,7 @@
                         <td>{{ $role->name }}</td>
                         <td>
                             <!-- Edit Button -->
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                onclick="openEditModal({{ $role->id }}, '{{ $role->name }}')">Edit</button>
+                            <a href="{{ route('roles.edit' , $role->id) }}" class="btn btn-sm btn-primary">Edit</a>
                             <!-- Delete Button -->
                             <button class="btn btn-sm btn-danger" onclick="openDeleteModal({{ $role->id }})">
                                 Delete
@@ -58,57 +57,6 @@
             </div>
             <div>
                 {{ $roles->links() }}
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Modal -->
-    <!-- <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addRoleForm" action="{{ route('roles.store') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Role Name</label>
-                            <input type="text" id="role" name="name" class="form-control" required
-                                placeholder="Enter Role name">
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Add</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editRoleForm" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-3">
-                            <label for="editRole" class="form-label">Role Name</label>
-                            <input type="text" id="editRole" name="name" class="form-control" required
-                                placeholder="Enter Role name">
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

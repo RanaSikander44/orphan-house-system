@@ -3,7 +3,7 @@
 use App\Http\Controllers\admin\PermissionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\admin\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ApplicationController;
@@ -74,10 +74,12 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Roles
-    Route::get('roles', [RoleController::class , 'index'] );
-    Route::get('roles/add', [RoleController::class, 'create'])->name('roles.create');
-    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
-    Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+    Route::get('roles', [RolesController::class , 'index'])->name('roles.index');
+    Route::get('roles/add', [RolesController::class, 'create'])->name('roles.create');
+    Route::post('roles/store', [RolesController::class, 'store'])->name('roles.store');
+    Route::get('roles/edit/{id}', [RolesController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{role}', [RolesController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{role}', [RolesController::class, 'destroy'])->name('roles.destroy');
 
 
     // permission
