@@ -15,9 +15,9 @@
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="text-muted">Role List</h5>
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+            <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary">
                 Add New Role
-            </button>
+            </a>
         </div>
 
 
@@ -31,11 +31,11 @@
             <tbody>
                 @forelse($roles as $role)
                     <tr>
-                        <td>{{ $role->role }}</td>
+                        <td>{{ $role->name }}</td>
                         <td>
                             <!-- Edit Button -->
                             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                onclick="openEditModal({{ $role->id }}, '{{ $role->role }}')">Edit</button>
+                                onclick="openEditModal({{ $role->id }}, '{{ $role->name }}')">Edit</button>
                             <!-- Delete Button -->
                             <button class="btn btn-sm btn-danger" onclick="openDeleteModal({{ $role->id }})">
                                 Delete
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Add Modal -->
-    <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -75,7 +75,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="role" class="form-label">Role Name</label>
-                            <input type="text" id="role" name="role" class="form-control" required
+                            <input type="text" id="role" name="name" class="form-control" required
                                 placeholder="Enter Role name">
                         </div>
                         <div class="d-flex justify-content-end">
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
@@ -101,7 +101,7 @@
                         @method('PUT')
                         <div class="mb-3">
                             <label for="editRole" class="form-label">Role Name</label>
-                            <input type="text" id="editRole" name="role" class="form-control" required
+                            <input type="text" id="editRole" name="name" class="form-control" required
                                 placeholder="Enter Role name">
                         </div>
                         <div class="d-flex justify-content-end">
