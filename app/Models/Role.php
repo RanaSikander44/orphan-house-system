@@ -13,7 +13,7 @@ class Role extends Model
     public $timestamps = false;
 
     // Define the fillable properties (columns that can be mass-assigned)
-    protected $fillable = ['role'];
+    protected $fillable = ['name' , 'guard_name'];
 
     // You can add relationships, scopes, or other methods here as needed
 }

@@ -55,11 +55,11 @@
                 <!-- Role -->
                 <div class="mb-3">
                     <label for="role" class="form-label fw-semibold">Role</label>
-                    <select class="form-select" id="role" name="role_id" required>
+                    <select class="form-select" id="role" name="role" required>
                         <option value="" disabled selected>Select a role</option>
                         @foreach ($roles as $list)
 
-                        <option value="{{ $list->id }}">{{ $list->role }}</option>
+                        <option value="{{ $list->name }}">{{ $list->name }}</option>
                         
                         @endforeach
                         

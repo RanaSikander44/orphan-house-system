@@ -1,43 +1,48 @@
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3 pt-2" href="{{ route('dashboard') }}">
-        Wisdom
-        <!-- <img src="{{asset('backend/images/logo.png')}}" style="width : 100px;" alt=""> -->
-    </a>
-    <!-- Sidebar Toggle-->
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
-            class="fas fa-bars"></i></button>
-    <!-- Navbar Search-->
-    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-        <div class="input-group">
-            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
-                aria-describedby="btnNavbarSearch" />
-            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-        </div>
-    </form>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <button class="btn btn-primary" id="sidebarTogglee">
-                <i class="fas fa-user fa-fw"></i>
-            </button>
-        </div>
-    </nav>
+<nav id="layoutHeader" class="sb-topnav navbar navbar-expand navbar-dark bg-white">
+    <!-- Navbar Brand -->
+    <p class="navbar-brand mt-2 ps-3 text-black" href="#">@yield('Page-title')</p>
+
+    <!-- Greeting and user button container -->
+    <div class="d-flex align-items-center ms-auto">
+        <!-- Greeting Text -->
+        <p class="mb-0 me-3" style="font-size: 1.1rem; color: #B5B5C3; font-weight: 500;">
+            {{ getGreeting() . ',' }}
+            <span class="text-dark">{{ Auth()->user()->name }}</span>
+        </p>
+
+        <!-- User Button -->
+        <button class="btn  me-3" style="background-color :#C9F7F5; color : #B5B5C3;" id="sidebarTogglee">
+            <i class="fas fa-user fa-fw"></i>
+        </button>
+    </div>
 </nav>
+
+
 <!-- Sidebar -->
 <div id="sidebar">
     <div class="bg-white border-end sidebar-content">
-        <ul class="list-group list-group-flush my-ul pt-2">
+        <ul class="list-group list-group-flush my-ul pt-4">
             <li class="list-group-item first-li">
-                <h4 class="text-capitalize">Admin profile</h4>
+                <h5 class="text-capitalize">Admin profile</h5>
                 <span id="cross" class="" style="cursor : pointer;"><i class="fa-solid fa-xmark"></i></span>
             </li>
             <li class="avatar">
-                <div class="image"><img src="" alt="avatar" /></div>
+                <div class="image"><img src="{{ asset('backend/images/default.jpg') }}" alt="avatar" class="rounded" />
+                </div>
                 <div class="name-login">
-                <h5>{{ auth()->user()->name }}</h5>
-                <a href="#"><i class="fa-solid fa-envelope"></i> {{ Auth()->user()->email }}</a>
-                    <a href="{{ route('logout') }}" class="text-capitalize d-block mt-2 my-btn text-dark" style="width  : 40%;">sign out</a>
+                    <h5>{{ auth()->user()->name }}</h5>
+                    <a href="#" class="d-flex align-items-center text-decoration-none">
+                        <!-- Envelope Icon -->
+                        <i class="fa-solid fa-envelope me-2" style="font-size: 1rem; color: #6c757d;"></i>
+
+                        <!-- Email Address -->
+                        <p class="text-muted mb-0" style="font-size: 1rem; color: #6c757d;">
+                            {{ Auth()->user()->email }}
+                        </p>
+                    </a>
+
+                    <a href="{{ route('logout') }}" class="text-capitalize d-block mt-2 my-btn text-dark"
+                        style="width  : 40%;">sign out</a>
                 </div>
             </li>
             <li class="third-li">
