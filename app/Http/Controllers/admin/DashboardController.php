@@ -13,6 +13,8 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-
+        $users_count = user::count(); 
+        $students = student::count(); 
+        return view('admin.dashboard' , compact('users_count' , 'students'));
     }
 }
