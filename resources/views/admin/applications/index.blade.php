@@ -1,12 +1,15 @@
 @extends('admin.default')
 
+
+@section('Page-title' , 'Applications')
+
 @section('content')
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Applications</h3>
+    <!-- <h3 class="mt-4">Applications</h3>
 
-    <a href="{{ route('application.add') }}" class="btn btn-sm btn-primary float-end">Add New Student</a>
+    <a href="{{ route('application.add') }}" class="btn btn-sm btn-primary float-end">Add New Student</a> -->
 
-    <div class="card bg-white p-3 mt-5 border-0 shadow-sm rounded">
+    <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <h5 class="text-muted mb-3">Applications List</h5>
         <table class="table table-striped">
             <thead class="bg-light">
@@ -33,18 +36,19 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('student.view' ,  $list->id) }}" title="View Student">
+                                        <a class="dropdown-item" href="{{ route('student.view', $list->id) }}"
+                                            title="View Student">
                                             <i class="fa fa-eye"></i> View
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="students" title="Edit Student">
+                                        <a class="dropdown-item" href="{{ route('student.edit', $list->id)  }}"
+                                            title="Edit Student">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="list" title="Delete Student"
-                                            onclick="return confirm('Are you sure you want to delete this student?')">
+                                        <a class="dropdown-item" href="javascript:void(0);" title="Delete Student" onclick="deleteStu()">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
                                     </li>
@@ -76,3 +80,25 @@
 </div>
 
 @endsection
+
+
+
+
+<script>
+    function deleteStu() {
+        Swal.fire({
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Make the AJAX request
+                window.location.href = "{{ route('student.delete', $list->id ?? '') }}";
+
+            }
+        });
+    }
+</script>

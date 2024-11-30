@@ -1,5 +1,7 @@
 @extends('admin.default')
 
+@section('Page-title', 'Dashboard')
+
 @section('content')
 <div class="container-fluid px-4">
     <div class="row">
@@ -13,7 +15,7 @@
                                 <h5 class="ms-3 mt-3">Student</h5>
                                 <p class="ms-3 mt-2">Total Students</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="{{ route('applications') }}">{{ $total_students }}</a>
+
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -22,7 +24,7 @@
                                 <h5 class="ms-3 mt-3">Teachers</h5>
                                 <p class="ms-3 mt-2">Total Teachers</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">2</a>
+
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -30,27 +32,17 @@
                                 <h5 class="ms-3 mt-3">Parents</h5>
                                 <p class="ms-3 mt-2">Total Parents</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">2</a>
+
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-white rounded-2 bg-gradient"
-                                style="border: none; background-color: #DC4BF1;">
-                                <h5 class="ms-3 mt-3">Staffs</h5>
-                                <p class="ms-3 mt-2">Total Staffs</p>
-                                <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">2</a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-xl-6">
             <div class="card mb-4">
                 <div class="card-header">
@@ -69,6 +61,6 @@
                 <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 @endsection
