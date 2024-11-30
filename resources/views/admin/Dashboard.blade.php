@@ -15,16 +15,7 @@
                                 <h5 class="ms-3 mt-3">Student</h5>
                                 <p class="ms-3 mt-2">Total Students</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="{{ route('applications') }}">{{ $students }}</a>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card text-white rounded-2 bg-gradient"
-                                style="border: none; background-color: #DC4BF1;">
-                                <h5 class="ms-3 mt-3">Users</h5>
-                                <p class="ms-3 mt-2">Total Users</p>
-                                <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="{{ route('users') }}">{{ $users_count }}</a>
+
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -33,7 +24,7 @@
                                 <h5 class="ms-3 mt-3">Teachers</h5>
                                 <p class="ms-3 mt-2">Total Teachers</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">0</a>
+
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -41,7 +32,7 @@
                                 <h5 class="ms-3 mt-3">Parents</h5>
                                 <p class="ms-3 mt-2">Total Parents</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">0</a>
+
                             </div>
                         </div>
 
@@ -50,8 +41,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!-- <div class="row">
         <div class="col-xl-6">
