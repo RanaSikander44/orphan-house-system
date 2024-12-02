@@ -23,7 +23,6 @@
                         </div>
                     </div>
 
-                    <!-- Student Information -->
                     <!-- Centered Student Information -->
                     <div class="white-box text-muted mt-5 p-3 border rounded shadow-sm text-center">
                         <div class="row py-2 border-bottom align-items-center">

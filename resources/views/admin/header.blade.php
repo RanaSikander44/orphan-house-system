@@ -9,7 +9,6 @@
             {{ getGreeting() . ',' }}
             <span class="text-dark">{{ Auth()->user()->name }}</span>
         </p>
-
         <!-- User Button -->
         <button class="btn  me-3" style="background-color :#C9F7F5; color : #B5B5C3;" id="sidebarTogglee">
             <i class="fas fa-user fa-fw"></i>
