@@ -493,7 +493,7 @@
                                         <hr class="w-100">
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="form-group">    
                                             <div class="row">
                                                 @foreach ($documents as $index => $list)
                                                     <div class="col-md-6">

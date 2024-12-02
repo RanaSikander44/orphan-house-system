@@ -129,35 +129,34 @@ class ApplicationController extends Controller
         }
 
 
-        // Documents start 
-        $titles = $req->input('document_titles'); // Document titles from the request
-        $documents = $req->file('document_names'); // Uploaded files from the request
+        $titles = $req->input('document_titles');
+        $documents = $req->file('document_names');
 
         foreach ($titles as $index => $title) {
             if (isset($documents[$index])) {
-                // Generate a unique name for the file with its original extension
                 $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                // Define the destination folder
                 $uploadPath = public_path('backend/documents');
 
-                // Ensure the directory exists
                 if (!file_exists($uploadPath)) {
                     mkdir($uploadPath, 0777, true);
                 }
 
-                // Move the uploaded file to the destination folder
                 $documents[$index]->move($uploadPath, $uniqueName);
 
-                // Save the document details to the database
                 StudentDocuments::create([
                     'student_id' => $application->id,
                     'title' => $title,
-                    'name' => $uniqueName, // Path relative to the public directory
+                    'name' => $uniqueName,
+                ]);
+            } else {
+                StudentDocuments::create([
+                    'student_id' => $application->id,
+                    'title' => $title,
+                    'name' => null, 
                 ]);
             }
         }
-        // Documents End
 
         if ($application->save()) {
             return redirect()->route('applications')->with('success', 'Student Added !');
@@ -170,7 +169,7 @@ class ApplicationController extends Controller
     {
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = StudentDocuments::where('student_id', $student->id)->get();
+        $documents = StudentDocuments::where('student_id', $student->id)->whereNotNull('name')->get();
         return view('admin.applications.student_view', compact('student', 'parents', 'documents'));
     }
 
@@ -189,7 +188,6 @@ class ApplicationController extends Controller
 
     public function studentUpdate(Request $req, $id)
     {
-        // Validate the input
         $validator = Validator::make($req->all(), [
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
@@ -215,10 +213,8 @@ class ApplicationController extends Controller
                 ->withInput();
         }
 
-        // Fetch the existing student record
         $application = Student::findOrFail($id);
 
-        // Update student details only if provided
         $fieldsToUpdate = [
             'first_name',
             'last_name',
@@ -244,7 +240,6 @@ class ApplicationController extends Controller
             }
         }
 
-        // Update student image if provided
         if ($image = $req->file('student_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('backend/images/students');
@@ -254,7 +249,6 @@ class ApplicationController extends Controller
 
         $application->save();
 
-        // Update parent information
         $data = ParentModel::where('student_id', $id)->firstOrNew();
 
         if ($req->parent_status === 'guardian') {
@@ -282,30 +276,22 @@ class ApplicationController extends Controller
 
 
 
-        // Update documents
         if ($req->has('document_titles')) {
             $titles = $req->input('document_titles');
             $documents = $req->file('document_names');
 
-            // Loop through all titles
             foreach ($titles as $index => $title) {
-                // Check if a document was uploaded for this title
                 if (isset($documents[$index])) {
-                    // Generate a unique name for the file
                     $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                    // Define the destination folder
                     $uploadPath = public_path('backend/documents');
 
-                    // Ensure the directory exists
                     if (!file_exists($uploadPath)) {
                         mkdir($uploadPath, 0777, true);
                     }
 
-                    // Move the uploaded file to the destination folder
                     $documents[$index]->move($uploadPath, $uniqueName);
 
-                    // Update only if the document is changed (uploaded)
                     StudentDocuments::where('title', $title)->update([
                         'name' => $uniqueName
                     ]);
