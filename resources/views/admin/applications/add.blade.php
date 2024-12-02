@@ -1,7 +1,7 @@
 @extends('admin.default')
 
 
-@section('Page-title' , 'Add New Application')
+@section('Page-title', 'Add New Application')
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -495,24 +495,18 @@
                                         <hr class="w-100">
                                     </div>
                                     <div class="card-body">
-
                                         <div class="form-group">
-                                            @for($i = 1; $i <= 4; $i++)
-                                                <div class="row mb-3">
+                                            <div class="row">
+                                                @foreach ($docs as $index => $list)
                                                     <div class="col-md-6">
-                                                        <label for="title{{ $i }}" class="text-muted mb-2">Title
-                                                            {{ $i }}</label>
-                                                        <input type="text" name="document_titles[]" id="title{{ $i }}"
-                                                            class="form-control" placeholder="Enter document title">
+                                                        <label for="file_{{ $index }}"
+                                                            class="mb-2 mt-2 text-muted">{{ $list->title }}</label>
+                                                            <input type="text" class="d-none" name="document_titles[]" value="{{ $list->id }}">
+                                                        <input type="file" class="form-control" name="document_names[]"
+                                                            id="file_{{ $index }}">
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label for="fileUpload{{ $i }}" class="text-muted mb-2">Document
-                                                            {{ $i }}</label>
-                                                        <input type="file" name="document_names[]" id="fileUpload{{ $i }}"
-                                                            class="form-control">
-                                                    </div>
-                                                </div>
-                                            @endfor
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

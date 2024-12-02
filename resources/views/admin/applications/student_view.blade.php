@@ -368,7 +368,7 @@
                                                 @foreach ($documents as $list)
                                                                                                 <tr>
                                                                                                     <!-- Display Title -->
-                                                                                                    <td>{{ $list->title }}</td>
+                                                                                                    <td>{{ $list->documentTitle->title }}</td>
 
                                                                                                     <!-- Display File Name -->
                                                                                                     <td>{{ $list->name }}</td>

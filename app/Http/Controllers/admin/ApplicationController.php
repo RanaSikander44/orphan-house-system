@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
+use App\Models\documents_title;
 use App\Models\student;
 use App\Models\ParentModel;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class ApplicationController extends Controller
         $years = academicyear::all();
         $lastAdmissionNumber = Student::max('admission_no');
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
-        return view('admin.applications.add', compact('years', 'newAdmissionNumber'));
+        $docs = documents_title::where('document_for' , 'child')->get();
+        return view('admin.applications.add', compact('years', 'newAdmissionNumber' , 'docs'));
     }
 
     public function store(Request $req)
