@@ -307,7 +307,8 @@ class ApplicationController extends Controller
     public function studentDelete($id)
     {
         $student = student::find($id);
-        $student->delete();
+        $student->name = 'null';
+        $student->save();
         return redirect()->route('applications')->with('success', 'Student Deleted Successfully');
     }
 

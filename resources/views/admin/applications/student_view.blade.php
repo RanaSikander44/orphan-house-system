@@ -1,16 +1,16 @@
 @extends('admin.default')
 
+@section('Page-title' , 'Applications View')
 @section('content')
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Student View</h3>
 
     <div class="row mt-4">
         <!-- Student Details Section -->
         <div class="col-md-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
-                    <!-- Title -->
-                    <h5 class="text-muted fw-bold text-center mb-4">Student Details</h5>
+
+                    <h5 class="text-muted fw-bold text-center mb-4">Application Details</h5>
 
                     <!-- Student Image Section -->
                     <div class="position-relative text-center"
@@ -18,7 +18,7 @@
                         <div class="d-flex justify-content-center align-items-center h-100">
                             <img class="student-meta-img img-fluid rounded-2 shadow"
                                 style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #fff; position: absolute; top : 65px;"
-                                src="{{ asset('backend/images/students/' . $student->student_image)}}"
+                                src="{{ $student->student_image ? asset('backend/images/students/' . $student->student_image) : asset('backend/images/default.jpg') }}"
                                 alt="Student Photo">
                         </div>
                     </div>
@@ -457,7 +457,6 @@
     }
 </style>
 
-
 <script>
     // CSRF token passed from the server
     let csrf_token = "{{ csrf_token() }}";
@@ -470,9 +469,7 @@
                 _token: csrf_token,  // Attach CSRF token
             },
             success: function (response) {
-                // On success, show alert and remove the row from the table
-                alert('Document deleted successfully!');
-                $('#document-row-' + id).remove(); // Remove the specific row
+                $('#document-row-' + id).remove();
             },
             error: function (xhr, status, error) {
                 // Handle any error during the request
