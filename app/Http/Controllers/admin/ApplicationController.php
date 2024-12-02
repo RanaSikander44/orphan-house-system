@@ -29,8 +29,8 @@ class ApplicationController extends Controller
         $years = academicyear::all();
         $lastAdmissionNumber = Student::max('admission_no');
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
-        $docs = documents_title::where('document_for' , 'child')->get();
-        return view('admin.applications.add', compact('years', 'newAdmissionNumber' , 'docs'));
+        $docs = documents_title::where('document_for', 'child')->get();
+        return view('admin.applications.add', compact('years', 'newAdmissionNumber', 'docs'));
     }
 
     public function store(Request $req)
@@ -280,12 +280,16 @@ class ApplicationController extends Controller
         $data->student_id = $application->id;
         $data->save();
 
+
+
         // Update documents
         if ($req->has('document_titles')) {
             $titles = $req->input('document_titles');
             $documents = $req->file('document_names');
 
+            // Loop through all titles
             foreach ($titles as $index => $title) {
+                // Check if a document was uploaded for this title
                 if (isset($documents[$index])) {
                     // Generate a unique name for the file
                     $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
@@ -301,14 +305,14 @@ class ApplicationController extends Controller
                     // Move the uploaded file to the destination folder
                     $documents[$index]->move($uploadPath, $uniqueName);
 
-                    // Save or update the document
-                    StudentDocuments::updateOrCreate(
-                        ['student_id' => $application->id, 'title' => $title],
-                        ['name' => $uniqueName]
-                    );
+                    // Update only if the document is changed (uploaded)
+                    StudentDocuments::where('title', $title)->update([
+                        'name' => $uniqueName
+                    ]);
                 }
             }
         }
+
 
         return redirect()->route('applications')->with('success', 'Student details updated successfully.');
     }
@@ -319,6 +323,17 @@ class ApplicationController extends Controller
         $student = student::find($id);
         $student->delete();
         return redirect()->route('applications')->with('success', 'Student Deleted Successfully');
+    }
+
+
+    public function deldoc($id)
+    {
+        $documents = StudentDocuments::findOrFail($id);
+        $documents->delete();
+
+        return response()->json([
+            'success' => 'Document has deleted !',
+        ]);
     }
 
 

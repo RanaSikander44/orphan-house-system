@@ -352,7 +352,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="attendance-tab">
-                        <div class="p-4 rounded-3 shadow-sm bg-light">
+                        <div class="p-4 rounded-3 bg-white">
                             <div class="pt-0 p-4 rounded-3">
                                 <div class="row g-0">
                                     <div class="col-12">
@@ -366,7 +366,8 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($documents as $list)
-                                                                                                <tr>
+                                                                                                <tr id="document-row-{{ $list->id }}">
+                                                                                                    <!-- Ensure each row has a unique ID -->
                                                                                                     <!-- Display Title -->
                                                                                                     <td>{{ $list->documentTitle->title }}</td>
 
@@ -377,24 +378,28 @@
                                                                                                         <!-- PHP block to generate the correct file extension and download filename -->
                                                                                                         @php
                                                                                                             $fileExtension = pathinfo($list->name, PATHINFO_EXTENSION); // Get the file extension
-                                                                                                            $downloadFilename = $list->title . '.' . $fileExtension; // Set the download filename with title and extension
+                                                                                                            $downloadFilename = $list->documentTitle->title . '.' . $fileExtension; // Set the download filename with title and extension
                                                                                                         @endphp
 
                                                                                                         <!-- Download Button with correct file name and extension -->
                                                                                                         <a href="{{ asset('backend/documents/' . $list->name) }}"
                                                                                                             class="btn btn-sm btn-primary rounded-pill"
                                                                                                             download="{{ $downloadFilename }}">
-                                                                                                            <i class="fa-solid fa-download"></i> </a>
+                                                                                                            <i class="fa-solid fa-download"></i> Download
+                                                                                                        </a>
 
-                                                                                                        <!-- Delete Button (you can link this to a delete action later) -->
-                                                                                                        <a href="" class="btn btn-sm btn-danger rounded-pill"><i
-                                                                                                                class="fa fa-trash"></i></>
+                                                                                                        <!-- Delete Button (Trigger AJAX function for deletion) -->
+                                                                                                        <button type="button" onclick="deldoc({{ $list->id }})"
+                                                                                                            class="btn btn-sm btn-danger rounded-pill">
+                                                                                                            <i class="fa fa-trash"></i> Delete
+                                                                                                        </button>
                                                                                                     </td>
                                                                                                 </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -451,5 +456,31 @@
         /* No shadow for active button */
     }
 </style>
+
+
+<script>
+    // CSRF token passed from the server
+    let csrf_token = "{{ csrf_token() }}";
+
+    let deldoc = (id) => {
+        $.ajax({
+            url: 'delete-document/' + id,  // The URL for the delete action
+            type: 'DELETE',  // Use DELETE method
+            data: {
+                _token: csrf_token,  // Attach CSRF token
+            },
+            success: function (response) {
+                // On success, show alert and remove the row from the table
+                alert('Document deleted successfully!');
+                $('#document-row-' + id).remove(); // Remove the specific row
+            },
+            error: function (xhr, status, error) {
+                // Handle any error during the request
+                alert('Error deleting document: ' + error);
+            }
+        });
+    }
+</script>
+
 
 @endsection

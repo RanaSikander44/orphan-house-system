@@ -1,9 +1,12 @@
 @extends('admin.default')
+
+<!-- 
+<h3 class="mt-4">Edit Application</h3>
+-->
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <div class="container-fluid px-4">
-    <h3 class="mt-4">Edit Application</h3>
 
     <div class="card bg-white p-3 mt-4 border-0 shadow-sm rounded">
         <div class="student-buttons pt-3">
@@ -23,7 +26,7 @@
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
         <!-- Tab Content -->
-        <form method="post" action="{{route('student.update' , $student->id)}}" enctype="multipart/form-data">
+        <form method="post" action="{{route('student.update', $student->id)}}" enctype="multipart/form-data">
             @csrf
             <div class="tab-content">
 
@@ -490,33 +493,39 @@
                                         <hr class="w-100">
                                     </div>
                                     <div class="card-body">
-
                                         <div class="form-group">
-                                            @foreach ($documents as $index => $list)
-                                                <div class="row mb-3">
-                                                    <!-- Document Title -->
+                                            <div class="row">
+                                                @foreach ($documents as $index => $list)
                                                     <div class="col-md-6">
-                                                        <label for="title{{ $index }}" class="text-muted mb-2">Title
-                                                            {{ $index + 1 }}</label>
-                                                        <input type="text" name="document_titles[]" id="title{{ $index }}"
-                                                            class="form-control" placeholder="Enter document title"
-                                                            value="{{ $list->title }}">
-                                                    </div>
+                                                        <!-- Label with unique id for each file input -->
+                                                        <label for="file_{{ $index }}"
+                                                            class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>
 
-                                                    <!-- Document File Upload -->
-                                                    <div class="col-md-6">
-                                                        <label for="fileUpload{{ $index }}" class="text-muted mb-2">Document
-                                                            {{ $index + 1 }}</label>
-                                                        <input type="file" name="document_names[]"
-                                                            id="fileUpload{{ $index }}" class="form-control" value="">
-                                                        <p class="text-muted mt-2">{{ $list->name }}</p>
+                                                        <!-- Hidden input field for storing the document title ID -->
+                                                        <input type="text" class="d-none" name="document_titles[]"
+                                                            value="{{ $list->documentTitle->id }}">
+
+                                                        <!-- File input for document upload -->
+                                                        <input type="file" class="form-control" name="document_names[]"
+                                                            id="file_{{ $index }}">
+
+                                                        <div class="docs">
+                                                            <!-- Display the existing document name with a link to the file -->
+                                                            @if($list->name)
+                                                                <p class="text-muted">
+                                                                    <a href="{{ asset('backend/documents/' . $list->name) }}"
+                                                                        target="_blank">Current Document</a>
+                                                                </p>
+                                                            @else
+                                                                <p class="text-muted">No document uploaded yet</p>
+                                                            @endif
                                                         </div>
-                                                </div>
-                                            @endforeach
-
-
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

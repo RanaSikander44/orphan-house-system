@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('applications/student-edit/{id}', [ApplicationController::class, 'studentEdit'])->name('student.edit');
     Route::post('applications/student-update/{id}', [ApplicationController::class, 'studentUpdate'])->name('student.update');
     Route::get('applications/student-delete/{id}', [ApplicationController::class, 'studentDelete'])->name('student.delete');
-
+    Route::delete('applications/student-view/delete-document/{id}', [ApplicationController::class, 'deldoc'])->name('delete.doc');
 
 
     // Users Routes
@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Roles
-    Route::get('roles', [RolesController::class , 'index'])->name('roles.index');
+    Route::get('roles', [RolesController::class, 'index'])->name('roles.index');
     Route::get('roles/add', [RolesController::class, 'create'])->name('roles.create');
     Route::post('roles/store', [RolesController::class, 'store'])->name('roles.store');
     Route::get('roles/edit/{id}', [RolesController::class, 'edit'])->name('roles.edit');
@@ -98,10 +98,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Settings
 
-    Route::get('settings' , [SettingsController::class , 'index'])->name('settings');
-    Route::post('settings/stores' , [SettingsController::class , 'store'])->name('settings.store');
-    Route::put('settings/update/{id}' , [SettingsController::class , 'update'])->name('settings.update');
-    Route::delete('settings/delete/{id}' , [SettingsController::class , 'delete'])->name('settings.delete');
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('settings/stores', [SettingsController::class, 'store'])->name('settings.store');
+    Route::put('settings/update/{id}', [SettingsController::class, 'update'])->name('settings.update');
+    Route::delete('settings/delete/{id}', [SettingsController::class, 'delete'])->name('settings.delete');
 
 });
 
