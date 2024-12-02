@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ApplicationController;
 use App\Http\Controllers\admin\AcademicYearController;
+use App\Http\Controllers\admin\SettingsController;
 
 
 Route::get('/', function () {
@@ -94,6 +95,13 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
+    // Settings
+
+    Route::get('settings' , [SettingsController::class , 'index'])->name('settings');
+    Route::post('settings/stores' , [SettingsController::class , 'store'])->name('settings.store');
+    Route::put('settings/update/{id}' , [SettingsController::class , 'update'])->name('settings.update');
+    Route::delete('settings/delete/{id}' , [SettingsController::class , 'delete'])->name('settings.delete');
 
 });
 
