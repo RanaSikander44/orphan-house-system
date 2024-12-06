@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\documents_title;
+use App\Models\StaffDocuments;
 use Illuminate\Http\Request;
 use App\Models\Staff;
 use App\Models\Role;
 use Illuminate\Support\Facades\Validator;
+use League\CommonMark\Node\Block\Document;
 
 class StaffController extends Controller
 {
@@ -25,7 +28,8 @@ class StaffController extends Controller
     public function create()
     {
         $roles = Role::where('name', '!=', 'Admin')->get();
-        return view('admin.staff.add'  , compact('roles'));
+        $staff_docs = documents_title::where('document_for', 'staff')->get();
+        return view('admin.staff.add', compact('roles', 'staff_docs'));
     }
 
     /**
@@ -79,34 +83,34 @@ class StaffController extends Controller
         $Staff->save();
 
 
-        // $titles = $req->input('document_titles');
-        // $documents = $req->file('document_names');
+        $titles = $request->input('document_titles');
+        $documents = $request->file('document_names');
 
-        // foreach ($titles as $index => $title) {
-        //     if (isset($documents[$index])) {
-        //         $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
+        foreach ($titles as $index => $title) {
+            if (isset($documents[$index])) {
+                $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-        //         $uploadPath = public_path('backend/documents');
+                $uploadPath = public_path('backend/documents');
 
-        //         if (!file_exists($uploadPath)) {
-        //             mkdir($uploadPath, 0777, true);
-        //         }
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0777, true);
+                }
 
-        //         $documents[$index]->move($uploadPath, $uniqueName);
+                $documents[$index]->move($uploadPath, $uniqueName);
 
-        //         StudentDocuments::create([
-        //             'student_id' => $application->id,
-        //             'title' => $title,
-        //             'name' => $uniqueName,
-        //         ]);
-        //     } else {
-        //         StudentDocuments::create([
-        //             'student_id' => $application->id,
-        //             'title' => $title,
-        //             'name' => null, 
-        //         ]);
-        //     }
-        // }
+                StaffDocuments::create([
+                    'staff_id' => $Staff->id,
+                    'title' => $title,
+                    'name' => $uniqueName,
+                ]);
+            } else {
+                StaffDocuments::create([
+                    'staff_id' => $Staff->id,
+                    'title' => $title,
+                    'name' => null,
+                ]);
+            }
+        }
 
         if ($Staff->save()) {
             return redirect()->route('staff.index')->with('success', 'Staff Added !');
@@ -126,7 +130,11 @@ class StaffController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $roles = Role::where('name', '!=', 'Admin')->get();
+        $staff_docs = documents_title::where('document_for', 'staff')->get();
+        $edit = Staff::where('id', $id)->first();
+        $documents = StaffDocuments::where('staff_id' , $id)->get();
+        return view('admin.staff.edit', compact('edit' , 'roles' , 'staff_docs' , 'documents'));
     }
 
     /**

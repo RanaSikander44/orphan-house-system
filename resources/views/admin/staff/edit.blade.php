@@ -1,9 +1,11 @@
 @extends('admin.default')
 
 
-@section('Page-title', 'Add New Staff')
+@section('Page-title', 'Edit Staff')
 
 @section('content')
+
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 
@@ -47,7 +49,7 @@
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="first_name"
-                                                    value="{{ old('first_name') }}">
+                                                    value="{{ old('first_name', $edit->first_name) }}">
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -58,7 +60,7 @@
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="last_name"
-                                                    value="{{ old('last_name') }}">
+                                                    value="{{ old('last_name', $edit->last_name) }}">
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -69,7 +71,7 @@
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector" name="dob"
-                                                    value="{{ old('dob') }}">
+                                                    value="{{ old('dob', $edit->dob) }}">
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -81,9 +83,9 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
                                                     <select class="select2gender" name="gender">
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                        <option value="other">Others</option>
+                                                        <option value="Male" {{ $edit->gender === 'Male' ? 'Selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ $edit->gender === 'Female' ? 'Selected' : '' }}>Female</option>
+                                                        <option value="other" {{ $edit->gender === 'other' ? 'Selected' : '' }}>Others</option>
                                                     </select>
                                                 </div>
                                                 @error('gender')
@@ -95,7 +97,7 @@
                                             <div class="col-4 mt-3">
                                                 <label for="" class="text-muted mb-2">Caste</label>
                                                 <input type="text" class="form-control" name="caste"
-                                                    value="{{ old('caste') }}">
+                                                    value="{{ old('caste', $edit->caste) }}">
                                             </div>
 
                                             @error('caste')
@@ -108,7 +110,7 @@
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <input type="email" class="form-control" name="email"
-                                                    value="{{ old('email') }}">
+                                                    value="{{ old('email', $edit->email) }}">
 
                                                 @error('email')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -123,7 +125,7 @@
                                                 <div class="cp_wrapper">
                                                     <select class="select2" name="role_id">
                                                         @forelse($roles as $list)
-                                                            <option value="{{ $list->id }}">{{ $list->name }}</option>
+                                                            <option value="{{ $list->id }}" {{ $list->id == $edit->role_id ? 'selected' : '' }}>{{ $list->name }}</option>
                                                         @empty
                                                             <option value="">No Data Found !</option>
                                                         @endforelse
@@ -140,7 +142,7 @@
                                                         class="text-danger">*</span>
                                                 </label>
                                                 <input type="number" class="text-muted form-control" name="phone_no"
-                                                    value="{{ old('phone_no') }}">
+                                                    value="{{ old('phone_no', $edit->phone_no) }}">
                                             </div>
 
                                             @error('phone_no')
@@ -180,15 +182,16 @@
 
 
                                             <div class="col-4">
-                                                <img src="" class="image-preview"
-                                                    style="width : 100px; height: 80px; display : none; margin-left : 40px;">
+                                                <img src="{{ asset('backend/images/staff/' . $edit->staff_image)}}"
+                                                    class="image-preview"
+                                                    style="width : 100px; height: 80px; display:{{ $edit->staff_image ? 'block' : 'none' }}; margin-left : 40px;">
                                             </div>
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Current Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
                                                     name="current_address" class="form-control" rows="3">
-                                                 {{ old('current_address') }}
+                                                 {{ old('current_address', $edit->current_address) }}
                                                 </textarea>
                                             </div>
 
@@ -197,7 +200,7 @@
                                                     Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
                                                     name="permanent_address" class="form-control" rows="3">
-                                                 {{ old('permanent_address') }}
+                                                 {{ old('permanent_address', $edit->permanent_address) }}
                                                 </textarea>
                                             </div>
                                         </div>
@@ -220,16 +223,37 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             <div class="row">
-                                                @foreach ($staff_docs as $index => $list)
-                                                    <div class="col-md-6">
-                                                        <label for="file_{{ $index }}"
-                                                            class="mb-2 mt-2 text-muted">{{ $list->title }}</label>
-                                                        <input type="text" class="d-none" name="document_titles[]"
-                                                            value="{{ $list->id }}">
-                                                        <input type="file" class="form-control" name="document_names[]"
-                                                            id="file_{{ $index }}">
-                                                    </div>
-                                                @endforeach
+                                                <div class="row">
+                                                    @foreach ($documents as $index => $list)
+                                                        <div class="col-md-6">
+                                                            <!-- Label with unique ID for each file input -->
+                                                            <label for="file_{{ $index }}" class="mb-2 mt-2 text-muted">
+                                                                {{ $list->staffDocs->name ?? 'Unknown Document' }}
+                                                            </label>
+
+                                                            <!-- Hidden input field for storing the document title ID -->
+                                                            <input type="hidden" name="document_titles[]"
+                                                                value="{{ $list->staffDocs->id ?? '' }}">
+
+                                                            <!-- File input for document upload -->
+                                                            <input type="file" class="form-control" name="document_names[]"
+                                                                id="file_{{ $index }}" accept="application/pdf,image/*">
+
+                                                            <div class="docs">
+                                                                <!-- Display the existing document name with a link to the file -->
+                                                                @if ($list->name)
+                                                                    <p class="text-muted">
+                                                                        <a href="{{ asset('backend/documents/' . $list->name) }}"
+                                                                            target="_blank">Current Document</a>
+                                                                    </p>
+                                                                @else
+                                                                    <p class="text-muted">No document uploaded yet</p>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
