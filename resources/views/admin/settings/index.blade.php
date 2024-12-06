@@ -13,7 +13,9 @@
                     <div class="col-3 p-0">
                         <div class="p-3" style="background-color: #f8f9fa;">
                             <button type="button" class="btn btn-sm btn-block mb-2 active" id="tab1">Child Age</button>
-                            <button type="button" class="btn btn-sm btn-block mb-2" id="docs">Required
+                            <button type="button" class="btn btn-sm btn-block mb-2" id="docs">Child
+                                Documents</button>
+                            <button type="button" class="btn btn-sm btn-block mb-2" id="staff_docs">Staff
                                 Documents</button>
                         </div>
                     </div>
@@ -34,7 +36,7 @@
                             </div>
                         </div>
 
-                        <!-- Required Documents Tab Content -->
+                        <!-- Required Documents Tab Content For Child -->
                         <div class="tab-documents" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h6 class="mb-0 text-muted">Required Documents Title</h6>
@@ -69,6 +71,48 @@
                                 @endif
                             </div>
                         </div>
+
+                        <!-- Staff Documents -->
+
+
+                        <div class="staff-tab-documents" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h6 class="mb-0 text-muted">Staff Documents Title</h6>
+                                <button type="button" class="btn btn-sm btn-success staff-add-document"
+                                    title="Add Document">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="staff-documents">
+                                @if ($staff_documents->isNotEmpty())
+                                    @foreach ($staff_documents as $key => $document)
+                                        <div class="document-group mb-3">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="{{ $document->id }}"
+                                                    name="staff_document_title[{{ $document->id }}]"
+                                                    value="{{ $document->title }}" placeholder="Enter document title">
+                                                @if ($key > 0)
+                                                    <button type="button" class="btn btn-danger btn-sm staff-remove-document"
+                                                        title="Remove" onclick="deletestaffdoc({{ $document->id }})">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="document-group mb-3">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="staff_document_title[]"
+                                                placeholder="Enter document title">
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>
@@ -166,18 +210,45 @@
         });
     };
 
+
+    const deletestaffdoc = (id) => {
+        $.ajax({
+            url: `{{ route('settings.delete', ':id') }}`.replace(':id', id),
+            type: 'DELETE',
+            data: {
+                _token: csrf, // Include CSRF token
+            },
+            success: (response) => {
+                // Check if the 'success' key exists in the response object
+                if (response.success) {
+                    document.getElementById(id).closest('.staff-document-group').remove();
+                }
+            },
+        });
+    };
+
+
     $(document).ready(function () {
         $('.tab-documents').hide();
 
         $('#tab1').click(function () {
-            $('.tab1').show(); 
+            $('.tab1').show();
             $('.tab-documents').hide();
+            $('.staff-tab-documents').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
         $('#docs').click(function () {
-            $('.tab-documents').show(); 
-            $('.tab1').hide(); 
+            $('.tab-documents').show();
+            $('.tab1').hide();
+            $('.staff-tab-documents').hide();
+            $(this).addClass('active').siblings().removeClass('active');
+        });
+
+        $('#staff_docs').click(function () {
+            $('.tab-documents').hide();
+            $('.tab1').hide();
+            $('.staff-tab-documents').show();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -200,5 +271,26 @@
                 $(this).closest('.document-group').remove();
             }
         });
+
+
+        // Add new document group
+        $('.staff-add-document').click(function () {
+            var newDocument = `
+        <div class="document-group mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="staff_document_title[]" placeholder="Enter document title">
+                <button type="button" class="btn btn-sm btn-danger staff-remove-document">×</button>
+            </div>
+        </div>`;
+
+            $('.staff-documents').append(newDocument);
+        });
+
+        // Remove document group
+        $('.staff-documents').on('click', '.staff-remove-document', function () {
+            $(this).closest('.document-group').remove();
+        });
+
+
     });
 </script>
