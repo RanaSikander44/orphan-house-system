@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ApplicationController;
 use App\Http\Controllers\admin\AcademicYearController;
 use App\Http\Controllers\admin\SettingsController;
+use App\Http\Controllers\admin\StaffController;
 
 
 Route::get('/', function () {
@@ -92,6 +93,17 @@ Route::middleware(['auth'])->group(function () {
 
     // assign permissions please
     Route::get('assign-roles/{id}', [PermissionController::class, 'assign'])->name('assign');
+
+
+
+
+
+
+    // Staffs
+    route::resource('staff' , StaffController::class);
+
+
+
 
 
 

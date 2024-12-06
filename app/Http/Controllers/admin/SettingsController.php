@@ -13,7 +13,8 @@ class SettingsController extends Controller
     {
         $settings = settings::first();
         $child_documents = documents_title::where('document_for', 'child')->get();
-        return view('admin.settings.index', compact('settings', 'child_documents'));
+        $staff_documents = documents_title::where('document_for', 'staff')->get();
+        return view('admin.settings.index', compact('settings', 'child_documents' , 'staff_documents'));
     }
 
     public function store(Request $req)
