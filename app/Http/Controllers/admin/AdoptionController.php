@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
 use App\Models\documents_title;
+use App\Models\settings;
 use App\Models\student;
 use App\Models\ParentModel;
 use Illuminate\Http\Request;
@@ -15,12 +16,12 @@ use App\Models\StudentDocuments;
 
 
 
-class ApplicationController extends Controller
+class AdoptionController extends Controller
 {
     public function index()
     {
-        $students = Student::orderBy('id', 'desc')->paginate(10);
-        return view('admin.applications.index', compact('students'));
+        $childrens = Student::orderBy('id', 'desc')->paginate(10);
+        return view('admin.adoptions.index', compact('childrens'));
     }
 
 
@@ -30,7 +31,8 @@ class ApplicationController extends Controller
         $lastAdmissionNumber = Student::max('admission_no');
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
         $docs = documents_title::where('document_for', 'child')->get();
-        return view('admin.applications.add', compact('years', 'newAdmissionNumber', 'docs'));
+        $settings = settings::first();
+        return view('admin.adoptions.add', compact('years', 'newAdmissionNumber', 'docs' , 'settings'));
     }
 
     public function store(Request $req)
@@ -56,7 +58,7 @@ class ApplicationController extends Controller
 
 
         if ($validator->fails()) {
-            return redirect()->route('application.add')
+            return redirect()->route('enquiry.add')
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -159,7 +161,7 @@ class ApplicationController extends Controller
         }
 
         if ($application->save()) {
-            return redirect()->route('applications')->with('success', 'Student Added !');
+            return redirect()->route('adoptions')->with('success', 'Student Added !');
         }
 
     }
@@ -170,7 +172,7 @@ class ApplicationController extends Controller
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
         $documents = StudentDocuments::where('student_id', $student->id)->whereNotNull('name')->get();
-        return view('admin.applications.student_view', compact('student', 'parents', 'documents'));
+        return view('admin.adoptions.student_view', compact('student', 'parents', 'documents'));
     }
 
     public function studentEdit($id)
@@ -182,7 +184,7 @@ class ApplicationController extends Controller
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
         $documents = StudentDocuments::where('student_id', $student->id)->get();
-        return view('admin.applications.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
+        return view('admin.adoptions.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
 
     }
 
@@ -300,7 +302,7 @@ class ApplicationController extends Controller
         }
 
 
-        return redirect()->route('applications')->with('success', 'Student details updated successfully.');
+        return redirect()->route('adoptions')->with('success', 'Student details updated successfully.');
     }
 
 
@@ -309,7 +311,7 @@ class ApplicationController extends Controller
         $student = student::find($id);
         $student->name = 'null';
         $student->save();
-        return redirect()->route('applications')->with('success', 'Student Deleted Successfully');
+        return redirect()->route('adoptions')->with('success', 'Student Deleted Successfully');
     }
 
 
