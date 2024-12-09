@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\documents_title;
 use App\Models\StaffDocuments;
+use App\Models\student;
 use Illuminate\Http\Request;
 use App\Models\Staff;
 use App\Models\Role;
@@ -122,7 +123,9 @@ class StaffController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $staff = staff::where('id' , $id)->first();
+        $documents = StaffDocuments::where('staff_id', $id)->whereNotNull('name')->get();
+        return view('admin.staff.view',compact('staff' , 'documents'));
     }
 
     /**
@@ -131,10 +134,9 @@ class StaffController extends Controller
     public function edit(string $id)
     {
         $roles = Role::where('name', '!=', 'Admin')->get();
-        $staff_docs = documents_title::where('document_for', 'staff')->get();
         $edit = Staff::where('id', $id)->first();
         $documents = StaffDocuments::where('staff_id' , $id)->get();
-        return view('admin.staff.edit', compact('edit' , 'roles' , 'staff_docs' , 'documents'));
+        return view('admin.staff.edit', compact('edit' , 'roles' , 'documents'));
     }
 
     /**
@@ -150,6 +152,28 @@ class StaffController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        dd($id);
+    }
+
+
+    public function delete($id)
+    {
+        
+         $staff = Staff::findOrFail($id)->first();
+         $staff->delete();
+
+         return redirect()->route('staff.index')->with('success'  , 'Staff Deleted !');
+
+    }
+
+    public function deleteStaffDocs($id)
+    {
+         $docs = StaffDocuments::findOrFail($id);
+         $docs->name  = Null;
+         $docs->update();
+
+         return response()->json([
+            'success' => 'Document deleted !',
+        ]);
     }
 }

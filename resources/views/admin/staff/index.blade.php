@@ -31,7 +31,7 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('staff.edit', $list->id) }}"
+                                        <a class="dropdown-item" href="{{ route('staff.show', $list->id) }}"
                                             title="View Student">
                                             <i class="fa fa-eye"></i> View
                                         </a>
@@ -44,7 +44,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);" title="Delete Student"
-                                            onclick="deleteStu()">
+                                            onclick="deleteStaff({{ $list->id }})">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
                                     </li>
@@ -77,3 +77,23 @@
 
 </div>
 @endsection
+
+
+
+<script>
+    let deleteStaff = (id) => {
+        Swal.fire({
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ route('staff.delete', ':id') }}".replace(':id', id);
+
+            }
+        });
+    }
+</script>

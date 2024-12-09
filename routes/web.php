@@ -98,10 +98,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
     // Staffs
-    route::resource('staff' , StaffController::class);
-
+    Route::resource('staff' , StaffController::class);
+    Route::get('staff/delete/{id}', [StaffController::class , 'delete'])->name('staff.delete');
+    Route::get('staff/documents/delete/{id}', [StaffController::class, 'deleteStaffDocs'])->name('staff.docs.delete');
 
 
 

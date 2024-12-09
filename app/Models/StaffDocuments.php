@@ -13,4 +13,10 @@ class StaffDocuments extends Model
         'title', // Add document_for for mass assignment
         'name',
     ];
+
+    public function staffDocs()
+    {
+        return $this->belongsTo(documents_title ::class, 'title', 'id');
+    }
+    
 }

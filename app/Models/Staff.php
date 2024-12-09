@@ -14,9 +14,9 @@ class Staff extends Model
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    public function staffDocs()
+    public function documentTitle()
     {
-        return $this->belongsTo(documents_title::class, 'name', 'id'); // Ensure correct naming
+        return $this->belongsTo(documents_title ::class, 'title', 'id');
     }
     
 }

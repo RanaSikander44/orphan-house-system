@@ -228,7 +228,7 @@
                                                         <div class="col-md-6">
                                                             <!-- Label with unique ID for each file input -->
                                                             <label for="file_{{ $index }}" class="mb-2 mt-2 text-muted">
-                                                                {{ $list->staffDocs->name ?? 'Unknown Document' }}
+                                                                {{ $list->staffDocs->title ?? 'Unknown Document' }}
                                                             </label>
 
                                                             <!-- Hidden input field for storing the document title ID -->

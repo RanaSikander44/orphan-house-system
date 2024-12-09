@@ -316,7 +316,8 @@ class ApplicationController extends Controller
     public function deldoc($id)
     {
         $documents = StudentDocuments::findOrFail($id);
-        $documents->delete();
+        $documents->name = Null;
+        $documents->update();
 
         return response()->json([
             'success' => 'Document has deleted !',
