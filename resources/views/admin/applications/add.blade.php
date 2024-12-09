@@ -1,7 +1,7 @@
 @extends('admin.default')
 
 
-@section('Page-title' , 'Add New Application')
+@section('Page-title', 'Add New Application')
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -123,14 +123,14 @@
                             <div class="col-6">
                                 <div class="card bg-light border-0 shadow-none" style="height : 350px;">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">Academic Information</p>
+                                        <p class="text-muted fw-bold">Adoption Badge</p>
                                         <hr class="w-100" style="font-weight: 200px;">
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- Academic Year -->
                                             <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Academic Year <span
+                                                <label for="" class="text-muted mb-2">Select Session<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapper">
                                                     <select class="select2" name="year_id">
@@ -150,7 +150,7 @@
 
                                             <!-- Admission Number -->
                                             <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Admission Number <span
+                                                <label for="" class="text-muted mb-2">Adoption Number <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="admission_no"
                                                     value="{{$newAdmissionNumber}}" readonly>
@@ -162,7 +162,7 @@
 
                                             <!-- Admission Date -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Admission Date <span
+                                                <label for="" class="text-muted mb-2">Adoption Date <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector"
                                                     name="admission_date">
@@ -175,7 +175,7 @@
                                             <div class="col-6"></div>
 
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Student Image</label>
+                                                <label for="" class="text-muted mb-2">Child Image</label>
                                                 <div class="image-input">
                                                     <input type="file" accept="image/*" id="imageInput"
                                                         name="student_image" class="d-none">
@@ -495,24 +495,18 @@
                                         <hr class="w-100">
                                     </div>
                                     <div class="card-body">
-
                                         <div class="form-group">
-                                            @for($i = 1; $i <= 4; $i++)
-                                                <div class="row mb-3">
+                                            <div class="row">
+                                                @foreach ($docs as $index => $list)
                                                     <div class="col-md-6">
-                                                        <label for="title{{ $i }}" class="text-muted mb-2">Title
-                                                            {{ $i }}</label>
-                                                        <input type="text" name="document_titles[]" id="title{{ $i }}"
-                                                            class="form-control" placeholder="Enter document title">
+                                                        <label for="file_{{ $index }}"
+                                                            class="mb-2 mt-2 text-muted">{{ $list->title }}</label>
+                                                            <input type="text" class="d-none" name="document_titles[]" value="{{ $list->id }}">
+                                                        <input type="file" class="form-control" name="document_names[]"
+                                                            id="file_{{ $index }}">
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label for="fileUpload{{ $i }}" class="text-muted mb-2">Document
-                                                            {{ $i }}</label>
-                                                        <input type="file" name="document_names[]" id="fileUpload{{ $i }}"
-                                                            class="form-control">
-                                                    </div>
-                                                </div>
-                                            @endfor
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
