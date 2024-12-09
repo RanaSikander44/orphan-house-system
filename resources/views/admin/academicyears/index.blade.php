@@ -1,5 +1,8 @@
 @extends('admin.default')
 
+@section('Page-title' , 'Sessions')
+
+
 @section('content')
 {{-- Include external CSS for Flatpickr --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -12,7 +15,6 @@
         <div class="col-md-4">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
-                    <h6 class="mb-3">Add New Academic Year</h6>
                     <form action="{{ route('academic-year.save') }}" method="post">
                         @csrf
                         <!-- Year Input -->
@@ -119,7 +121,6 @@
         </div>
     </div>
 </div>
-
 <style>
     .card {
         border-radius: 10px;

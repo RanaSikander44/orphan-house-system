@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
+use App\Models\documents_title;
 use App\Models\student;
 use App\Models\ParentModel;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class ApplicationController extends Controller
         $years = academicyear::all();
         $lastAdmissionNumber = Student::max('admission_no');
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
-        return view('admin.applications.add', compact('years', 'newAdmissionNumber'));
+        $docs = documents_title::where('document_for', 'child')->get();
+        return view('admin.applications.add', compact('years', 'newAdmissionNumber', 'docs'));
     }
 
     public function store(Request $req)
@@ -127,35 +129,34 @@ class ApplicationController extends Controller
         }
 
 
-        // Documents start 
-        $titles = $req->input('document_titles'); // Document titles from the request
-        $documents = $req->file('document_names'); // Uploaded files from the request
+        $titles = $req->input('document_titles');
+        $documents = $req->file('document_names');
 
         foreach ($titles as $index => $title) {
             if (isset($documents[$index])) {
-                // Generate a unique name for the file with its original extension
                 $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                // Define the destination folder
                 $uploadPath = public_path('backend/documents');
 
-                // Ensure the directory exists
                 if (!file_exists($uploadPath)) {
                     mkdir($uploadPath, 0777, true);
                 }
 
-                // Move the uploaded file to the destination folder
                 $documents[$index]->move($uploadPath, $uniqueName);
 
-                // Save the document details to the database
                 StudentDocuments::create([
                     'student_id' => $application->id,
                     'title' => $title,
-                    'name' => $uniqueName, // Path relative to the public directory
+                    'name' => $uniqueName,
+                ]);
+            } else {
+                StudentDocuments::create([
+                    'student_id' => $application->id,
+                    'title' => $title,
+                    'name' => null, 
                 ]);
             }
         }
-        // Documents End
 
         if ($application->save()) {
             return redirect()->route('applications')->with('success', 'Student Added !');
@@ -168,7 +169,7 @@ class ApplicationController extends Controller
     {
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = StudentDocuments::where('student_id', $student->id)->get();
+        $documents = StudentDocuments::where('student_id', $student->id)->whereNotNull('name')->get();
         return view('admin.applications.student_view', compact('student', 'parents', 'documents'));
     }
 
@@ -187,7 +188,6 @@ class ApplicationController extends Controller
 
     public function studentUpdate(Request $req, $id)
     {
-        // Validate the input
         $validator = Validator::make($req->all(), [
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
@@ -213,10 +213,8 @@ class ApplicationController extends Controller
                 ->withInput();
         }
 
-        // Fetch the existing student record
         $application = Student::findOrFail($id);
 
-        // Update student details only if provided
         $fieldsToUpdate = [
             'first_name',
             'last_name',
@@ -242,7 +240,6 @@ class ApplicationController extends Controller
             }
         }
 
-        // Update student image if provided
         if ($image = $req->file('student_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('backend/images/students');
@@ -252,7 +249,6 @@ class ApplicationController extends Controller
 
         $application->save();
 
-        // Update parent information
         $data = ParentModel::where('student_id', $id)->firstOrNew();
 
         if ($req->parent_status === 'guardian') {
@@ -278,35 +274,31 @@ class ApplicationController extends Controller
         $data->student_id = $application->id;
         $data->save();
 
-        // Update documents
+
+
         if ($req->has('document_titles')) {
             $titles = $req->input('document_titles');
             $documents = $req->file('document_names');
 
             foreach ($titles as $index => $title) {
                 if (isset($documents[$index])) {
-                    // Generate a unique name for the file
                     $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                    // Define the destination folder
                     $uploadPath = public_path('backend/documents');
 
-                    // Ensure the directory exists
                     if (!file_exists($uploadPath)) {
                         mkdir($uploadPath, 0777, true);
                     }
 
-                    // Move the uploaded file to the destination folder
                     $documents[$index]->move($uploadPath, $uniqueName);
 
-                    // Save or update the document
-                    StudentDocuments::updateOrCreate(
-                        ['student_id' => $application->id, 'title' => $title],
-                        ['name' => $uniqueName]
-                    );
+                    StudentDocuments::where('title', $title)->update([
+                        'name' => $uniqueName
+                    ]);
                 }
             }
         }
+
 
         return redirect()->route('applications')->with('success', 'Student details updated successfully.');
     }
@@ -315,8 +307,21 @@ class ApplicationController extends Controller
     public function studentDelete($id)
     {
         $student = student::find($id);
-        $student->delete();
+        $student->name = 'null';
+        $student->save();
         return redirect()->route('applications')->with('success', 'Student Deleted Successfully');
+    }
+
+
+    public function deldoc($id)
+    {
+        $documents = StudentDocuments::findOrFail($id);
+        $documents->name = Null;
+        $documents->update();
+
+        return response()->json([
+            'success' => 'Document has deleted !',
+        ]);
     }
 
 
