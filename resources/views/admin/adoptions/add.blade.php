@@ -72,13 +72,14 @@
                                                         class="text-danger">*</span></label>
 
                                                 <select class="select2" name="">
-                                                    @forelse ($years as $list)
-                                                        <option value="{{$list->id}}">
-                                                            {{$list->title . ' [' . $list->year . ']'}}
-                                                        </option>
-                                                    @empty
-                                                        <option value="">No Years available</option>
-                                                    @endforelse
+                                                    <option value="">Personal Reference</option>
+                                                    <option value="">Social Media</option>
+                                                    <option value="">Telephonic</option>
+                                                    <option value="">Personal Contact</option>
+                                                    <option value="">Walk In</option>
+                                                    <option value="">Website</option>
+                                                    <option value="">Web Search</option>
+                                                    <option value="">Media Advertisement</option>
                                                 </select>
                                             </div>
 
@@ -198,7 +199,8 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector" name="dob" id="DateOfBirth">
+                                                <input type="text" class="form-control dateselector" name="dob"
+                                                    id="DateOfBirth">
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -208,10 +210,12 @@
                                             <div class="col-6 mb-2 mt-3">
                                                 <label for="" class="text-muted mb-2">Age<span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control bg-light" name="last_name" id="ChildAge"
-                                                    readonly>
-                                                    <input type="text" class="d-none" value="{{ $settings->min_age_of_child }}" id="minAge">
-                                                    <input type="text" class="d-none"   value="{{ $settings->max_age_of_child }}" id="maxAge">
+                                                <input type="text" class="form-control bg-light" name="last_name"
+                                                    id="ChildAge" readonly>
+                                                <input type="text" class="d-none"
+                                                    value="{{ $settings->min_age_of_child }}" id="minAge">
+                                                <input type="text" class="d-none"
+                                                    value="{{ $settings->max_age_of_child }}" id="maxAge">
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror

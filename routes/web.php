@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\EnquiryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\admin\RolesController;
@@ -105,6 +106,11 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
+
+    // Enquiry Types 
+
+     Route::resource('enquiry-types' , EnquiryController::class);
 
 
 
