@@ -14,20 +14,22 @@
                 <tr>
                     <th scope="col">Enquiry No</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Father Name</th>
-                    <th scope="col">Date Of Birth</th>
-                    <th scope="col">Gender</th>
+                    <th scope="col">Campaign Name</th>
+                    <th scope="col">Adoption Date</th>
+                    <th scope="col">Enquiry Type</th>
+                    <th scope="col">Status Of Adoption</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($childrens as $list)
                     <tr>
-                        <td>{{$list->admission_no}}</td>
-                        <td>{{$list->first_name}}</td>
-                        <td>{{$list->last_name}}</td>
-                        <td>{{ \Carbon\Carbon::parse($list->dob)->format('d  M Y') }}</td>
-                        <td>{{ $list->gender}}</td>
+                        <td>{{$list->enquiry_no}}</td>
+                        <td>{{$list->first_name}} {{$list->last_name}}</td>
+                        <td>{{ $list->campaign_id }}</td>
+                        <td>{{ \Carbon\Carbon::parse($list->adoption_date)->format('d  M Y') }}</td>
+                        <td>{{ $list->enquiry_id}}</td>
+                        <td>{{ $list->status_of_adoption}}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -58,7 +60,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td class="text-center" colspan="5">No Applications Found!</td>
+                        <td class="text-center" colspan="12">No childrens Found!</td>
                     </tr>
                 @endforelse
             </tbody>

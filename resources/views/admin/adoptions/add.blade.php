@@ -46,50 +46,53 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <!-- Campaing Year -->
+                                            <!-- Campaign Year -->
                                             <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Campaign Type<span
+                                                <label for="" class="text-muted mb-2">Campaign Type <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapper">
-                                                    <select class="select2" name="year_id">
+                                                    <select class="select2" name="compaign_id">
                                                         @forelse ($years as $list)
-                                                            <option value="{{$list->id}}">
-                                                                {{$list->title . ' [' . $list->year . ']'}}
+                                                            <option value="{{ $list->id }}" {{ old('compaign_id') == $list->id ? 'selected' : '' }}>
+                                                                {{ $list->title . ' [' . $list->year . ']' }}
                                                             </option>
                                                         @empty
                                                             <option value="">No Years available</option>
                                                         @endforelse
                                                     </select>
                                                 </div>
-                                                @error('year_id')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                @error('compaign_id')
+                                                    <span class="text-danger">The Field is Required.</span>
                                                 @enderror
                                             </div>
 
-                                            <!-- Enquiry type -->
+                                            <!-- Enquiry Type -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Enquiry Type <span
                                                         class="text-danger">*</span></label>
-
                                                 <select class="select2" name="enquiry_type_id">
                                                     @forelse($enquiry_types as $list)
-                                                        <option value="{{ $list->id }}">{{ $list->title }}</option>
+                                                        <option value="{{ $list->id }}" {{ old('enquiry_type_id') == $list->id ? 'selected' : '' }}>
+                                                            {{ $list->title }}
+                                                        </option>
                                                     @empty
-                                                        <option value="">Please add atleast one enquiry type from settings
+                                                        <option value="">Please add at least one enquiry type from settings
                                                         </option>
                                                     @endforelse
                                                 </select>
+                                                @error('enquiry_type_id')
+                                                    <span class="text-danger">This Field is Required</span>
+                                                @enderror
                                             </div>
 
-                                            <!-- Adoption Number -->
+                                            <!-- Enquiry Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Adoption Number <span
+                                                <label for="" class="text-muted mb-2">Enquiry Number <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control bg-light" name="admission_no"
-                                                    value="{{$newAdmissionNumber}}" readonly>
-
-                                                @error('admission_no')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <input type="text" class="form-control bg-light" name="enquiry_no"
+                                                    value="{{ old('enquiry_no', $newEnquiryId) }}" readonly>
+                                                @error('enquiry_no')
+                                                    <span class="text-danger">This Field is Required.</span>
                                                 @enderror
                                             </div>
 
@@ -98,14 +101,13 @@
                                                 <label for="" class="text-muted mb-2">Source of Information <span
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="source_of_information">
-                                                    <option value="Webiste">Website</option>
-                                                    <option value="Personal Reference">Personal Reference</option>
-                                                    <option value="Member Shared">Member Shared</option>
-                                                    <option value="Referral Case">Referral Case</option>
-                                                    <option value="Referral Case">Other</option>
+                                                    <option value="Website" {{ old('source_of_information') == 'Website' ? 'selected' : '' }}>Website</option>
+                                                    <option value="Personal Reference" {{ old('source_of_information') == 'Personal Reference' ? 'selected' : '' }}>Personal Reference</option>
+                                                    <option value="Member Shared" {{ old('source_of_information') == 'Member Shared' ? 'selected' : '' }}>Member Shared</option>
+                                                    <option value="Referral Case" {{ old('source_of_information') == 'Referral Case' ? 'selected' : '' }}>Referral Case</option>
+                                                    <option value="Other" {{ old('source_of_information') == 'Other' ? 'selected' : '' }}>Other</option>
                                                 </select>
-
-                                                @error('admission_date')
+                                                @error('source_of_information')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -115,54 +117,53 @@
                                                 <label for="" class="text-muted mb-2">Adoption Date <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector"
-                                                    name="admission_date">
-
-                                                @error('admission_date')
+                                                    name="adoption_date" value="{{ old('adoption_date') }}">
+                                                @error('adoption_date')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
+
                                             <!-- City -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">City<span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="">
+                                                <select class="select2" name="city_id">
                                                     @forelse ($years as $list)
-                                                        <option value="{{$list->id}}">
-                                                            {{$list->title . ' [' . $list->year . ']'}}
+                                                        <option value="{{ $list->id }}" {{ old('city_id') == $list->id ? 'selected' : '' }}>
+                                                            {{ $list->title . ' [' . $list->year . ']' }}
                                                         </option>
                                                     @empty
                                                         <option value="">No Years available</option>
                                                     @endforelse
                                                 </select>
-
-                                                @error('admission_date')
+                                                @error('city_id')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
 
                                             <!-- Status of Adoption -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Status of adoption<span
+                                                <label for="" class="text-muted mb-2">Status of Adoption <span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="">
-                                                    <option value="Forward">Forwarded</option>
-                                                    <option value="Not Processed">Not Processed</option>
-                                                    <option value="Rejected">Rejected</option>
-                                                    <option value="Reserved">Reserved</option>
-                                                    <option value="Forward for Considration">Forward for Considration
-                                                    </option>
+                                                <select class="select2" name="status_of_adoption">
+                                                    <option value="Forwarded" {{ old('status_of_adoption') == 'Forwarded' ? 'selected' : '' }}>Forwarded</option>
+                                                    <option value="Not Processed" {{ old('status_of_adoption') == 'Not Processed' ? 'selected' : '' }}>Not Processed</option>
+                                                    <option value="Rejected" {{ old('status_of_adoption') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                                                    <option value="Reserved" {{ old('status_of_adoption') == 'Reserved' ? 'selected' : '' }}>Reserved</option>
+                                                    <option value="Forward for Consideration" {{ old('status_of_adoption') == 'Forward for Consideration' ? 'selected' : '' }}>Forward for Consideration</option>
                                                 </select>
-
-                                                @error('admission_date')
+                                                @error('status_of_adoption')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Personal Information -->
+
                             <div class="col-6">
                                 <div class="card bg-light border-0 shadow-none">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
@@ -175,7 +176,8 @@
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="first_name">
+                                                <input type="text" class="form-control" name="first_name"
+                                                    value="{{ old('first_name') }}">
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -185,7 +187,8 @@
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="last_name">
+                                                <input type="text" class="form-control" name="last_name"
+                                                    value="{{ old('last_name') }}">
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -196,27 +199,26 @@
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector" name="dob"
-                                                    id="DateOfBirth">
+                                                    id="DateOfBirth" value="{{ old('dob') }}">
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
 
-
+                                            <!-- Age -->
                                             <div class="col-6 mb-2 mt-3">
-                                                <label for="" class="text-muted mb-2">Age<span
+                                                <label for="" class="text-muted mb-2">Age <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control bg-light" name="last_name"
-                                                    id="ChildAge" readonly>
+                                                <input type="text" class="form-control bg-light" name="age"
+                                                    id="ChildAge" readonly value="{{ old('age') }}">
                                                 <input type="text" class="d-none"
                                                     value="{{ $settings->min_age_of_child }}" id="minAge">
                                                 <input type="text" class="d-none"
                                                     value="{{ $settings->max_age_of_child }}" id="maxAge">
-                                                @error('last_name')
+                                                @error('age')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-
 
                                             <!-- Gender -->
                                             <div class="col-6 mt-3">
@@ -224,9 +226,9 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
                                                     <select class="select2gender" name="gender">
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                        <option value="other">Others</option>
+                                                        <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+                                                        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Others</option>
                                                     </select>
                                                 </div>
                                                 @error('gender')
@@ -237,7 +239,8 @@
                                             <!-- Caste -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Caste</label>
-                                                <input type="text" class="form-control" name="caste">
+                                                <input type="text" class="form-control" name="caste"
+                                                    value="{{ old('caste') }}">
                                             </div>
 
                                             <!-- Religion -->
@@ -246,10 +249,10 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperreg">
                                                     <select class="select2reg" name="religion">
-                                                        <option value="Islam">Islam</option>
-                                                        <option value="Hinduism">Hinduism</option>
-                                                        <option value="Sikhism">Sikhism</option>
-                                                        <option value="Other">Others</option>
+                                                        <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                                        <option value="Hinduism" {{ old('religion') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
+                                                        <option value="Sikhism" {{ old('religion') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
+                                                        <option value="Other" {{ old('religion') == 'Other' ? 'selected' : '' }}>Others</option>
                                                     </select>
                                                 </div>
                                                 @error('religion')
@@ -257,28 +260,20 @@
                                                 @enderror
                                             </div>
 
-
-                                            <div class="col-6"></div>
-
-
-
-
                                             <!-- Child Image -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Child Image</label>
                                                 <div class="image-input">
                                                     <input type="file" accept="image/*" id="imageInput"
-                                                        name="student_image" class="d-none">
+                                                        name="child_image" class="d-none">
                                                     <label for="imageInput" class="image-button"><i
                                                             class="far fa-image"></i> Choose image</label>
                                                 </div>
                                             </div>
 
-
-
                                             <div class="col-6">
                                                 <img src="" class="image-preview"
-                                                    style="width : 100px; height: 80px; display : none; margin-left : 40px;">
+                                                    style="width: 100px; height: 80px; display: none; margin-left: 40px;">
                                             </div>
                                         </div>
                                     </div>
