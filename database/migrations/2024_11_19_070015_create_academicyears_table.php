@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->unsignedInteger('year'); // Store numeric year values, e.g., 2024
             $table->string('title'); // Title of the academic year
             $table->date('starting_date'); // Corrected column name
-            $table->date('ending_date');   // Ending date of the academic year
+            $table->date('ending_date');
+            $table->boolean('status'); // Ending date of the academic year
             $table->timestamps();          // Created and updated timestamps
         });
 

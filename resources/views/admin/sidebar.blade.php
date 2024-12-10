@@ -14,7 +14,7 @@
                 <div id="close-sidebar" class="sidebarToggle">
                     <i class="fa-solid fa-angles-right text-black"></i>
                 </div>
-            </div>  
+            </div>
 
 
             <div class="sidebar-menu">
