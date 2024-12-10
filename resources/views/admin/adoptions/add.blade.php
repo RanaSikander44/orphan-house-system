@@ -71,15 +71,13 @@
                                                 <label for="" class="text-muted mb-2">Enquiry Type <span
                                                         class="text-danger">*</span></label>
 
-                                                <select class="select2" name="">
-                                                    <option value="">Personal Reference</option>
-                                                    <option value="">Social Media</option>
-                                                    <option value="">Telephonic</option>
-                                                    <option value="">Personal Contact</option>
-                                                    <option value="">Walk In</option>
-                                                    <option value="">Website</option>
-                                                    <option value="">Web Search</option>
-                                                    <option value="">Media Advertisement</option>
+                                                <select class="select2" name="enquiry_type_id">
+                                                    @forelse($enquiry_types as $list)
+                                                        <option value="{{ $list->id }}">{{ $list->title }}</option>
+                                                    @empty
+                                                        <option value="">Please add atleast one enquiry type from settings
+                                                        </option>
+                                                    @endforelse
                                                 </select>
                                             </div>
 
@@ -99,14 +97,12 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Source of Information <span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="">
-                                                    @forelse ($years as $list)
-                                                        <option value="{{$list->id}}">
-                                                            {{$list->title . ' [' . $list->year . ']'}}
-                                                        </option>
-                                                    @empty
-                                                        <option value="">No Years available</option>
-                                                    @endforelse
+                                                <select class="select2" name="source_of_information">
+                                                    <option value="Webiste">Website</option>
+                                                    <option value="Personal Reference">Personal Reference</option>
+                                                    <option value="Member Shared">Member Shared</option>
+                                                    <option value="Referral Case">Referral Case</option>
+                                                    <option value="Referral Case">Other</option>
                                                 </select>
 
                                                 @error('admission_date')

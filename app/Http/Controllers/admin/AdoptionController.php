@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
 use App\Models\documents_title;
+use App\Models\enquiry_types;
 use App\Models\settings;
 use App\Models\student;
 use App\Models\ParentModel;
@@ -32,7 +33,8 @@ class AdoptionController extends Controller
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
         $docs = documents_title::where('document_for', 'child')->get();
         $settings = settings::first();
-        return view('admin.adoptions.add', compact('years', 'newAdmissionNumber', 'docs' , 'settings'));
+        $enquiry_types = enquiry_types::where('status' , '1')->get();
+        return view('admin.adoptions.add', compact('years', 'newAdmissionNumber', 'docs' , 'settings' , 'enquiry_types'));
     }
 
     public function store(Request $req)
