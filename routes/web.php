@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\admin\RolesController;
@@ -46,7 +47,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('academic-year/edit/{id}', [AcademicYearController::class, 'edit'])->name('academic-year.edit');
     Route::post('academic-year/update/{id}', [AcademicYearController::class, 'update'])->name('academic-year.update');
     Route::get('academic-year/delete/{id}', [AcademicYearController::class, 'delete'])->name('academic-year.delete');
-
+// city route
+Route::get('cities', [CityController::class, 'index'])->name('cities.index');
+Route::post('cities/save', [CityController::class, 'store'])->name('cities.store');
+Route::get('cities/edit/{id}', [CityController::class, 'edit'])->name('cities.edit');
+Route::put('cities/update/{id}', [CityController::class, 'update'])->name('cities.update');
+Route::delete('cities/delete/{id}', [CityController::class, 'destroy'])->name('cities.destroy');
 
 
     // Students Applications
