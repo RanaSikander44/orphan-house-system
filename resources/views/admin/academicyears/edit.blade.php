@@ -41,11 +41,14 @@
 
                                 </div>
                                 <div class="col-lg-6 col-md-6 mb-3">
-                                    <label for="status" class="form-label">Status <span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="status" placeholder="Enter Status" value="{{ $rowforedit->status }}"
-                                        required>
+                                    <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                                    <select class="form-control" name="status" id="status" required>
+                                        <option value="" disabled>Select Status</option>
+                                        <option value="1" {{ $rowforedit->status == 1 ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ $rowforedit->status == 0 ? 'selected' : '' }}>Inactive</option>
+                                    </select>
                                 </div>
+
                             </div>
                             <div class="text-end mt-1 ">
                                 <button class="btn btn-primary btn-md">
