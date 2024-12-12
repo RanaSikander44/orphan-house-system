@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\EnquiryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\admin\RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\ApplicationController;
+use App\Http\Controllers\admin\AdoptionController;
 use App\Http\Controllers\admin\AcademicYearController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\StaffController;
@@ -50,14 +51,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Students Applications
-    Route::get('applications', [ApplicationController::class, 'index'])->name('applications');
-    Route::get('applications/add', [ApplicationController::class, 'add'])->name('application.add');
-    Route::post('applications/store', [ApplicationController::class, 'store'])->name('application.store');
-    Route::get('applications/student-view/{id}', [ApplicationController::class, 'studentView'])->name('student.view');
-    Route::get('applications/student-edit/{id}', [ApplicationController::class, 'studentEdit'])->name('student.edit');
-    Route::post('applications/student-update/{id}', [ApplicationController::class, 'studentUpdate'])->name('student.update');
-    Route::get('applications/student-delete/{id}', [ApplicationController::class, 'studentDelete'])->name('student.delete');
-    Route::delete('applications/student-view/delete-document/{id}', [ApplicationController::class, 'deldoc'])->name('delete.doc');
+    Route::get('adoptions', [AdoptionController::class, 'index'])->name('adoptions');
+    Route::get('enquiry/add', [AdoptionController::class, 'add'])->name('enquiry.add');
+    Route::post('enquiry/store', [AdoptionController::class, 'store'])->name('enquiry.store');
+    Route::get('enquiry/child-view/{id}', [AdoptionController::class, 'studentView'])->name('enquiry.view');
+    Route::get('enquiry/child-edit/{id}', [AdoptionController::class, 'studentEdit'])->name('enquiry.edit');
+    Route::post('enquiry/child-update/{id}', [AdoptionController::class, 'studentUpdate'])->name('enquiry.update');
+    Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
+    Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
 
 
     // Users Routes
@@ -99,12 +100,17 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Staffs
-    Route::resource('staff' , StaffController::class);
-    Route::get('staff/delete/{id}', [StaffController::class , 'delete'])->name('staff.delete');
+    Route::resource('staff', StaffController::class);
+    Route::get('staff/delete/{id}', [StaffController::class, 'delete'])->name('staff.delete');
     Route::get('staff/documents/delete/{id}', [StaffController::class, 'deleteStaffDocs'])->name('staff.docs.delete');
 
 
 
+
+
+    // Enquiry Types 
+
+     Route::resource('enquiry-types' , EnquiryController::class);
 
 
 
