@@ -33,12 +33,14 @@
                                         style="{{ request()->is($menu->route . '*') ? 'height: auto;' : '' }}">
                                         <ul>
                                             @foreach ($menu->children as $child)
-                                                <li>
-                                                    <a href="{{ route($child->route) }}"
-                                                        class="{{ request()->routeIs($child->route) ? 'active' : '' }}">
-                                                        {{ $child->title }}
-                                                    </a>
-                                                </li>
+                                                @can($child->permission) <!-- Check permission for submenu -->
+                                                    <li>
+                                                        <a href="{{ route($child->route) }}"
+                                                            class="{{ request()->routeIs($child->route) ? 'active' : '' }}">
+                                                            {{ $child->title }}
+                                                        </a>
+                                                    </li>
+                                                @endcan
                                             @endforeach
                                         </ul>
                                     </div>
@@ -48,6 +50,7 @@
                     @endforeach
                 </ul>
             </div>
+
         </div>
     </nav>
 </div>
