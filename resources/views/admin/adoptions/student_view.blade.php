@@ -1,6 +1,6 @@
 @extends('admin.default')
 
-@section('Page-title' , 'Applications View')
+@section('Page-title' , 'Enquiry View')
 @section('content')
 <div class="container-fluid px-4">
 
@@ -10,7 +10,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
 
-                    <h5 class="text-muted fw-bold text-center mb-4">Application Details</h5>
+                    <h5 class="text-muted fw-bold text-center mb-4">Enquiry Details</h5>
 
                     <!-- Student Image Section -->
                     <div class="position-relative text-center"
@@ -19,26 +19,20 @@
                             <img class="student-meta-img img-fluid rounded-2 shadow"
                                 style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #fff; position: absolute; top : 65px;"
                                 src="{{ $student->student_image ? asset('backend/images/students/' . $student->student_image) : asset('backend/images/default.jpg') }}"
-                                alt="Student Photo">
+                                alt="Child Photo">
                         </div>
                     </div>
 
                     <!-- Centered Student Information -->
                     <div class="white-box text-muted mt-5 p-3 border rounded shadow-sm text-center">
                         <div class="row py-2 border-bottom align-items-center">
-                            <div class="col-6 fw-bold">Student Name:</div>
+                            <div class="col-6 fw-bold">Name:</div>
                             <div class="col-6">{{ $student->first_name }} {{ $student->last_name }}</div>
                         </div>
                         <div class="row py-2 border-bottom align-items-center">
-                            <div class="col-6 fw-bold">Roll No:</div>
+                            <div class="col-6 fw-bold">Enquiry No:</div>
                             <div class="col-6">{{ $student->admission_no }}</div>
                         </div>
-
-                        <div class="row py-2 border-bottom align-items-center">
-                            <div class="col-6 fw-bold">Gender</div>
-                            <div class="col-6">{{ $student->gender }}</div>
-                        </div>
-
                     </div>
 
 

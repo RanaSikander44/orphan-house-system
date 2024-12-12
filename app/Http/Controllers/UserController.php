@@ -110,7 +110,7 @@ class UserController extends Controller
             'role_id' => 'required',
             'change_password' => 'nullable|string|min:8', // Validate only if provided and ensure at least 8 characters
         ]);
-        
+
 
 
         $user = User::findOrFail($id);

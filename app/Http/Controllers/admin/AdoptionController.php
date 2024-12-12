@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
 use App\Models\documents_title;
+use App\Models\enquiry_types;
+use App\Models\settings;
+use App\Models\child;
 use App\Models\student;
 use App\Models\ParentModel;
 use Illuminate\Http\Request;
@@ -15,65 +18,77 @@ use App\Models\StudentDocuments;
 
 
 
-class ApplicationController extends Controller
+class AdoptionController extends Controller
 {
     public function index()
     {
-        $students = Student::orderBy('id', 'desc')->paginate(10);
-        return view('admin.applications.index', compact('students'));
+        $childrens = child::orderBy('id', 'desc')->paginate(10);
+        return view('admin.adoptions.index', compact('childrens'));
     }
 
 
     public function add()
     {
         $years = academicyear::all();
-        $lastAdmissionNumber = Student::max('admission_no');
-        $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
+        $lastEnquiryID = child::max('enquiry_no');
+        $newEnquiryId = $lastEnquiryID ? $lastEnquiryID + 1 : 1;
         $docs = documents_title::where('document_for', 'child')->get();
-        return view('admin.applications.add', compact('years', 'newAdmissionNumber', 'docs'));
+        $settings = settings::first();
+        $enquiry_types = enquiry_types::where('status', '1')->get();
+        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types'));
     }
 
     public function store(Request $req)
     {
+
+
+
         $validator = Validator::make($req->all(), [
+            'enquiry_type_id' => 'required',
+            'compaign_id' => 'required',
+            'enquiry_no' => 'required',
+            'source_of_information' => 'required',
+            'status_of_adoption' => 'required',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'year_id' => 'required|integer',
-            'admission_date' => 'required|date',
             'caste' => 'nullable|string',
-            'admission_no' => 'required|string',
-            'gender' => 'required|string',
+            'adoption_date' => 'required|date',
+            'gender' => 'required|string|in:Male,Female,Others',
             'dob' => 'required|date',
             'religion' => 'nullable|string',
-            'email' => 'nullable|email',
+            'email' => 'nullable|email|unique:children,email',
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
             'permanent_address' => 'nullable|string',
             'blood_group' => 'nullable|string',
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
+            'age' => 'required',
+            'city_id' => 'nullable|integer',
         ]);
 
 
         if ($validator->fails()) {
-            return redirect()->route('application.add')
+            return redirect()->route('enquiry.add')
                 ->withErrors($validator)
                 ->withInput();
         }
 
 
-
-        //  dd($req->all());
-        $application = new Student();
+        $application = new child();
+        $application->campaign_id = $req->compaign_id;
+        $application->enquiry_id = $req->enquiry_type_id;
+        $application->enquiry_no = $req->enquiry_no;
+        $application->source_of_information = $req->source_of_information;
+        $application->status_of_adoption = $req->status_of_adoption;
+        $application->adoption_date = $req->adoption_date;
         $application->first_name = $req->first_name;
         $application->last_name = $req->last_name;
-        $application->year_id = $req->year_id;
-        $application->admission_date = $req->admission_date;
-        $application->caste = $req->caste;
-        $application->admission_no = $req->admission_no;
         $application->gender = $req->gender;
         $application->dob = $req->dob;
+        $application->age = $req->age;
         $application->religion = $req->religion;
+        $application->caste = $req->caste;
         $application->email = $req->email;
         $application->phone_no = $req->phone_no;
         $application->current_address = $req->current_address;
@@ -81,11 +96,14 @@ class ApplicationController extends Controller
         $application->blood_group = $req->blood_group;
         $application->height = $req->height;
         $application->weight = $req->weight;
-        if ($image = $req->file('student_image')) {
+        $application->city_id = $req->city_id;
+        $application->age = $req->age;
+
+        if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('backend/images/students');
             $image->move($destinationPath, $uniqueName);
-            $application->student_image = $uniqueName ? $uniqueName : 'null';
+            $application->child_image = $uniqueName ? $uniqueName : 'null';
         }
 
         $application->save();
@@ -153,13 +171,13 @@ class ApplicationController extends Controller
                 StudentDocuments::create([
                     'student_id' => $application->id,
                     'title' => $title,
-                    'name' => null, 
+                    'name' => null,
                 ]);
             }
         }
 
         if ($application->save()) {
-            return redirect()->route('applications')->with('success', 'Student Added !');
+            return redirect()->route('adoptions')->with('success', 'Student Added !');
         }
 
     }
@@ -170,7 +188,7 @@ class ApplicationController extends Controller
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
         $documents = StudentDocuments::where('student_id', $student->id)->whereNotNull('name')->get();
-        return view('admin.applications.student_view', compact('student', 'parents', 'documents'));
+        return view('admin.adoptions.student_view', compact('student', 'parents', 'documents'));
     }
 
     public function studentEdit($id)
@@ -182,7 +200,7 @@ class ApplicationController extends Controller
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
         $documents = StudentDocuments::where('student_id', $student->id)->get();
-        return view('admin.applications.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
+        return view('admin.adoptions.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
 
     }
 
@@ -300,7 +318,7 @@ class ApplicationController extends Controller
         }
 
 
-        return redirect()->route('applications')->with('success', 'Student details updated successfully.');
+        return redirect()->route('adoptions')->with('success', 'Student details updated successfully.');
     }
 
 
@@ -309,7 +327,7 @@ class ApplicationController extends Controller
         $student = student::find($id);
         $student->name = 'null';
         $student->save();
-        return redirect()->route('applications')->with('success', 'Student Deleted Successfully');
+        return redirect()->route('adoptions')->with('success', 'Student Deleted Successfully');
     }
 
 

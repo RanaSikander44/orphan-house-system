@@ -19,6 +19,7 @@ class AcademicYearController extends Controller
       $year = new academicyear();
       $year->year = $req->year;
       $year->title = $req->title;
+      $year->status=$req->status;
       $year->starting_date = $req->starting_date;
       $year->ending_date = $req->ending_date;
 
@@ -69,6 +70,7 @@ class AcademicYearController extends Controller
       $year->title = $req->title;
       $year->starting_date = $req->starting_date;
       $year->ending_date = $req->ending_date;
+      $year->status = $req->status;
 
       // Save the updated model
       if ($year->save()) {
