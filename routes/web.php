@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\EnquiryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\admin\RolesController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\admin\AdoptionController;
 use App\Http\Controllers\admin\AcademicYearController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\StaffController;
+use App\Http\Controllers\CityController;
+
 
 
 Route::get('/', function () {
