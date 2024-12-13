@@ -1,39 +1,40 @@
 @extends('admin.default')
 
-@section('Page-title' , 'Enquiry View')
+@section('Page-title', 'Enquiry View')
 @section('content')
 <div class="container-fluid px-4">
 
     <div class="row mt-4">
-        <!-- Student Details Section -->
+        <!-- child Details Section -->
         <div class="col-md-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
 
                     <h5 class="text-muted fw-bold text-center mb-4">Enquiry Details</h5>
 
-                    <!-- Student Image Section -->
+                    <!-- child Image Section -->
                     <div class="position-relative text-center"
                         style="min-height: 150px; background-color: #7c32ff; border-radius: 8px;">
                         <div class="d-flex justify-content-center align-items-center h-100">
-                            <img class="student-meta-img img-fluid rounded-2 shadow"
+                            <img class="child-meta-img img-fluid rounded-2 shadow"
                                 style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #fff; position: absolute; top : 65px;"
-                                src="{{ $student->student_image ? asset('backend/images/students/' . $student->student_image) : asset('backend/images/default.jpg') }}"
+                                src="{{ $child->child_image ? asset('backend/images/childs/' . $child->child_image) : asset('backend/images/default.jpg') }}"
                                 alt="Child Photo">
                         </div>
                     </div>
 
-                    <!-- Centered Student Information -->
-                    <div class="white-box text-muted mt-5 p-3 border rounded shadow-sm text-center">
-                        <div class="row py-2 border-bottom align-items-center">
-                            <div class="col-6 fw-bold">Name:</div>
-                            <div class="col-6">{{ $student->first_name }} {{ $student->last_name }}</div>
-                        </div>
-                        <div class="row py-2 border-bottom align-items-center">
-                            <div class="col-6 fw-bold">Enquiry No:</div>
-                            <div class="col-6">{{ $student->admission_no }}</div>
+                    <!-- Centered Child Information -->
+                    <div class="white-box text-muted mt-5 p-4 border rounded shadow-sm text-center">
+                        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <div class="fw-bold text-uppercase">
+                                Enquiry No :
+                            </div>
+                            <div class="text-dark fs-5">
+                                {{ $child->enquiry_no }}
+                            </div>
                         </div>
                     </div>
+
 
 
                 </div>
@@ -61,34 +62,46 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn" id="attendance-tab" data-bs-toggle="pill"
+                            <button class="nav-link custom-btn" id="documents" data-bs-toggle="pill"
                                 data-bs-target="#other" type="button" role="tab" aria-controls="other"
                                 aria-selected="false">
                                 <i class="bi bi-calendar-check me-2"></i>Documents
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn" id="attendance-tab" data-bs-toggle="pill"
-                                data-bs-target="#attendance" type="button" role="tab" aria-controls="attendance"
-                                aria-selected="false">
-                                <i class="bi bi-calendar-check me-2"></i>Documents
-                            </button>
-                        </li>
+
                     </ul>
                     <hr>
                     <!-- Pills Content -->
                     <div class="tab-content" id="infoTabsContent">
                         <div class="tab-pane fade show active" id="academic" role="tabpanel"
                             aria-labelledby="academic-tab">
-                            <div class=" pt-0 p-4 rounded-3">
+                            <div class="pt-0 p-4 rounded-3">
                                 <div class="row g-0">
                                     <!-- Row 1 -->
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Admission Date</h6>
+                                            <h6 class="mb-0 text-muted">First Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->admission_date }}</p>
+                                            <p class="mb-0">{{ $child->first_name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Last Name</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->last_name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Adoption Date</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->adoption_date }}</p>
                                         </div>
                                     </div>
 
@@ -98,7 +111,7 @@
                                             <h6 class="mb-0 text-muted">Date Of Birth</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->dob }}</p>
+                                            <p class="mb-0">{{ $child->dob }}</p>
                                         </div>
                                     </div>
 
@@ -109,11 +122,7 @@
                                         </div>
                                         <div class="col-6 text-muted text-end">
                                             <p class="mb-0">
-                                                @php
-                                                    $dob = \Carbon\Carbon::parse($student->dob);
-                                                    $age = $dob->age;
-                                                @endphp
-                                                {{ $age }} years old
+                                                {{ $child->age }}
                                             </p>
                                         </div>
 
@@ -124,7 +133,7 @@
                                             <h6 class="mb-0 text-muted">Religion</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->religion }}</p>
+                                            <p class="mb-0">{{ $child->religion }}</p>
                                         </div>
                                     </div>
 
@@ -133,7 +142,7 @@
                                             <h6 class="mb-0 text-muted">Phone Number</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->phone_number }}</p>
+                                            <p class="mb-0">{{ $child->phone_number }}</p>
                                         </div>
                                     </div>
 
@@ -143,7 +152,7 @@
                                             </h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->email }}</p>
+                                            <p class="mb-0">{{ $child->email }}</p>
                                         </div>
                                     </div>
 
@@ -152,7 +161,7 @@
                                             <h6 class="mb-0 text-muted">Present Address </h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->current_address }}</p>
+                                            <p class="mb-0">{{ $child->current_address }}</p>
                                         </div>
                                     </div>
 
@@ -161,11 +170,49 @@
                                             <h6 class="mb-0 text-muted">Permanent Address</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $student->permanent_address }}</p>
+                                            <p class="mb-0">{{ $child->permanent_address }}</p>
                                         </div>
                                     </div>
 
-                                    <!-- Add more rows as needed -->
+                                    <h5 class="text-muted fw-bold text-center pt-5">Enquiry Details</h5>
+
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Campaign</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->academicyear->title }}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Row 1 -->
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Enquiry No</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->enquiry_id }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Source Of Information</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->source_of_information }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Status of Adoption</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->status_of_adoption }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -344,6 +391,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Docs -->
                     <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="attendance-tab">
                         <div class="p-4 rounded-3 bg-white">
                             <div class="pt-0 p-4 rounded-3">
@@ -375,7 +424,7 @@
                                                                                                         @endphp
 
                                                                                                         <!-- Download Button with correct file name and extension -->
-                                                                                                        <a href="{{ asset('backend/documents/' . $list->name) }}"
+                                                                                                        <a href="{{ asset('backend/documents/childs/' . $list->name) }}"
                                                                                                             class="btn btn-sm btn-primary rounded-pill"
                                                                                                             download="{{ $downloadFilename }}">
                                                                                                             <i class="fa-solid fa-download"></i> Download
@@ -397,7 +446,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -100,7 +100,7 @@ class AdoptionController extends Controller
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('backend/images/students');
+            $destinationPath = public_path('backend/images/childs');
             $image->move($destinationPath, $uniqueName);
             $application->child_image = $uniqueName ? $uniqueName : 'null';
         }
@@ -110,7 +110,7 @@ class AdoptionController extends Controller
 
         if ($req->parent_status === 'guardian') {
             $data = new ParentModel();
-            $data->student_id = $application->id;
+            $data->child_id = $application->id;
             $data->guardian_name = $req->guardian_name;
             $data->guardian_last_name = $req->guardian_last_name;
             $data->guardian_gender = $req->guardian_gender;
@@ -121,7 +121,7 @@ class AdoptionController extends Controller
         } elseif ($req->parent_status === "mother") {
 
             $data = new ParentModel();
-            $data->student_id = $application->id;
+            $data->child_id = $application->id;
             $data->mother_name = $req->guardian_name;
             $data->mother_last_name = $req->guardian_last_name;
             $data->mother_email = $req->mother_email;
@@ -132,7 +132,7 @@ class AdoptionController extends Controller
         } elseif ($req->parent_status === "father") {
 
             $data = new ParentModel();
-            $data->student_id = $application->id;
+            $data->child_id = $application->id;
             $data->father_name = $req->father_name;
             $data->father_last_name = $req->father_last_name;
             $data->father_email = $req->father_email;
@@ -141,7 +141,7 @@ class AdoptionController extends Controller
             $data->save();
         } else {
             $data = new ParentModel();
-            $data->student_id = $application->id;
+            $data->child_id = $application->id;
             $data->save();
         }
 
@@ -153,7 +153,7 @@ class AdoptionController extends Controller
             if (isset($documents[$index])) {
                 $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                $uploadPath = public_path('backend/documents/students/');
+                $uploadPath = public_path('backend/documents/childs/');
 
                 if (!file_exists($uploadPath)) {
                     mkdir($uploadPath, 0777, true);
@@ -184,22 +184,22 @@ class AdoptionController extends Controller
 
     public function studentView($id)
     {
-        $student = child::where('id', $id)->first();
-        $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = child_documents::where('child_id', $student->id)->whereNotNull('name')->get();
-        return view('admin.adoptions.student_view', compact('student', 'parents', 'documents'));
+        $child = child::where('id', $id)->first();
+        $parents = ParentModel::where('child_id', $child->id)->first();
+        $documents = child_documents::where('child_id', $child->id)->whereNotNull('name')->get();
+        return view('admin.adoptions.view', compact('child', 'parents', 'documents'));
     }
 
     public function studentEdit($id)
     {
 
         $years = academicyear::all();
-        $lastAdmissionNumber = Student::max('admission_no');
+        $lastAdmissionNumber = child::max('admission_no');
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
-        $student = student::where('id', $id)->first();
-        $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = child_documents::where('student_id', $student->id)->get();
-        return view('admin.adoptions.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
+        $child = child::where('id', $id)->first();
+        $parents = ParentModel::where('child_id', $child->id)->first();
+        $documents = child_documents::where('child_id', $child->id)->get();
+        return view('admin.adoptions.edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
 
     }
 
@@ -331,7 +331,7 @@ class AdoptionController extends Controller
 
     public function deldoc($id)
     {
-        $documents = StudentDocuments::findOrFail($id);
+        $documents = child_documents::findOrFail($id);
         $documents->name = Null;
         $documents->update();
 
