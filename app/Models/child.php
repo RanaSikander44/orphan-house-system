@@ -10,4 +10,13 @@ class child extends Model
     {
         return $this->belongsTo(AcademicYear::class, 'campaign_id');
     }
+
+    public function enquiryType()
+    {
+        return $this->belongsTo(enquiry_types::class, 'enquiry_id');
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
 }

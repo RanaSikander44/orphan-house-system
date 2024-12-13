@@ -139,6 +139,15 @@
 
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
+                                            <h6 class="mb-0 text-muted">City</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->city->name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
                                             <h6 class="mb-0 text-muted">Phone Number</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
@@ -193,6 +202,15 @@
                                         </div>
                                         <div class="col-6 text-muted text-end">
                                             <p class="mb-0">{{ $child->enquiry_id }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Enquiry Type</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->enquiryType->title }}</p>
                                         </div>
                                     </div>
 
