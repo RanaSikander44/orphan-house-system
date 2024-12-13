@@ -13,7 +13,8 @@ use App\Models\ParentModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use App\Models\StudentDocuments;
+use App\Models\child_documents;
+use App\Models\City;
 
 
 
@@ -29,20 +30,18 @@ class AdoptionController extends Controller
 
     public function add()
     {
-        $years = academicyear::all();
+        $years = academicyear::where('status', '1')->get();
         $lastEnquiryID = child::max('enquiry_no');
         $newEnquiryId = $lastEnquiryID ? $lastEnquiryID + 1 : 1;
         $docs = documents_title::where('document_for', 'child')->get();
         $settings = settings::first();
         $enquiry_types = enquiry_types::where('status', '1')->get();
-        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types'));
+        $cities = City::all();
+        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities'));
     }
 
     public function store(Request $req)
     {
-
-
-
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
             'compaign_id' => 'required',
@@ -64,7 +63,7 @@ class AdoptionController extends Controller
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
             'age' => 'required',
-            'city_id' => 'nullable|integer',
+            'city_id' => 'required',
         ]);
 
 
@@ -154,7 +153,7 @@ class AdoptionController extends Controller
             if (isset($documents[$index])) {
                 $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                $uploadPath = public_path('backend/documents');
+                $uploadPath = public_path('backend/documents/students/');
 
                 if (!file_exists($uploadPath)) {
                     mkdir($uploadPath, 0777, true);
@@ -162,14 +161,14 @@ class AdoptionController extends Controller
 
                 $documents[$index]->move($uploadPath, $uniqueName);
 
-                StudentDocuments::create([
-                    'student_id' => $application->id,
+                child_documents::create([
+                    'child_id' => $application->id,
                     'title' => $title,
                     'name' => $uniqueName,
                 ]);
             } else {
-                StudentDocuments::create([
-                    'student_id' => $application->id,
+                child_documents::create([
+                    'child_id' => $application->id,
                     'title' => $title,
                     'name' => null,
                 ]);
@@ -185,9 +184,9 @@ class AdoptionController extends Controller
 
     public function studentView($id)
     {
-        $student = student::where('id', $id)->first();
+        $student = child::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = StudentDocuments::where('student_id', $student->id)->whereNotNull('name')->get();
+        $documents = child_documents::where('child_id', $student->id)->whereNotNull('name')->get();
         return view('admin.adoptions.student_view', compact('student', 'parents', 'documents'));
     }
 
@@ -199,7 +198,7 @@ class AdoptionController extends Controller
         $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
         $student = student::where('id', $id)->first();
         $parents = ParentModel::where('student_id', $student->id)->first();
-        $documents = StudentDocuments::where('student_id', $student->id)->get();
+        $documents = child_documents::where('student_id', $student->id)->get();
         return view('admin.adoptions.student_edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
 
     }
@@ -324,9 +323,8 @@ class AdoptionController extends Controller
 
     public function studentDelete($id)
     {
-        $student = student::find($id);
-        $student->name = 'null';
-        $student->save();
+        $student = child::find($id);
+        $student->delete();
         return redirect()->route('adoptions')->with('success', 'Student Deleted Successfully');
     }
 

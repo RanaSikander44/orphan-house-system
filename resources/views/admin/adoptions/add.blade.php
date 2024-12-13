@@ -128,12 +128,12 @@
                                                 <label for="" class="text-muted mb-2">City<span
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="city_id">
-                                                    @forelse ($years as $list)
+                                                    @forelse ($cities as $list)
                                                         <option value="{{ $list->id }}" {{ old('city_id') == $list->id ? 'selected' : '' }}>
-                                                            {{ $list->title . ' [' . $list->year . ']' }}
+                                                            {{ $list->name}}
                                                         </option>
                                                     @empty
-                                                        <option value="">No Years available</option>
+                                                        <option value="">No Cities are available</option>
                                                     @endforelse
                                                 </select>
                                                 @error('city_id')
@@ -300,7 +300,7 @@
                                             <!-- Admission Number -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="number" class="text-muted form-control">
+                                                <input type="number" name="phone_no" class="text-muted form-control">
                                             </div>
 
                                             <!-- Admission Date -->
@@ -336,13 +336,13 @@
                                                 <label for="" class="text-muted mb-2">Blood Group</label>
                                                 <div class="cp_wrapperblgroup">
                                                     <select class="select2blgroup" name="blood_group">
-                                                        <option value="Islam">A+</option>
-                                                        <option value="Islam">B+</option>
-                                                        <option value="Islam">AB+</option>
-                                                        <option value="Islam">O+</option>
-                                                        <option value="Islam">A-</option>
-                                                        <option value="Islam">B-</option>
-                                                        <option value="Islam">AB-</option>
+                                                        <option value="A+">A+</option>
+                                                        <option value="B+">B+</option>
+                                                        <option value="AB+">AB+</option>
+                                                        <option value="O+">O+</option>
+                                                        <option value="A-">A-</option>
+                                                        <option value="B-">B-</option>
+                                                        <option value="AB-">AB-</option>
                                                     </select>
                                                 </div>
                                             </div>
