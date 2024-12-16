@@ -193,13 +193,16 @@ class AdoptionController extends Controller
     public function studentEdit($id)
     {
 
+        $cities = City::all();
         $years = academicyear::all();
-        $lastAdmissionNumber = child::max('admission_no');
-        $newAdmissionNumber = $lastAdmissionNumber ? $lastAdmissionNumber + 1 : 1;
+        $settings = settings::first();
+        $enquiry_types = enquiry_types::where('status', '1')->get();
+        $lastEnquiryID = child::max('enquiry_no');
+        $newEnquiryId = $lastEnquiryID ? $lastEnquiryID + 1 : 1;
         $child = child::where('id', $id)->first();
         $parents = ParentModel::where('child_id', $child->id)->first();
         $documents = child_documents::where('child_id', $child->id)->get();
-        return view('admin.adoptions.edit', compact('student', 'parents', 'documents', 'years', 'newAdmissionNumber'));
+        return view('admin.adoptions.edit', compact('child', 'cities' , 'settings' ,'parents', 'documents', 'years', 'newEnquiryId' , 'enquiry_types'));
 
     }
 

@@ -16,7 +16,7 @@ class child_documents extends Model
 
     public function documentTitle()
     {
-        return $this->belongsTo(documents_title::class, 'title', 'id');
+        return $this->belongsTo(documents_title::class, 'title');
     }
 
 }
