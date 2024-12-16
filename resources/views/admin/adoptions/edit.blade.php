@@ -69,7 +69,7 @@
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="enquiry_type_id">
                                                     @forelse($enquiry_types as $list)
-                                                        <option value="{{ $list->id }}" {{$child->enquiry_type_id == $list->id ? 'selected' : ''   }}>
+                                                        <option value="{{ $list->id }}" {{$child->enquiry_id == $list->id ? 'selected' : ''   }}>
                                                             {{ $list->title }}
                                                         </option>
                                                     @empty
@@ -87,7 +87,7 @@
                                                 <label for="" class="text-muted mb-2">Enquiry Number <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control bg-light" name="enquiry_no"
-                                                    value="{{ old('enquiry_no', $child->enquiry_no) }}" readonly>
+                                                    value="{{ $child->enquiry_no}}" readonly>
 
                                                 @error('enquiry_no')
                                                     <span class="text-danger">This Field is Required.</span>
@@ -96,19 +96,32 @@
 
                                             <!-- Source Of Information -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Source of Information <span
-                                                        class="text-danger">*</span></label>
-                                                <select class="select2" name="source_of_information">
-                                                    <option value="Website" {{ old('source_of_information') == 'Website' ? 'selected' : '' }}>Website</option>
-                                                    <option value="Personal Reference" {{ old('source_of_information') == 'Personal Reference' ? 'selected' : '' }}>Personal Reference</option>
-                                                    <option value="Member Shared" {{ old('source_of_information') == 'Member Shared' ? 'selected' : '' }}>Member Shared</option>
-                                                    <option value="Referral Case" {{ old('source_of_information') == 'Referral Case' ? 'selected' : '' }}>Referral Case</option>
-                                                    <option value="Other" {{ old('source_of_information') == 'Other' ? 'selected' : '' }}>Other</option>
+                                                <label for="source_of_information" class="text-muted mb-2">
+                                                    Source of Information <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="select2" name="source_of_information"
+                                                    id="source_of_information">
+                                                    <option value="Website" {{ (old('source_of_information', $child->source_of_information) == 'Website') ? 'selected' : '' }}>
+                                                        Website
+                                                    </option>
+                                                    <option value="Personal Reference" {{ (old('source_of_information', $child->source_of_information) == 'Personal Reference') ? 'selected' : '' }}>
+                                                        Personal Reference
+                                                    </option>
+                                                    <option value="Member Shared" {{ (old('source_of_information', $child->source_of_information) == 'Member Shared') ? 'selected' : '' }}>
+                                                        Member Shared
+                                                    </option>
+                                                    <option value="Referral Case" {{ (old('source_of_information', $child->source_of_information) == 'Referral Case') ? 'selected' : '' }}>
+                                                        Referral Case
+                                                    </option>
+                                                    <option value="Other" {{ (old('source_of_information', $child->source_of_information) == 'Other') ? 'selected' : '' }}>
+                                                        Other
+                                                    </option>
                                                 </select>
                                                 @error('source_of_information')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
+
 
                                             <!-- Adoption Date -->
                                             <div class="col-6 mt-3">
@@ -141,20 +154,34 @@
                                             </div>
 
                                             <!-- Status of Adoption -->
+                                            <!-- Status of Adoption -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Status of Adoption <span
-                                                        class="text-danger">*</span></label>
-                                                <select class="select2" name="status_of_adoption">
-                                                    <option value="Forwarded" {{ old('status_of_adoption') == 'Forwarded' ? 'selected' : '' }}>Forwarded</option>
-                                                    <option value="Not Processed" {{ old('status_of_adoption') == 'Not Processed' ? 'selected' : '' }}>Not Processed</option>
-                                                    <option value="Rejected" {{ old('status_of_adoption') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
-                                                    <option value="Reserved" {{ old('status_of_adoption') == 'Reserved' ? 'selected' : '' }}>Reserved</option>
-                                                    <option value="Forward for Consideration" {{ old('status_of_adoption') == 'Forward for Consideration' ? 'selected' : '' }}>Forward for Consideration</option>
+                                                <label for="status_of_adoption" class="text-muted mb-2">
+                                                    Status of Adoption <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="select2" name="status_of_adoption"
+                                                    id="status_of_adoption">
+                                                    <option value="Forwarded" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forwarded' ? 'selected' : '' }}>
+                                                        Forwarded
+                                                    </option>
+                                                    <option value="Not Processed" {{ old('status_of_adoption', $child->status_of_adoption) == 'Not Processed' ? 'selected' : '' }}>
+                                                        Not Processed
+                                                    </option>
+                                                    <option value="Rejected" {{ old('status_of_adoption', $child->status_of_adoption) == 'Rejected' ? 'selected' : '' }}>
+                                                        Rejected
+                                                    </option>
+                                                    <option value="Reserved" {{ old('status_of_adoption', $child->status_of_adoption) == 'Reserved' ? 'selected' : '' }}>
+                                                        Reserved
+                                                    </option>
+                                                    <option value="Forward for Consideration" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forward for Consideration' ? 'selected' : '' }}>
+                                                        Forward for Consideration
+                                                    </option>
                                                 </select>
                                                 @error('status_of_adoption')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
+
                                         </div>
 
                                     </div>
@@ -225,10 +252,12 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
                                                     <select class="select2gender" name="gender">
-                                                        <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                                        <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Others</option>
+                                                        <option value="Male" {{ old('gender', $child->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ old('gender', $child->gender) == 'Female' ? 'selected' : '' }}>Female
+                                                        </option>
+                                                        <option value="other" {{ old('gender', $child->gender) == 'other' ? 'selected' : '' }}>Others</option>
                                                     </select>
+
                                                 </div>
                                                 @error('gender')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -248,10 +277,10 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperreg">
                                                     <select class="select2reg" name="religion">
-                                                        <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>Islam</option>
-                                                        <option value="Hinduism" {{ old('religion') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
-                                                        <option value="Sikhism" {{ old('religion') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
-                                                        <option value="Other" {{ old('religion') == 'Other' ? 'selected' : '' }}>Others</option>
+                                                        <option value="Islam" {{ old('religion', $child->religion ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                                        <option value="Hinduism" {{ old('religion', $child->religion ?? '') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
+                                                        <option value="Sikhism" {{ old('religion', $child->religion ?? '') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
+                                                        <option value="Other" {{ old('religion', $child->religion ?? '') == 'Other' ? 'selected' : '' }}>Others</option>
                                                     </select>
                                                 </div>
                                                 @error('religion')
@@ -342,14 +371,15 @@
                                                 <label for="" class="text-muted mb-2">Blood Group</label>
                                                 <div class="cp_wrapperblgroup">
                                                     <select class="select2blgroup" name="blood_group">
-                                                        <option value="A+">A+</option>
-                                                        <option value="B+">B+</option>
-                                                        <option value="AB+">AB+</option>
-                                                        <option value="O+">O+</option>
-                                                        <option value="A-">A-</option>
-                                                        <option value="B-">B-</option>
-                                                        <option value="AB-">AB-</option>
+                                                        <option value="A+" {{ old('blood_group', $child->blood_group ?? '') == 'A+' ? 'selected' : '' }}>A+</option>
+                                                        <option value="B+" {{ old('blood_group', $child->blood_group ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
+                                                        <option value="AB+" {{ old('blood_group', $child->blood_group ?? '') == 'AB+' ? 'selected' : '' }}>AB+</option>
+                                                        <option value="O+" {{ old('blood_group', $child->blood_group ?? '') == 'O+' ? 'selected' : '' }}>O+</option>
+                                                        <option value="A-" {{ old('blood_group', $child->blood_group ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
+                                                        <option value="B-" {{ old('blood_group', $child->blood_group ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
+                                                        <option value="AB-" {{ old('blood_group', $child->blood_group ?? '') == 'AB-' ? 'selected' : '' }}>AB-</option>
                                                     </select>
+
                                                 </div>
                                             </div>
 
@@ -451,9 +481,9 @@
                                                 <label for="" class="text-muted mb-2">Gender</label>
                                                 <div class="cp_wrapperGg">
                                                     <select class="select2Gg form-control" name="guardian_gender">
-                                                        <option value=""> --Select-- </option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
+                                                        <option value="">--Select--</option>
+                                                        <option value="Male" {{ old('guardian_gender', $parents->guardian_gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ old('guardian_gender', $parents->guardian_gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -496,7 +526,7 @@
                                                 <label for="mother_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="mother_name"
-                                                    id="mother_first_name" value="{{ $parents->mother_last_name }}">
+                                                    id="mother_first_name" value="{{ $parents->mother_first_name }}">
                                             </div>
 
                                             <!-- Last Name -->
@@ -548,7 +578,7 @@
                                                 <label for="father_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="father_name"
-                                                    id="father_first_name" value="{{ $parents->father }}">
+                                                    id="father_first_name" value="{{ $parents->father_name }}">
                                             </div>
 
                                             <!-- Last Name -->
@@ -603,6 +633,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 @foreach ($documents as $index => $list)
+                                                
                                                     <div class="col-md-6">
                                                         <label for="file_{{ $index }}"
                                                             class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>

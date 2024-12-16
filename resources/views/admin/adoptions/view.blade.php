@@ -201,7 +201,7 @@
                                             <h6 class="mb-0 text-muted">Enquiry No</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->enquiry_id }}</p>
+                                            <p class="mb-0">{{ $child->enquiry_no }}</p>
                                         </div>
                                     </div>
 
