@@ -16,15 +16,16 @@ return new class extends Migration {
             $table->string('enquiry_id');
             $table->string('enquiry_no');
             $table->string('source_of_information');
-            $table->string('status_of_adoption');
             $table->date('adoption_date');
+            $table->string('city_id')->nullable();
+            $table->string('status_of_adoption');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('gender');
             $table->date('dob');
             $table->string('age');
-            $table->string('religion');
+            $table->string('gender');
             $table->string('caste')->nullable();
+            $table->string('religion');
             $table->string('email')->nullable();
             $table->string('phone_no')->nullable();
             $table->string('current_address')->nullable();
@@ -32,7 +33,6 @@ return new class extends Migration {
             $table->string('blood_group')->nullable();
             $table->string('height')->nullable();
             $table->string('weight')->nullable();
-            $table->string('city_id')->nullable();
             $table->string('child_image')->nullable();
             $table->timestamps();
         });

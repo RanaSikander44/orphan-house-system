@@ -30,10 +30,10 @@
                             <div class="col-6">{{ $staff->first_name }} {{ $staff->last_name }}</div>
                         </div>
 
-                        <div class="row py-2 border-bottom align-items-center">
+                        <!-- <div class="row py-2 border-bottom align-items-center">
                             <div class="col-6 fw-bold">Gender</div>
                             <div class="col-6">{{ $staff->gender }}</div>
-                        </div>
+                        </div> -->
 
                     </div>
 
@@ -113,7 +113,7 @@
                                             <h6 class="mb-0 text-muted">Age</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->dob }}</p>
+                                            <p class="mb-0">{{ $staff->age . ' Years'}}</p>
                                         </div>
                                     </div>
 
@@ -136,6 +136,15 @@
                                         </div>
                                     </div>
 
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">Religion</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $staff->religion }}</p>
+                                        </div>
+                                    </div>
+
                                     <!-- Row 2 -->
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
@@ -148,10 +157,10 @@
 
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Religion</h6>
+                                            <h6 class="mb-0 text-muted">Emergency Contact Number</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->religion }}</p>
+                                            <p class="mb-0">{{ $staff->emergency_contact_number }}</p>
                                         </div>
                                     </div>
 
@@ -198,7 +207,7 @@
                                                                                                 <tr id="document-row-{{ $list->id }}">
                                                                                                     <!-- Ensure each row has a unique ID -->
                                                                                                     <!-- Display Title -->
-                                                                                                    <td>{{ $list->documentTitle->title ?? 'Unknown Document' }}</td>
+                                                                                                    <td>{{ $list->staffDocs->title ?? 'Unknown Document' }}</td>
 
                                                                                                     <!-- Display File Name -->
                                                                                                     <td>{{ $list->name }}</td>

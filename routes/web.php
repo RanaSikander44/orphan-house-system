@@ -62,7 +62,7 @@ Route::delete('cities/delete/{id}', [CityController::class, 'destroy'])->name('c
     Route::post('enquiry/store', [AdoptionController::class, 'store'])->name('enquiry.store');
     Route::get('enquiry/child-view/{id}', [AdoptionController::class, 'studentView'])->name('enquiry.view');
     Route::get('enquiry/child-edit/{id}', [AdoptionController::class, 'studentEdit'])->name('enquiry.edit');
-    Route::post('enquiry/child-update/{id}', [AdoptionController::class, 'studentUpdate'])->name('enquiry.update');
+    Route::post('enquiry/child-update/{id}', [AdoptionController::class, 'update'])->name('enquiry.update');
     Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
 

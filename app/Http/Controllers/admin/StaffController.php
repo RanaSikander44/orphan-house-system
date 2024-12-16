@@ -43,12 +43,16 @@ class StaffController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required',
             'dob' => 'required',
+            'age' => 'required',
             'gender' => 'required|string',
             'email' => 'required|email|unique:staff,email', // Ensure correct table and column are specified
+            'password' => 'required|min:8',
             'religion' => 'required|string',
             'role_id' => 'required|integer',
             'phone_no' => 'required',
+            'emergency_contact_number' => 'required',
         ]);
+
 
         if ($validator->fails()) {
             return redirect()->route('staff.create')
@@ -63,11 +67,14 @@ class StaffController extends Controller
         $Staff->first_name = $request->first_name;
         $Staff->last_name = $request->last_name;
         $Staff->dob = $request->dob;
+        $Staff->age = $request->age;
         $Staff->gender = $request->gender;
         $Staff->email = $request->email;
+        $Staff->password = bcrypt($request->password);
         $Staff->religion = $request->religion;
         $Staff->role_id = $request->role_id;
         $Staff->phone_no = $request->phone_no;
+        $Staff->emergency_contact_number = $request->emergency_contact_number;
         $Staff->caste = $request->caste;
         $Staff->current_address = $request->current_address;
         $Staff->permanent_address = $request->permanent_address;
@@ -104,6 +111,7 @@ class StaffController extends Controller
                     'title' => $title,
                     'name' => $uniqueName,
                 ]);
+
             } else {
                 StaffDocuments::create([
                     'staff_id' => $Staff->id,
@@ -123,9 +131,9 @@ class StaffController extends Controller
      */
     public function show(string $id)
     {
-        $staff = staff::where('id' , $id)->first();
+        $staff = staff::where('id', $id)->first();
         $documents = StaffDocuments::where('staff_id', $id)->whereNotNull('name')->get();
-        return view('admin.staff.view',compact('staff' , 'documents'));
+        return view('admin.staff.view', compact('staff', 'documents'));
     }
 
     /**
@@ -135,17 +143,93 @@ class StaffController extends Controller
     {
         $roles = Role::where('name', '!=', 'Admin')->get();
         $edit = Staff::where('id', $id)->first();
-        $documents = StaffDocuments::where('staff_id' , $id)->get();
-        return view('admin.staff.edit', compact('edit' , 'roles' , 'documents'));
+        $documents = StaffDocuments::where('staff_id', $id)->get();
+        return view('admin.staff.edit', compact('edit', 'roles', 'documents'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, $id)
     {
-        //
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string',
+            'last_name' => 'required',
+            'dob' => 'required',
+            'age' => 'required',
+            'gender' => 'required|string',
+            'email' => 'required|email|unique:staff,email,' . $id, // Ensure unique validation for the current record
+            'password' => 'nullable|min:8', // Make password optional on update
+            'religion' => 'required|string',
+            'role_id' => 'required|integer',
+            'phone_no' => 'required',
+            'emergency_contact_number' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('staff.edit', $id)
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Find the staff by ID
+        $Staff = Staff::findOrFail($id);
+        $Staff->first_name = $request->first_name;
+        $Staff->last_name = $request->last_name;
+        $Staff->dob = $request->dob;
+        $Staff->age = $request->age;
+        $Staff->gender = $request->gender;
+        $Staff->email = $request->email;
+
+        // Only update password if provided
+        if ($request->filled('password')) {
+            $Staff->password = bcrypt($request->password);
+        }
+
+        $Staff->religion = $request->religion;
+        $Staff->role_id = $request->role_id;
+        $Staff->phone_no = $request->phone_no;
+        $Staff->emergency_contact_number = $request->emergency_contact_number;
+        $Staff->caste = $request->caste;
+        $Staff->current_address = $request->current_address;
+        $Staff->permanent_address = $request->permanent_address;
+
+        // Handle staff image upload
+        if ($image = $request->file('staff_image')) {
+            $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('backend/images/staff');
+            $image->move($destinationPath, $uniqueName);
+            $Staff->staff_image = $uniqueName ? $uniqueName : $Staff->staff_image; // Keep old image if not uploaded
+        }
+
+        $Staff->save();
+
+        // Handle document updates
+        $titles = $request->input('document_titles');
+        $documents = $request->file('document_names');
+
+        foreach ($titles as $index => $title) {
+            if (isset($documents[$index])) {
+                $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
+                $uploadPath = public_path('backend/documents');
+
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0777, true);
+                }
+
+                $documents[$index]->move($uploadPath, $uniqueName);
+
+                StaffDocuments::where('title', $title)->update([
+                    'name' => $uniqueName
+                ]);
+            }
+        }
+
+        return redirect()->route('staff.index')->with('success', 'Staff Updated Successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -158,21 +242,21 @@ class StaffController extends Controller
 
     public function delete($id)
     {
-        
-         $staff = Staff::findOrFail($id)->first();
-         $staff->delete();
 
-         return redirect()->route('staff.index')->with('success'  , 'Staff Deleted !');
+        $staff = Staff::findOrFail($id)->first();
+        $staff->delete();
+
+        return redirect()->route('staff.index')->with('success', 'Staff Deleted !');
 
     }
 
     public function deleteStaffDocs($id)
     {
-         $docs = StaffDocuments::findOrFail($id);
-         $docs->name  = Null;
-         $docs->update();
+        $docs = StaffDocuments::findOrFail($id);
+        $docs->name = Null;
+        $docs->update();
 
-         return response()->json([
+        return response()->json([
             'success' => 'Document deleted !',
         ]);
     }

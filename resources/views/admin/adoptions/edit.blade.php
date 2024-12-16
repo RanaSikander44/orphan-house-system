@@ -26,16 +26,170 @@
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
         <!-- Tab Content -->
-        <form method="post" action="{{route('enquiry.update', $student->id)}}" enctype="multipart/form-data">
+        <form method="post" action="{{route('enquiry.update', $child->id)}}" enctype="multipart/form-data">
             @csrf
             <div class="tab-content">
-
                 <!-- Home Tab -->
                 <div class="tab-pane fade show active" style="width: 100%;" id="home">
                     <div class="p-3">
                         <div class="row d-flex">
 
+                            <!-- Adoption Information -->
+                            <div class="col-6">
+                                <div class="card bg-light border-0 shadow-none" style="height : 450px;">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">Adoption Badge</p>
+                                        <hr class="w-100" style="font-weight: 200px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Campaign Year -->
+                                            <div class="col-6 mb-2">
+                                                <label for="" class="text-muted mb-2">Campaign Type <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cp_wrapper">
+                                                    <select class="select2" name="compaign_id">
+                                                        @forelse ($years as $list)
+                                                            <option value="{{ $list->id }}" {{$child->compaign_id == $list->id ? 'selected' : '' }}>
+                                                                {{ $list->title . ' [' . $list->year . ']' }}
+                                                            </option>
+                                                        @empty
+                                                            <option value="">No Years available</option>
+                                                        @endforelse
+                                                    </select>
+                                                </div>
+                                                @error('compaign_id')
+                                                    <span class="text-danger">The Field is Required.</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Enquiry Type -->
+                                            <div class="col-6">
+                                                <label for="" class="text-muted mb-2">Enquiry Type <span
+                                                        class="text-danger">*</span></label>
+                                                <select class="select2" name="enquiry_type_id">
+                                                    @forelse($enquiry_types as $list)
+                                                        <option value="{{ $list->id }}" {{$child->enquiry_id == $list->id ? 'selected' : ''   }}>
+                                                            {{ $list->title }}
+                                                        </option>
+                                                    @empty
+                                                        <option value="">Please add at least one enquiry type from settings
+                                                        </option>
+                                                    @endforelse
+                                                </select>
+                                                @error('enquiry_type_id')
+                                                    <span class="text-danger">This Field is Required</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Enquiry Number -->
+                                            <div class="col-6 mt-3">
+                                                <label for="" class="text-muted mb-2">Enquiry Number <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control bg-light" name="enquiry_no"
+                                                    value="{{ $child->enquiry_no}}" readonly>
+
+                                                @error('enquiry_no')
+                                                    <span class="text-danger">This Field is Required.</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Source Of Information -->
+                                            <div class="col-6 mt-3">
+                                                <label for="source_of_information" class="text-muted mb-2">
+                                                    Source of Information <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="select2" name="source_of_information"
+                                                    id="source_of_information">
+                                                    <option value="Website" {{ (old('source_of_information', $child->source_of_information) == 'Website') ? 'selected' : '' }}>
+                                                        Website
+                                                    </option>
+                                                    <option value="Personal Reference" {{ (old('source_of_information', $child->source_of_information) == 'Personal Reference') ? 'selected' : '' }}>
+                                                        Personal Reference
+                                                    </option>
+                                                    <option value="Member Shared" {{ (old('source_of_information', $child->source_of_information) == 'Member Shared') ? 'selected' : '' }}>
+                                                        Member Shared
+                                                    </option>
+                                                    <option value="Referral Case" {{ (old('source_of_information', $child->source_of_information) == 'Referral Case') ? 'selected' : '' }}>
+                                                        Referral Case
+                                                    </option>
+                                                    <option value="Other" {{ (old('source_of_information', $child->source_of_information) == 'Other') ? 'selected' : '' }}>
+                                                        Other
+                                                    </option>
+                                                </select>
+                                                @error('source_of_information')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+
+                                            <!-- Adoption Date -->
+                                            <div class="col-6 mt-3">
+                                                <label for="" class="text-muted mb-2">Adoption Date <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control dateselector"
+                                                    name="adoption_date"
+                                                    value="{{ old('adoption_date', $child->adoption_date) }}">
+                                                @error('adoption_date')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- City -->
+                                            <div class="col-6 mt-3">
+                                                <label for="" class="text-muted mb-2">City<span
+                                                        class="text-danger">*</span></label>
+                                                <select class="select2" name="city_id">
+                                                    @forelse ($cities as $list)
+                                                        <option value="{{ $list->id }}" {{$child->city_id == $list->id ? 'selected' : ''  }}>
+                                                            {{ $list->name}}
+                                                        </option>
+                                                    @empty
+                                                        <option value="">No Cities are available</option>
+                                                    @endforelse
+                                                </select>
+                                                @error('city_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Status of Adoption -->
+                                            <!-- Status of Adoption -->
+                                            <div class="col-6 mt-3">
+                                                <label for="status_of_adoption" class="text-muted mb-2">
+                                                    Status of Adoption <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="select2" name="status_of_adoption"
+                                                    id="status_of_adoption">
+                                                    <option value="Forwarded" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forwarded' ? 'selected' : '' }}>
+                                                        Forwarded
+                                                    </option>
+                                                    <option value="Not Processed" {{ old('status_of_adoption', $child->status_of_adoption) == 'Not Processed' ? 'selected' : '' }}>
+                                                        Not Processed
+                                                    </option>
+                                                    <option value="Rejected" {{ old('status_of_adoption', $child->status_of_adoption) == 'Rejected' ? 'selected' : '' }}>
+                                                        Rejected
+                                                    </option>
+                                                    <option value="Reserved" {{ old('status_of_adoption', $child->status_of_adoption) == 'Reserved' ? 'selected' : '' }}>
+                                                        Reserved
+                                                    </option>
+                                                    <option value="Forward for Consideration" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forward for Consideration' ? 'selected' : '' }}>
+                                                        Forward for Consideration
+                                                    </option>
+                                                </select>
+                                                @error('status_of_adoption')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Personal Information -->
+
                             <div class="col-6">
                                 <div class="card bg-light border-0 shadow-none">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
@@ -49,7 +203,7 @@
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="first_name"
-                                                    value="{{ $student->first_name }}">
+                                                    value="{{ old('first_name', $child->first_name) }}">
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -60,8 +214,34 @@
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="last_name"
-                                                    value="{{ $student->last_name }}">
+                                                    value="{{ old('last_name', $child->last_name) }}">
                                                 @error('last_name')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Date of Birth -->
+                                            <div class="col-6 mt-3">
+                                                <label for="" class="text-muted mb-2">Date Of Birth <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control dateselector" name="dob"
+                                                    id="DateOfBirth" value="{{ old('dob', $child->dob) }}">
+                                                @error('dob')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Age -->
+                                            <div class="col-6 mb-2 mt-3">
+                                                <label for="" class="text-muted mb-2">Age <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control bg-light" name="age"
+                                                    id="ChildAge" readonly value="{{ old('age', $child->age) }}">
+                                                <input type="text" class="d-none"
+                                                    value="{{ $settings->min_age_of_child }}" id="minAge">
+                                                <input type="text" class="d-none"
+                                                    value="{{ $settings->max_age_of_child }}" id="maxAge">
+                                                @error('age')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -72,9 +252,10 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
                                                     <select class="select2gender" name="gender">
-                                                        <option value="Male" {{ $student->gender == 'Male' ? 'selected' : '' }}>Male</option>
-                                                        <option value="Female" {{ $student->gender == 'Female' ? 'selected' : '' }}>Female</option>
-                                                        <option value="other" {{ $student->gender == 'other' ? 'selected' : '' }}>Others</option>
+                                                        <option value="Male" {{ old('gender', $child->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ old('gender', $child->gender) == 'Female' ? 'selected' : '' }}>Female
+                                                        </option>
+                                                        <option value="other" {{ old('gender', $child->gender) == 'other' ? 'selected' : '' }}>Others</option>
                                                     </select>
 
                                                 </div>
@@ -83,15 +264,11 @@
                                                 @enderror
                                             </div>
 
-                                            <!-- Date of Birth -->
+                                            <!-- Caste -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Date Of Birth <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector" name="dob"
-                                                    value="{{ $student->dob }}">
-                                                @error('dob')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <label for="" class="text-muted mb-2">Caste</label>
+                                                <input type="text" class="form-control" name="caste"
+                                                    value="{{ old('caste', $child->caste) }}">
                                             </div>
 
                                             <!-- Religion -->
@@ -100,10 +277,10 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperreg">
                                                     <select class="select2reg" name="religion">
-                                                        <option value="Islam" {{ $student->gender == 'Islam' ? 'selected' : '' }}>Islam</option>
-                                                        <option value="Hinduism" {{ $student->gender == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
-                                                        <option value="Sikhism" {{ $student->gender == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
-                                                        <option value="Other" {{ $student->gender == 'Other' ? 'selected' : ''  }}>Others</option>
+                                                        <option value="Islam" {{ old('religion', $child->religion ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                                        <option value="Hinduism" {{ old('religion', $child->religion ?? '') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
+                                                        <option value="Sikhism" {{ old('religion', $child->religion ?? '') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
+                                                        <option value="Other" {{ old('religion', $child->religion ?? '') == 'Other' ? 'selected' : '' }}>Others</option>
                                                     </select>
                                                 </div>
                                                 @error('religion')
@@ -111,91 +288,28 @@
                                                 @enderror
                                             </div>
 
-                                            <!-- Caste -->
+                                            <!-- Child Image -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Caste</label>
-                                                <input type="text" class="form-control" name="caste"
-                                                    value="{{ $student->caste }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Academic Information -->
-                            <div class="col-6">
-                                <div class="card bg-light border-0 shadow-none" style="height : 350px;">
-                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">Academic Information</p>
-                                        <hr class="w-100" style="font-weight: 200px;">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <!-- Academic Year -->
-                                            <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Academic Year <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="cp_wrapper">
-                                                    <select class="select2" name="year_id">
-                                                        @forelse ($years as $list)
-                                                            <option value="{{ $list->id }}" {{ $student->year_id === $list->id ? 'selected' : '' }}>
-                                                                {{ $list->title . ' [' . $list->year . ']' }}
-                                                            </option>
-                                                        @empty
-                                                            <option value="">No Years available</option>
-                                                        @endforelse
-                                                    </select>
-
-                                                </div>
-                                                @error('year_id')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Admission Number -->
-                                            <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Admission Number <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="admission_no"
-                                                    value="{{ $student->admission_no }}" readonly>
-
-                                                @error('admission_no')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Admission Date -->
-                                            <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Admission Date <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector"
-                                                    name="admission_date" value="{{ $student->admission_date }}">
-                                                @error('admission_date')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-6"></div>
-
-                                            <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Student Image</label>
+                                                <label for="" class="text-muted mb-2">Child Image</label>
                                                 <div class="image-input">
                                                     <input type="file" accept="image/*" id="imageInput"
-                                                        name="student_image" class="d-none">
+                                                        name="child_image" class="d-none">
                                                     <label for="imageInput" class="image-button"><i
                                                             class="far fa-image"></i> Choose image</label>
                                                 </div>
                                             </div>
 
                                             <div class="col-6">
-                                                <img src="{{ asset('backend/images/students/' . $student->student_image)}}"
+                                                <img src="{{  asset('backend/images/childs/' . $child->child_image)}}"
                                                     class="image-preview"
-                                                    style="width : 100px; height: 80px; display:{{ $student->student_image ? 'block' : 'none' }}; margin-left : 40px;">
+                                                    style="width: 100px; height: 80px; display:{{ $child->child_image ? 'block' : 'none' }}; margin-left: 40px;">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+
 
                             <!-- Contact Information -->
                             <div class="col-6 mt-4">
@@ -209,26 +323,32 @@
                                             <!-- Academic Year -->
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Email Address</label>
-                                                <input type="email" class="form-control" name="email">
+                                                <input type="email" class="form-control" name="email"
+                                                    value="{{ $child->email }}">
                                             </div>
 
                                             <!-- Admission Number -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="number" class="text-muted form-control">
+                                                <input type="number" name="phone_no" value="{{ $child->phone_no }}"
+                                                    class="text-muted form-control">
                                             </div>
 
                                             <!-- Admission Date -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Current Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
-                                                    name="current_address" class="form-control" rows="3"></textarea>
+                                                    name="current_address" class="form-control" rows="3">
+                                                 {{ $child->current_address }}
+                                                </textarea>
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <label for="permanentAddress" class="text-muted mb-2">Permanent
                                                     Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
-                                                    name="permanent_address" class="form-control" rows="3"></textarea>
+                                                    name="permanent_address" class="form-control" rows="3">
+                                                 {{ $child->permanent_address }}
+                                                </textarea>
                                             </div>
 
                                         </div>
@@ -251,14 +371,15 @@
                                                 <label for="" class="text-muted mb-2">Blood Group</label>
                                                 <div class="cp_wrapperblgroup">
                                                     <select class="select2blgroup" name="blood_group">
-                                                        <option value="Islam">A+</option>
-                                                        <option value="Islam">B+</option>
-                                                        <option value="Islam">AB+</option>
-                                                        <option value="Islam">O+</option>
-                                                        <option value="Islam">A-</option>
-                                                        <option value="Islam">B-</option>
-                                                        <option value="Islam">AB-</option>
+                                                        <option value="A+" {{ old('blood_group', $child->blood_group ?? '') == 'A+' ? 'selected' : '' }}>A+</option>
+                                                        <option value="B+" {{ old('blood_group', $child->blood_group ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
+                                                        <option value="AB+" {{ old('blood_group', $child->blood_group ?? '') == 'AB+' ? 'selected' : '' }}>AB+</option>
+                                                        <option value="O+" {{ old('blood_group', $child->blood_group ?? '') == 'O+' ? 'selected' : '' }}>O+</option>
+                                                        <option value="A-" {{ old('blood_group', $child->blood_group ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
+                                                        <option value="B-" {{ old('blood_group', $child->blood_group ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
+                                                        <option value="AB-" {{ old('blood_group', $child->blood_group ?? '') == 'AB-' ? 'selected' : '' }}>AB-</option>
                                                     </select>
+
                                                 </div>
                                             </div>
 
@@ -267,12 +388,14 @@
                                             <!-- Admission Date -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Height (In)</label>
-                                                <input type="number" class="form-control" name="height">
+                                                <input type="number" class="form-control" name="height"
+                                                    value="{{ $child->height }}">
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <label for="permanentAddress" class="text-muted mb-2">Weight
                                                     (Kg)</label>
-                                                <input type="number" class="form-control" name="weight">
+                                                <input type="number" class="form-control" name="weight"
+                                                    value="{{ $child->weight }}">
                                             </div>
 
                                         </div>
@@ -288,33 +411,47 @@
                 <div class="tab-pane fade" id="menu1">
                     <div class="p-3">
                         <div class="row">
-                            <!-- Guardian Type -->
-                            <div class="col-6 mb-2">
-                                <label for="" class="text-muted mb-2">Guardian Type</label>
-                                <div>
-                                    <label for="father" class="form-check-label">
-                                        <input type="radio" name="parent_status" value="father" id="father"
-                                            class="form-check-input" @if(!empty($parents->father_name)) checked @endif>
-                                        Father
-                                    </label>
-                                </div>
-                                <div>
-                                    <label for="mother" class="form-check-label">
-                                        <input type="radio" name="parent_status" value="mother" id="mother"
-                                            class="form-check-input" @if(!empty($parents->mother_name)) checked @endif>
-                                        Mother
-                                    </label>
-                                </div>
-                                <div>
-                                    <label for="guardian" class="form-check-label">
-                                        <input type="radio" name="parent_status" value="guardian" id="guardian"
-                                            class="form-check-input" @if(!empty($parents->guardian_name)) checked
-                                            @endif>
-                                        Guardian
-                                    </label>
+                            <div class="col-6">
+                                <div class="card bg-light border-0 shadow-none">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">Guardian Information</p>
+                                        <hr class="w-100" style="font-weight: 200px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Guardain Type -->
+                                            <div class="col-6 mb-2">
+                                                <label for="" class="text-muted mb-2">Guardain Type</label>
+                                                <div>
+                                                    <label for="father" class="form-check-label">
+                                                        <input type="radio" name="parent_status" value="father"
+                                                            id="father" class="form-check-input"
+                                                            @if(!empty($parents->father_name)) checked @endif>
+                                                        Father
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label for="mother" class="form-check-label">
+                                                        <input type="radio" name="parent_status" value="mother"
+                                                            id="mother" class="form-check-input"
+                                                            @if(!empty($parents->mother_name)) checked @endif>
+                                                        Mother
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label for="guardian" class="form-check-label">
+                                                        <input type="radio" name="parent_status" value="guardian"
+                                                            id="guardian" class="form-check-input"
+                                                            @if(!empty($parents->guardian_email)) checked @endif>
+                                                        Guardian
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-
                             <!-- Guardian Information -->
                             <div class="col-6 d-none" id="guardian-info">
                                 <div class="card bg-light border-0 shadow-none">
@@ -344,9 +481,9 @@
                                                 <label for="" class="text-muted mb-2">Gender</label>
                                                 <div class="cp_wrapperGg">
                                                     <select class="select2Gg form-control" name="guardian_gender">
-                                                        <option value=""> --Select-- </option>
-                                                        <option value="Male" {{ $parents->guardian_gender === "Male" ? 'Selected' : '' }}>Male</option>
-                                                        <option value="Female" {{ $parents->guardian_gender === "Female" ? 'Selected' : '' }}>Female</option>
+                                                        <option value="">--Select--</option>
+                                                        <option value="Male" {{ old('guardian_gender', $parents->guardian_gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ old('guardian_gender', $parents->guardian_gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -354,7 +491,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="guardian_email"
-                                                    value="{{ $parents->guardian_email }}">
+                                                    value="{{ $parents->email }}">
                                             </div>
 
 
@@ -389,7 +526,7 @@
                                                 <label for="mother_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="mother_name"
-                                                    id="mother_first_name" value="{{ $parents->mother_name }}">
+                                                    id="mother_first_name" value="{{ $parents->mother_first_name }}">
                                             </div>
 
                                             <!-- Last Name -->
@@ -420,7 +557,7 @@
                                                 <label for="mother_phone" class="text-muted mb-2">Phone
                                                     Number</label>
                                                 <input type="text" class="form-control" name="mother_phone_no"
-                                                    id="mother_phone" value="{{ $parents->mother_phone_no }}">
+                                                    id="mother_phone" value="{{ $parents->mother_phone }}">
                                             </div>
                                         </div>
                                     </div>
@@ -493,27 +630,22 @@
                                         <hr class="w-100">
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">    
+                                        <div class="form-group">
                                             <div class="row">
                                                 @foreach ($documents as $index => $list)
+                                                
                                                     <div class="col-md-6">
-                                                        <!-- Label with unique id for each file input -->
                                                         <label for="file_{{ $index }}"
                                                             class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>
-
-                                                        <!-- Hidden input field for storing the document title ID -->
                                                         <input type="text" class="d-none" name="document_titles[]"
                                                             value="{{ $list->documentTitle->id }}">
-
-                                                        <!-- File input for document upload -->
                                                         <input type="file" class="form-control" name="document_names[]"
                                                             id="file_{{ $index }}">
-
                                                         <div class="docs">
                                                             <!-- Display the existing document name with a link to the file -->
                                                             @if($list->name)
                                                                 <p class="text-muted">
-                                                                    <a href="{{ asset('backend/documents/' . $list->name) }}"
+                                                                    <a href="{{ asset('backend/documents/childs/' . $list->name) }}"
                                                                         target="_blank">Current Document</a>
                                                                 </p>
                                                             @else
@@ -525,7 +657,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -535,7 +666,7 @@
             </div>
             <div class="text-end mt-3">
                 <button class="btn btn-primary btn-sm" type="submit">
-                    <i class="fa fa-save"></i> Save
+                    <i class="fa fa-save"></i> Update
                 </button>
             </div>
         </form>

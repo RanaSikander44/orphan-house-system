@@ -6,5 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class child extends Model
 {
-    //
+    public function academicyear()
+    {
+        return $this->belongsTo(AcademicYear::class, 'campaign_id');
+    }
+
+    public function enquiryType()
+    {
+        return $this->belongsTo(enquiry_types::class, 'enquiry_id');
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
 }
