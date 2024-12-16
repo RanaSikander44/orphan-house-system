@@ -16,7 +16,7 @@ class StaffDocuments extends Model
 
     public function staffDocs()
     {
-        return $this->belongsTo(documents_title ::class, 'title', 'id');
+        return $this->belongsTo(documents_title ::class, 'title');
     }
     
 }
