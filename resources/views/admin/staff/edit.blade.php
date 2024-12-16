@@ -199,7 +199,7 @@
 
 
                                             <div class="col-4 mt-3 mb-2">
-                                                <label for="" class="text-muted mb-2">Password to login
+                                                <label for="" class="text-muted mb-2">Update password to login
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <input type="password" class="form-control" name="password"
