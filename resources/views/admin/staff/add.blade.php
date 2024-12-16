@@ -64,16 +64,15 @@
                                                 @enderror
                                             </div>
 
-                                            <!-- Date of Birth -->
+
                                             <div class="col-4">
-                                                <label for="" class="text-muted mb-2">Date Of Birth <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector" name="dob"
-                                                    value="{{ old('dob') }}">
-                                                @error('dob')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                                <label for="" class="text-muted mb-2">Caste</label>
+                                                <input type="text" class="form-control" name="caste"
+                                                    value="{{ old('caste') }}">
                                             </div>
+
+                                            <!-- <div class="col-4 mt-3 mb-2"></div> -->
+
 
                                             <!-- Gender -->
                                             <div class="col-4 mt-3">
@@ -91,31 +90,27 @@
                                                 @enderror
                                             </div>
 
-                                            <!-- Caste -->
-                                            <div class="col-4 mt-3">
-                                                <label for="" class="text-muted mb-2">Caste</label>
-                                                <input type="text" class="form-control" name="caste"
-                                                    value="{{ old('caste') }}">
-                                            </div>
-
-                                            @error('caste')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-
-
-                                            <div class="col-4 mt-3 mb-2">
-                                                <label for="" class="text-muted mb-2">Email Address
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="email" class="form-control" name="email"
-                                                    value="{{ old('email') }}">
-
-                                                @error('email')
+                                            <!-- Date of Birth -->
+                                            <div class="col-4">
+                                                <label for="" class="text-muted mt-3 mb-2">Date Of Birth <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" id="StaffDob" class="form-control dateselector "
+                                                    name="dob" value="{{ old('dob') }}">
+                                                @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
 
-
+                                            <!-- Age -->
+                                            <div class="col-4 mt-3">
+                                                <label for="" class="text-muted mb-2">Age<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="number" id="totalAgeStaff" class="form-control bg-light"
+                                                    name="age" value="{{ old('age')}}" readonly>
+                                                @error('age')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
                                             <!-- Role -->
                                             <div class="col-4 mb-2 mt-3">
                                                 <label for="" class="text-muted mb-2">Select Role<span
@@ -134,6 +129,8 @@
                                                 @enderror
                                             </div>
 
+
+
                                             <!-- Phone Number -->
                                             <div class="col-4 mt-3">
                                                 <label for="" class="text-muted mb-2">Phone Number <span
@@ -141,13 +138,28 @@
                                                 </label>
                                                 <input type="number" class="text-muted form-control" name="phone_no"
                                                     value="{{ old('phone_no') }}">
+                                                @error('phone_no')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
 
-                                            @error('phone_no')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
 
-                                            <div class="col-4 mt-3"></div>
+
+
+                                            <!-- Phone Number -->
+                                            <div class="col-4 mt-3">
+                                                <label for="" class="text-muted mb-2">Emergency Contact Number <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" class="text-muted form-control"
+                                                    name="emergency_contact_number"
+                                                    value="{{ old('emergency_contact_number') }}">
+                                                @error('emergency_contact_number')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+
 
                                             <!-- Religion -->
                                             <div class="col-4 mt-3">
@@ -167,6 +179,35 @@
                                             </div>
 
 
+                                            <div class="col-4 mt-3 mb-2">
+                                                <label for="" class="text-muted mb-2">Email Address
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="email" class="form-control" name="email"
+                                                    value="{{ old('email') }}">
+
+                                                @error('email')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-4 mt-3 mb-2">
+                                                <label for="" class="text-muted mb-2">Password to login
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="password" class="form-control" name="password"
+                                                    id="password" value="{{ old('password') }}">
+
+                                                <div class="form-check mt-2">
+                                                    <input type="checkbox" class="form-check-input" id="show-password">
+                                                    <label class="form-check-label" for="show-password">Show
+                                                        Password</label>
+                                                </div>
+
+                                                @error('password')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
 
                                             <div class="col-4 mt-4">
                                                 <label for="" class="text-muted mb-2">Staff Image</label>
@@ -183,6 +224,8 @@
                                                 <img src="" class="image-preview"
                                                     style="width : 100px; height: 80px; display : none; margin-left : 40px;">
                                             </div>
+
+
 
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Current Address</label>
@@ -253,7 +296,55 @@
 
 
 <script>
+    document.getElementById('show-password').addEventListener('change', function () {
+        const passwordField = document.getElementById('password');
+        if (this.checked) {
+            passwordField.type = 'text';  // Show password
+        } else {
+            passwordField.type = 'password';  // Hide password
+        }
+    });
+</script>
+
+
+
+<script>
     $(document).ready(function () {
+
+        $('#StaffDob').on('change', function () {
+            // Get the selected date of birth value
+            const dob = $(this).val();
+
+            // Ensure the value is not empty and is a valid date
+            if (dob) {
+                // Parse the date of birth into a JavaScript Date object
+                const dobDate = new Date(dob);
+
+                // Get the current date
+                const today = new Date();
+
+                // Calculate the age
+                let age = today.getFullYear() - dobDate.getFullYear();
+                const monthDifference = today.getMonth() - dobDate.getMonth();
+
+                // Adjust age if the birth date has not yet occurred this year
+                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dobDate.getDate())) {
+                    age--;
+                }
+
+                // Check if the age is less than or equal to 0
+                if (age <= 0) {
+                    alert('Invalid date of birth. Age cannot be zero or less than 0.');
+                } else {
+                    $('#totalAgeStaff').val(age)
+                }
+            } else {
+                alert('Please select a valid date of birth.');
+            }
+        });
+
+
+
         $('.select2').select2({
             dropdownParent: $('.cp_wrapper')
         });

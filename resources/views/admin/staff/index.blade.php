@@ -54,7 +54,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="text-center">No Staff Data Found!</td>
+                        <td colspan="12" class="text-center">No Data Found!</td>
                     </tr>
                 @endforelse
 
