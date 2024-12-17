@@ -108,7 +108,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'role_id' => 'required',
-            'change_password' => 'nullable|string|min:8', // Validate only if provided and ensure at least 8 characters
+            'change_password' => 'nullable|string|min:8',
         ]);
 
 
