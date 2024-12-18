@@ -30,6 +30,14 @@
                                     Action
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
+                                    @if ($list->role->name === 'Nanny')
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('assign.childs', $list->id) }}"
+                                                title="Assign Childs">
+                                                <i class="fa fa-child"></i> Assign Childs
+                                            </a>
+                                        </li>
+                                    @endif
                                     <li>
                                         <a class="dropdown-item" href="{{ route('staff.show', $list->id) }}"
                                             title="View Student">

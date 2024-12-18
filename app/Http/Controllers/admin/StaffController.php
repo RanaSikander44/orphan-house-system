@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\child;
 use App\Models\documents_title;
+use App\Models\nannyChilds;
 use App\Models\StaffDocuments;
 use App\Models\student;
 use Illuminate\Http\Request;
@@ -242,12 +244,17 @@ class StaffController extends Controller
 
     public function delete($id)
     {
-
         $staff = Staff::findOrFail($id)->first();
         $staff->delete();
 
-        return redirect()->route('staff.index')->with('success', 'Staff Deleted !');
+        $nanny = nannyChilds::where('nanny_id', $id)->get();
 
+        if ($nanny->isNotEmpty()) {
+            $nanny = nannyChilds::where('nanny_id', $id)->delete();
+            return redirect()->route('staff.index')->with('success', 'Staff Deleted !');
+        }
+
+        return redirect()->route('staff.index')->with('success', 'Staff Deleted !');
     }
 
     public function deleteStaffDocs($id)
@@ -260,4 +267,72 @@ class StaffController extends Controller
             'success' => 'Document deleted !',
         ]);
     }
+
+    public function assignChilds($id)
+    {
+        $nanny = Staff::find($id);
+
+        $childs = Child::whereNotIn('id', function ($query) {
+            $query->select('child_id')
+                ->from('nanny_childs');
+        })->get(['first_name', 'id', 'last_name']);
+
+        $assigned = nannyChilds::where('nanny_id', $nanny->id)->paginate(5);
+
+        return view('admin.staff.assignChilds.index', compact('nanny', 'childs', 'assigned'));
+    }
+
+
+
+
+    public function assignChildsToNanny(Request $req, $id)
+    {
+        $selectedChildIds = explode(',', $req->selected_childs);
+
+        $selectedChildIds = array_filter($selectedChildIds, function ($value) {
+            return !empty($value);
+        });
+
+        foreach ($selectedChildIds as $childId) {
+            if (is_numeric($childId)) {
+                nannyChilds::updateOrCreate(
+                    [
+                        'nanny_id' => $id,
+                        'child_id' => $childId
+                    ],
+                    [
+                        'nanny_id' => $id,
+                        'child_id' => $childId
+                    ]
+                );
+            }
+        }
+
+        return redirect()->route('assign.childs', ['id' => $id])
+            ->with('success', 'Childrens assigned to nanny successfully.');
+    }
+
+    public function unassignChild(Request $req)
+    {
+        nannyChilds::where('id', $req->unassign_child)->delete();
+
+        return redirect()->route('assign.childs', ['id' => $req->nanny_id])
+            ->with('success', 'The child has been successfully unassigned from this nanny.');
+    }
+
+
+
+
+
+    public function unassignAll($id)
+    {
+
+        nannyChilds::where('nanny_id', $id)->delete();
+        return redirect()->route('assign.childs', ['id' => $id])
+            ->with('success', 'All children have been unassigned from this nanny.');
+
+    }
+
+
+
 }

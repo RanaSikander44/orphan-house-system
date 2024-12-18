@@ -111,7 +111,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('staff', StaffController::class);
     Route::get('staff/delete/{id}', [StaffController::class, 'delete'])->name('staff.delete');
     Route::get('staff/documents/delete/{id}', [StaffController::class, 'deleteStaffDocs'])->name('staff.docs.delete');
-
+    // Assign Childs to nanny
+    Route::get('staff/nanny/assign-childs/{id}', [StaffController::class, 'assignChilds'])->name('assign.childs');
+    Route::post('staff/nanny/assign-childs-nanny/{id}', [StaffController::class, 'assignChildsToNanny'])->name('assign.childs.submit');
+    Route::get('staff/nanny/unassing-all/{id}', [StaffController::class, 'unassignAll'])->name('unassign.all');
+    Route::get('staff/nanny/unassing-child', [StaffController::class, 'unassignChild'])->name('unassign.child');
 
 
     // Enquiry Types 
@@ -137,5 +141,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('grades/schools/update/{id}', [SchoolGradesController::class, 'update'])->name('grades.update');
     Route::get('grades/schools/delete/{id}', [SchoolGradesController::class, 'delete'])->name('grades.delete');
 
-}); 
+
+
+});
 
