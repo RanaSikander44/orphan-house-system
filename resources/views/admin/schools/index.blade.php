@@ -10,7 +10,7 @@
         <table class="table table-striped">
             <thead class="bg-light">
                 <tr>
-                    <th scope="col">Name</th>   
+                    <th scope="col">Name</th>
                     <th scope="col">Grade</th>
                     <th scope="col">Fees</th>
                     <th scope="col">Address</th>
@@ -22,7 +22,7 @@
                 @forelse($schools as $list)
                     <tr>
                         <td>{{ $list->name }} {{ $list->last_name }}</td>
-                        <td>{{ $list->grade }}</td>
+                        <td>{{ $list->gradeName?->grade ?? 'N/A' }}</td>
                         <td>{{ $list->fees }}</td>
                         <td>{{ $list->address }}</td>
                         <td>
@@ -33,22 +33,23 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('staff.show', $list->id) }}"
-                                            title="View Student">
-                                            <i class="fa fa-eye"></i> View
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('staff.edit', $list->id)  }}"
+                                        <a class="dropdown-item" href="{{ route('schools.edit', $list->id)  }}"
                                             title="Edit Student">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);" title="Delete Student"
-                                            onclick="deleteStaff({{ $list->id }})">
+                                            onclick="confirmDelete({{ $list->id }})">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
+
+                                        <form id="delete-form-{{ $list->id }}"
+                                            action="{{ route('schools.destroy', $list->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </li>
                                 </ul>
                             </div>
@@ -67,7 +68,8 @@
         <!-- Pagination -->
         <div class="d-flex justify-content-between mt-3 align-items-center">
             <div>
-                <span>Showing {{ $schools->firstItem() ?? 0 }} to {{ $schools->lastItem() ?? 0 }} of {{ $schools->total() }}
+                <span>Showing {{ $schools->firstItem() ?? 0 }} to {{ $schools->lastItem() ?? 0 }} of
+                    {{ $schools->total() }}
                     entries</span>
             </div>
             <div>
@@ -81,3 +83,23 @@
 
 
 @endsection
+
+
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-form-${id}`).submit();
+            }
+        });
+    }
+</script>
