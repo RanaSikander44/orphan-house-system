@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Staff;
 use App\Models\Role;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use League\CommonMark\Node\Block\Document;
 
 class StaffController extends Controller
@@ -40,21 +41,25 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required',
             'dob' => 'required',
             'age' => 'required',
             'gender' => 'required|string',
-            'email' => 'required|email|unique:staff,email', // Ensure correct table and column are specified
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email'),
+                Rule::unique('staff', 'email'),
+                Rule::unique('children', 'email'),
+            ],
             'password' => 'required|min:8',
             'religion' => 'required|string',
             'role_id' => 'required|integer',
             'phone_no' => 'required',
             'emergency_contact_number' => 'required',
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->route('staff.create')
@@ -136,7 +141,7 @@ class StaffController extends Controller
         $staff = staff::where('id', $id)->first();
         $documents = StaffDocuments::where('staff_id', $id)->whereNotNull('name')->get();
         $childs = nannyChilds::where('nanny_id', $staff->id)->get();
-        return view('admin.staff.view', compact('staff', 'documents' , 'childs'));
+        return view('admin.staff.view', compact('staff', 'documents', 'childs'));
     }
 
     /**
@@ -163,7 +168,13 @@ class StaffController extends Controller
             'dob' => 'required',
             'age' => 'required',
             'gender' => 'required|string',
-            'email' => 'required|email|unique:staff,email,' . $id, // Ensure unique validation for the current record
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('staff')->ignore($id),  // Check 'staff' table, excluding current record
+                Rule::unique('users')->ignore($id),  // Check 'users' table, excluding current record
+                Rule::unique('children')->ignore($id), // Check 'children' table, excluding current record
+            ],
             'password' => 'nullable|min:8', // Make password optional on update
             'religion' => 'required|string',
             'role_id' => 'required|integer',
