@@ -135,7 +135,8 @@ class StaffController extends Controller
     {
         $staff = staff::where('id', $id)->first();
         $documents = StaffDocuments::where('staff_id', $id)->whereNotNull('name')->get();
-        return view('admin.staff.view', compact('staff', 'documents'));
+        $childs = nannyChilds::where('nanny_id', $staff->id)->get();
+        return view('admin.staff.view', compact('staff', 'documents' , 'childs'));
     }
 
     /**
