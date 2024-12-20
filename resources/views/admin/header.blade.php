@@ -7,7 +7,7 @@
         <!-- Greeting Text -->
         <p class="mb-0 me-3" style="font-size: 1.1rem; color: #B5B5C3; font-weight: 500;">
             {{ getGreeting() . ',' }}
-            <span class="text-dark">{{ Auth()->user()->name }}</span>
+            <span class="text-dark">{{Auth::user()->role->name}}</span>
         </p>
         <!-- User Button -->
         <button class="btn  me-3" style="background-color :#C9F7F5; color : #B5B5C3;" id="sidebarTogglee">
@@ -29,7 +29,7 @@
                 <div class="image"><img src="{{ asset('backend/images/default.jpg') }}" alt="avatar" class="rounded" />
                 </div>
                 <div class="name-login">
-                    <h5>{{ auth()->user()->name }}</h5>
+                    <h5>{{ auth()->user()->first_name }} {{ auth()->user()->first_name }}</h5>
                     <a href="#" class="d-flex align-items-center text-decoration-none">
                         <!-- Envelope Icon -->
                         <i class="fa-solid fa-envelope me-2" style="font-size: 1rem; color: #6c757d;"></i>

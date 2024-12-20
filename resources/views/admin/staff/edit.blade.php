@@ -26,9 +26,10 @@
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
         <!-- Tab Content -->
-        <form method="post" action="{{route('staff.update' , $edit->id)}}" enctype="multipart/form-data">
+        <form method="post" action="{{route('staff.update', $edit->id)}}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" class="form-control" name="user_id" value="{{ $edit->user_id }}">
             <div class="tab-content">
 
                 <!-- Home Tab -->
@@ -50,7 +51,7 @@
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="first_name"
-                                                    value="{{ old('first_name', $edit->first_name) }}">
+                                                    value="{{ old('first_name', $edit->Users->first_name) }}">
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -61,7 +62,7 @@
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="last_name"
-                                                    value="{{ old('last_name', $edit->last_name) }}">
+                                                    value="{{ old('last_name', $edit->Users->last_name) }}">
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -190,7 +191,7 @@
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <input type="email" class="form-control" name="email"
-                                                    value="{{ old('email', $edit->email) }}">
+                                                    value="{{ old('email', $edit->Users->email) }}">
 
                                                 @error('email')
                                                     <span class="text-danger">{{ $message }}</span>

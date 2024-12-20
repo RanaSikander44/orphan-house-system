@@ -89,7 +89,7 @@
                                             <h6 class="mb-0 text-muted">First Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->first_name }}</p>
+                                            <p class="mb-0">{{ $staff->user_id }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
@@ -97,7 +97,7 @@
                                             <h6 class="mb-0 text-muted">Last Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->last_name }}</p>
+                                            <p class="mb-0">{{ $staff->user_id }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
