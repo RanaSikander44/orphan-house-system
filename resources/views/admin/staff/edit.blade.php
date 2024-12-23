@@ -204,7 +204,7 @@
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 <input type="password" class="form-control" name="password"
-                                                    id="password" value="{{ old('password')}}">
+                                                    id="password">
 
                                                 <div class="form-check mt-2">
                                                     <input type="checkbox" class="form-check-input" id="show-password">

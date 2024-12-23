@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use League\CommonMark\Node\Block\Document;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+
 
 
 class StaffController extends Controller
@@ -74,7 +76,10 @@ class StaffController extends Controller
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        // $user->password = bcrypt($request->password);
+
+        $user->password = $request->password; // Hash the password securely
+
         $user->role_id = $request->role_id;
         $user->save();
 
@@ -270,7 +275,7 @@ class StaffController extends Controller
             'age' => 'required',
             'gender' => 'required|string',
             'email' => 'required|unique:users,email,' . $request->user_id,
-            'password' => 'nullable|min:8', // Make password optional on update
+            'password' => 'nullable|string|min:8',
             'religion' => 'required|string',
             'role_id' => 'required|integer',
             'phone_no' => 'required',
@@ -288,11 +293,18 @@ class StaffController extends Controller
         $User->last_name = $request->last_name;
         $User->email = $request->email;
         $User->role_id = $request->role_id;
-        if ($request->filled('password')) {
-            $User->password = bcrypt($request->password);
+
+        if (!empty($request->password) && $request->password !== 'null') {
+            $User->password = Hash::make($request->password); // Hash the password securely
         }
 
-        $User->update();
+        $role = Role::findById($request->role_id);
+
+        // Reassign the new role to the user
+        $User->syncRoles($role);
+
+        $User->save();
+
 
 
         // Find the staff by ID

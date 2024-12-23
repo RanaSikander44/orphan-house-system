@@ -22,7 +22,7 @@
     <div class="bg-white border-end sidebar-content">
         <ul class="list-group list-group-flush my-ul pt-4">
             <li class="list-group-item first-li">
-                <h5 class="text-capitalize">Admin profile</h5>
+                <h5 class="text-capitalize">{{ Auth::user()->role->name }} profile</h5>
                 <span id="cross" class="" style="cursor : pointer;"><i class="fa-solid fa-xmark"></i></span>
             </li>
             <li class="avatar">

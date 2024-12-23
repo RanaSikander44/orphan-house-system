@@ -39,9 +39,10 @@ Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->nam
 
 
 Route::middleware(['auth'])->group(function () {
-
-
+    
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+
 
 
     // Academic Year
