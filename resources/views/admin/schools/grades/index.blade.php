@@ -1,26 +1,21 @@
 @extends('admin.default')
 
-@section('Page-title', 'Enquiry Types')
-
-
+@section('Page-title', 'Grades')
 @section('content')
 {{-- Include external CSS for Flatpickr --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-@section('Page-title', 'Academic Years')
-
 <div class="container-fluid px-4 mt-4">
     <div class="row">
         <!-- Form Column -->
         <div class="col-md-4">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
-                    <form action="{{ route('enquiry-types.store') }}" method="post">
+                    <form action="{{ route('grades.store') }}" method="post">
                         @csrf
                         <!-- Year Input -->
                         <div class="mb-3">
                             <label for="year" class="form-label">Title <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="title" placeholder="Enter Title" required>
+                            <input type="text" class="form-control" name="grade" placeholder="Enter Grade" required>
                         </div>
 
                         <!-- Year Title Input -->
@@ -53,9 +48,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($enquiry as $list)
+                            @forelse ($grades as $list)
                                 <tr>
-                                    <td>{{ $list->title }}</td>
+                                    <td>{{ $list->grade }}</td>
                                     <td>{{ $list->status === 1 ? 'Active' : 'Inactive'}}</td>
                                     <td>
                                         <div class="dropdown">
@@ -65,16 +60,14 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionMenu">
                                                 <li>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('enquiry-types.show', $list->id) }}">
+                                                    <a class="dropdown-item" href="{{ route('grades.edit', $list->id) }}">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <form action="{{ route('enquiry-types.destroy', $list->id) }}"
-                                                        method="POST" class="d-inline">
+                                                    <form action="{{ route('grades.delete', $list->id) }}" method="get"
+                                                        class="d-inline">
                                                         @csrf
-                                                        @method('DELETE')
                                                         <button type="submit" class="dropdown-item text-danger">
                                                             <i class="fas fa-trash"></i> Delete
                                                         </button>
@@ -86,7 +79,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted">No Enquiry Types are available.</td>
+                                    <td colspan="5" class="text-center text-muted">No Grades are available.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -95,11 +88,11 @@
                     <!-- Pagination -->
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <div class="text-muted">
-                            Showing {{ $enquiry->firstItem() }} to {{ $enquiry->lastItem() }} of {{ $enquiry->total() }}
+                            Showing {{ $grades->firstItem() }} to {{ $grades->lastItem() }} of {{ $grades->total() }}
                             results
                         </div>
                         <div>
-                            {{ $enquiry->links('pagination::bootstrap-4') }}
+                            {{ $grades->links('pagination::bootstrap-4') }}
                         </div>
                     </div>
                 </div>

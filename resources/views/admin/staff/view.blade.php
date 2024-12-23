@@ -48,47 +48,58 @@
                     <!-- Add flexbox utilities to the nav -->
                     <ul class="nav nav-pills mb-4 justify-content-around" id="infoTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn active" id="academic-tab" data-bs-toggle="pill"
-                                data-bs-target="#academic" type="button" role="tab" aria-controls="academic"
+                            <button class="nav-link custom-btn active" id="profile-tab" data-bs-toggle="pill"
+                                data-bs-target="#profile" type="button" role="tab" aria-controls="profile"
                                 aria-selected="true">
                                 <i class="bi bi-award me-2"></i>Profile
                             </button>
                         </li>
+
+                        @if($staff->role->name === 'Nanny')
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link custom-btn" id="childs-tab" data-bs-toggle="pill"
+                                    data-bs-target="#childs" type="button" role="tab" aria-controls="childs"
+                                    aria-selected="false">
+                                    <i class="bi bi-award me-2"></i>Childs
+                                </button>
+                            </li>
+                        @endif
+
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn" id="attendance-tab" data-bs-toggle="pill"
-                                data-bs-target="#other" type="button" role="tab" aria-controls="other"
+                            <button class="nav-link custom-btn" id="documents-tab" data-bs-toggle="pill"
+                                data-bs-target="#documents" type="button" role="tab" aria-controls="documents"
                                 aria-selected="false">
                                 <i class="bi bi-calendar-check me-2"></i>Documents
                             </button>
                         </li>
                     </ul>
+
                     <hr>
+
                     <!-- Pills Content -->
                     <div class="tab-content" id="infoTabsContent">
-                        <div class="tab-pane fade show active" id="academic" role="tabpanel"
-                            aria-labelledby="academic-tab">
-                            <div class=" pt-0 p-4 rounded-3">
+                        <!-- Profile Tab Pane -->
+                        <div class="tab-pane fade show active" id="profile" role="tabpanel"
+                            aria-labelledby="profile-tab">
+                            <div class="pt-0 p-4 rounded-3">
                                 <div class="row g-0">
-
+                                    <!-- Profile Rows Here -->
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">First Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->first_name }}</p>
+                                            <p class="mb-0">{{ $staff->user_id }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Last Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->last_name }}</p>
+                                            <p class="mb-0">{{ $staff->user_id }}</p>
                                         </div>
                                     </div>
-
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Role</h6>
@@ -97,7 +108,6 @@
                                             <p class="mb-0">{{ $staff->role->name }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Date Of Birth</h6>
@@ -106,17 +116,14 @@
                                             <p class="mb-0">{{ $staff->dob }}</p>
                                         </div>
                                     </div>
-
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Age</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->age . ' Years'}}</p>
+                                            <p class="mb-0">{{ $staff->age . ' Years' }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Gender</h6>
@@ -125,8 +132,6 @@
                                             <p class="mb-0">{{ $staff->gender }}</p>
                                         </div>
                                     </div>
-
-                                    <!-- Row 1 -->
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Email</h6>
@@ -135,7 +140,6 @@
                                             <p class="mb-0">{{ $staff->email }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Religion</h6>
@@ -144,8 +148,6 @@
                                             <p class="mb-0">{{ $staff->religion }}</p>
                                         </div>
                                     </div>
-
-                                    <!-- Row 2 -->
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Phone Number</h6>
@@ -154,7 +156,6 @@
                                             <p class="mb-0">{{ $staff->phone_no }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Emergency Contact Number</h6>
@@ -163,16 +164,14 @@
                                             <p class="mb-0">{{ $staff->emergency_contact_number }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Present Address </h6>
+                                            <h6 class="mb-0 text-muted">Present Address</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
                                             <p class="mb-0">{{ $staff->current_address }}</p>
                                         </div>
                                     </div>
-
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">
                                             <h6 class="mb-0 text-muted">Permanent Address</h6>
@@ -181,71 +180,85 @@
                                             <p class="mb-0">{{ $staff->permanent_address }}</p>
                                         </div>
                                     </div>
-
-                                    <!-- Add more rows as needed -->
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-
-                    <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="attendance-tab">
-                        <div class="p-4 rounded-3 bg-white">
-                            <div class="pt-0 p-4 rounded-3">
-                                <div class="row g-0">
-                                    <div class="col-12">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Title</th>
-                                                    <th>Name</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($documents as $list)
-                                                                                                <tr id="document-row-{{ $list->id }}">
-                                                                                                    <!-- Ensure each row has a unique ID -->
-                                                                                                    <!-- Display Title -->
-                                                                                                    <td>{{ $list->staffDocs->title ?? 'Unknown Document' }}</td>
-
-                                                                                                    <!-- Display File Name -->
-                                                                                                    <td>{{ $list->name }}</td>
-
-                                                                                                    <td>
-                                                                                                        <!-- PHP block to generate the correct file extension and download filename -->
-                                                                                                        @php
-                                                                                                            $fileExtension = pathinfo($list->name, PATHINFO_EXTENSION); // Get the file extension
-                                                                                                            $downloadFilename = $list->title . '.' . $fileExtension; // Set the download filename with title and extension
-                                                                                                        @endphp
-
-                                                                                                        <!-- Download Button with correct file name and extension -->
-                                                                                                        <a href="{{ asset('backend/documents/' . $list->name) }}"
-                                                                                                            class="btn btn-sm btn-primary rounded-pill"
-                                                                                                            download="{{ $downloadFilename }}">
-                                                                                                            <i class="fa-solid fa-download"></i> Download
-                                                                                                        </a>
-
-                                                                                                        <!-- Delete Button (Trigger AJAX function for deletion) -->
-                                                                                                        <button type="button" onclick="deldoc({{ $list->id }})"
-                                                                                                            class="btn btn-sm btn-danger rounded-pill">
-                                                                                                            <i class="fa fa-trash"></i> Delete
-                                                                                                        </button>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                        <!-- Childs Tab Pane (Visible only if the role is 'Nanny') -->
+                        @if($staff->role->name === 'Nanny')
+                            <div class="tab-pane fade" id="childs" role="tabpanel" aria-labelledby="childs-tab">
+                                <h4 class="p-4 text-muted">Assigned Childs</h4>
+                                <div class="pt-0 p-4 rounded-3">
+                                    <div class="row g-0">
+                                        @foreach ($childs as $list)                                        
+                                            <div class="d-flex align-items-center py-3 border-bottom">
+                                                <div class="col-6">
+                                                    <h6 class="mb-0 text-muted">{{ $list->child->first_name }}
+                                                        {{ $list->child->last_name }}
+                                                    </h6>
+                                                </div>
+                                                <div class="col-6 text-muted text-end">
+                                                    <a href="{{ route('enquiry.view', $list->child_id) }}" target="__blank"
+                                                        class="btn btn-sm btn-warning text-white"><i
+                                                            class="fa-solid fa-eye"></i></a>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        <!-- Add more rows for Childs tab as needed -->
                                     </div>
+                                </div>
+                            </div>
+                        @endif
 
+                        <!-- Documents Tab Pane -->
+                        <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                            <div class="p-4 rounded-3 bg-white">
+                                <div class="pt-0 p-4 rounded-3">
+                                    <div class="row g-0">
+                                        <div class="col-12">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Title</th>
+                                                        <th>Name</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($documents as $list)
+                                                                                                        <tr id="document-row-{{ $list->id }}">
+                                                                                                            <td>{{ $list->staffDocs->title ?? 'Unknown Document' }}</td>
+                                                                                                            <td>{{ $list->name }}</td>
+                                                                                                            <td>
+                                                                                                                @php
+                                                                                                                    $fileExtension = pathinfo($list->name, PATHINFO_EXTENSION);
+                                                                                                                    $downloadFilename = $list->title . '.' . $fileExtension;
+                                                                                                                @endphp
+                                                                                                                <a href="{{ asset('backend/documents/' . $list->name) }}"
+                                                                                                                    class="btn btn-sm btn-primary rounded-pill"
+                                                                                                                    download="{{ $downloadFilename }}">
+                                                                                                                    <i class="fa-solid fa-download"></i> Download
+                                                                                                                </a>
+                                                                                                                <button type="button" onclick="deldoc({{ $list->id }})"
+                                                                                                                    class="btn btn-sm btn-danger rounded-pill">
+                                                                                                                    <i class="fa fa-trash"></i> Delete
+                                                                                                                </button>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 

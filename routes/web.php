@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\admin\SchoolController;
+use App\Http\Controllers\admin\SchoolGradesController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\Route;
@@ -37,9 +39,10 @@ Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->nam
 
 
 Route::middleware(['auth'])->group(function () {
-
-
+    
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+
 
 
     // Academic Year
@@ -48,12 +51,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('academic-year/edit/{id}', [AcademicYearController::class, 'edit'])->name('academic-year.edit');
     Route::post('academic-year/update/{id}', [AcademicYearController::class, 'update'])->name('academic-year.update');
     Route::get('academic-year/delete/{id}', [AcademicYearController::class, 'delete'])->name('academic-year.delete');
-// city route
-Route::get('cities', [CityController::class, 'index'])->name('cities.index');
-Route::post('cities/save', [CityController::class, 'store'])->name('cities.store');
-Route::get('cities/edit/{id}', [CityController::class, 'edit'])->name('cities.edit');
-Route::put('cities/update/{id}', [CityController::class, 'update'])->name('cities.update');
-Route::delete('cities/delete/{id}', [CityController::class, 'destroy'])->name('cities.destroy');
+    // city route
+    Route::get('cities', [CityController::class, 'index'])->name('cities.index');
+    Route::post('cities/save', [CityController::class, 'store'])->name('cities.store');
+    Route::get('cities/edit/{id}', [CityController::class, 'edit'])->name('cities.edit');
+    Route::put('cities/update/{id}', [CityController::class, 'update'])->name('cities.update');
+    Route::delete('cities/delete/{id}', [CityController::class, 'destroy'])->name('cities.destroy');
 
 
     // Students Applications
@@ -109,15 +112,15 @@ Route::delete('cities/delete/{id}', [CityController::class, 'destroy'])->name('c
     Route::resource('staff', StaffController::class);
     Route::get('staff/delete/{id}', [StaffController::class, 'delete'])->name('staff.delete');
     Route::get('staff/documents/delete/{id}', [StaffController::class, 'deleteStaffDocs'])->name('staff.docs.delete');
-
-
-
+    // Assign Childs to nanny
+    Route::get('staff/nanny/assign-childs/{id}', [StaffController::class, 'assignChilds'])->name('assign.childs');
+    Route::post('staff/nanny/assign-childs-nanny/{id}', [StaffController::class, 'assignChildsToNanny'])->name('assign.childs.submit');
+    Route::get('staff/nanny/unassing-all/{id}', [StaffController::class, 'unassignAll'])->name('unassign.all');
+    Route::get('staff/nanny/unassing-child', [StaffController::class, 'unassignChild'])->name('unassign.child');
 
 
     // Enquiry Types 
-
-     Route::resource('enquiry-types' , EnquiryController::class);
-
+    Route::resource('enquiry-types', EnquiryController::class);
 
 
     // Settings
@@ -126,6 +129,20 @@ Route::delete('cities/delete/{id}', [CityController::class, 'destroy'])->name('c
     Route::post('settings/stores', [SettingsController::class, 'store'])->name('settings.store');
     Route::put('settings/update/{id}', [SettingsController::class, 'update'])->name('settings.update');
     Route::delete('settings/delete/{id}', [SettingsController::class, 'delete'])->name('settings.delete');
+
+
+    // Schools
+    Route::resource('schools', SchoolController::class);
+
+
+    // Schools Grades
+    Route::get('grades/schools', [SchoolGradesController::class, 'index'])->name('add.grades');
+    Route::post('grades/schools/add', [SchoolGradesController::class, 'store'])->name('grades.store');
+    Route::get('grades/schools/edit/{id}', [SchoolGradesController::class, 'edit'])->name('grades.edit');
+    Route::post('grades/schools/update/{id}', [SchoolGradesController::class, 'update'])->name('grades.update');
+    Route::get('grades/schools/delete/{id}', [SchoolGradesController::class, 'delete'])->name('grades.delete');
+
+
 
 });
 

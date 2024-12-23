@@ -1,5 +1,7 @@
 @extends('admin.default')
-@section('Page-title', 'Staff List')
+
+
+@section('Page-title', 'Schools')
 
 @section('content')
 <div class="container-fluid px-4">
@@ -9,20 +11,20 @@
             <thead class="bg-light">
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Role</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Fees</th>
+                    <th scope="col">Address</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
 
-                @forelse($staff as $list)
+                @forelse($schools as $list)
                     <tr>
-                        <td>{{ $list->Users->first_name }} {{ $list->Users->last_name }}</td>
-                        <td>{{ $list->Users->email }}</td>
-                        <td>{{ $list->gender }}</td>
-                        <td>{{ $list->users->role->name }}</td>
+                        <td>{{ $list->name }} {{ $list->last_name }}</td>
+                        <td>{{ $list->gradeName?->grade ?? 'N/A' }}</td>
+                        <td>{{ $list->fees }}</td>
+                        <td>{{ $list->address }}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -30,31 +32,24 @@
                                     Action
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
-                                    @if ($list->users->role->name === 'Nanny' || 'nanny')
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('assign.childs', $list->id) }}"
-                                                title="Assign Childs">
-                                                <i class="fa fa-child"></i> Assign Childs
-                                            </a>
-                                        </li>
-                                    @endif
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('staff.show', $list->id) }}"
-                                            title="View Student">
-                                            <i class="fa fa-eye"></i> View
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('staff.edit', $list->id)  }}"
+                                        <a class="dropdown-item" href="{{ route('schools.edit', $list->id)  }}"
                                             title="Edit Student">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);" title="Delete Student"
-                                            onclick="deleteStaff({{ $list->id }})">
+                                            onclick="confirmDelete({{ $list->id }})">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
+
+                                        <form id="delete-form-{{ $list->id }}"
+                                            action="{{ route('schools.destroy', $list->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </li>
                                 </ul>
                             </div>
@@ -73,34 +68,37 @@
         <!-- Pagination -->
         <div class="d-flex justify-content-between mt-3 align-items-center">
             <div>
-                <span>Showing {{ $staff->firstItem() ?? 0 }} to {{ $staff->lastItem() ?? 0 }} of {{ $staff->total() }}
+                <span>Showing {{ $schools->firstItem() ?? 0 }} to {{ $schools->lastItem() ?? 0 }} of
+                    {{ $schools->total() }}
                     entries</span>
             </div>
             <div>
-                {{ $staff->links() }}
+                {{ $schools->links() }}
             </div>
         </div>
 
     </div>
 
 </div>
+
+
 @endsection
 
 
 
 <script>
-    let deleteStaff = (id) => {
+    function confirmDelete(id) {
         Swal.fire({
+            title: 'Are you sure?',
             text: "You won't be able to revert this!",
             showCancelButton: true,
-            confirmButtonText: 'Delete',
-            cancelButtonText: 'Cancel',
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "{{ route('staff.delete', ':id') }}".replace(':id', id);
-
+                document.getElementById(`delete-form-${id}`).submit();
             }
         });
     }

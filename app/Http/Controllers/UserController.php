@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+
 class UserController extends Controller
 {
 
@@ -32,8 +33,6 @@ class UserController extends Controller
         $roles = Role::all();
         return view('users.edit', compact('user', 'roles'));  // Passing the user to the view
     }
-
-
 
     // Register method
     public function register(Request $request)
@@ -58,36 +57,44 @@ class UserController extends Controller
         }
     }
 
+
     public function login(Request $request)
     {
-
-        // Validate login credentials
+        // Validate the incoming credentials
         $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        // Attempt login
-        if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Login Successful'], 200);  // Redirect to dashboard after successful login
-            // return redirect()->route('admin.dashboard')->with('success', 'Login Successfull !');
+        // Check if a user is already logged in and log them out
+        if (Auth::check()) {
+            Auth::logout();
         }
 
-        // Check email exist (for invalid usename)
-        $user = User::where('email', $request->email)->first();
+        // Find the user by email
+        $user = User::where('email', $credentials['email'])->first();
 
-        if (!$user) {
-            return response()->json(['message' => 'Invalid username'], 400);
-        } else {
-            return response()->json(['message' => 'Invalid password'], 401);
+        // Verify user and password
+        if ($user && Hash::check($request->password, $user->password)) {
+            // Log the user in
+            Auth::login($user);
+
+            // Redirect to the intended page or dashboard
+            return redirect()->intended(route('dashboard'))->with('success', 'Welcome back!');
         }
+
+        // Redirect back to login with error
+        dd('not matched');
+        // return redirect()
+        //     ->route('login')
+        //     ->withErrors(['email' => 'Invalid credentials. Please try again.'])
+        //     ->withInput($request->only('email'));
     }
-
 
     public function dashboardPage()
     {
         if (Auth::check()) {
-            return view('admin.Dashboard'); // This is the correct path to the admin dashboard view
+            return view('admin.Dashboard');
         } else {
             return redirect()->route('login');
         }
@@ -108,7 +115,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'role_id' => 'required',
-            'change_password' => 'nullable|string|min:8',
+            'password' => 'nullable|string|min:8',
         ]);
 
 
@@ -120,11 +127,10 @@ class UserController extends Controller
         $user->role_id = $request->role_id;
 
         // Update password only if `change_password` is provided
-        if ($request->filled('change_password')) {
-            $user->password = bcrypt($request->change_password); // Hash the password
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password); // Hash the password
         }
 
-        // Save the updated user details
         $user->save();
 
 
@@ -136,19 +142,15 @@ class UserController extends Controller
     // Method to update the user's role
     public function updateRole(Request $request, $id)
     {
-        // Validate the role input
         $request->validate([
             'role' => 'required|in:admin,user,donor',
         ]);
 
-        // Find the admin by ID
         $user = User::findOrFail($id);
 
-        // Update the role
         $user->role = $request->input('role');
         $user->save();
 
-        // Redirect back to the users list with a success message
         return redirect()->route('users')->with('success', 'Role updated successfully!');
     }
 
@@ -156,8 +158,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-        // Validate incoming request
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -201,8 +202,13 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        $userCount = User::count(); // Fetch the total number of users
-        return view('admin.dashboard', compact('userCount'));
+        if (auth::check()) {
+            $userCount = User::count(); // Fetch the total number of users
+            return view('admin.dashboard', compact('userCount'));
+        } else {
+            return redirect()->route('login');
+        }
+
     }
     public function destroy($id)
     {

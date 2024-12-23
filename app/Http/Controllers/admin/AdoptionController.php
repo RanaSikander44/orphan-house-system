@@ -12,6 +12,7 @@ use App\Models\student;
 use App\Models\ParentModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use App\Models\child_documents;
 use App\Models\City;
@@ -55,7 +56,13 @@ class AdoptionController extends Controller
             'gender' => 'required|string|in:Male,Female,Others',
             'dob' => 'required|date',
             'religion' => 'nullable|string',
-            'email' => 'nullable|email|unique:children,email',
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('users', 'email'),
+                Rule::unique('staff', 'email'),
+                Rule::unique('children', 'email'),
+            ],
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
             'permanent_address' => 'nullable|string',
@@ -65,7 +72,6 @@ class AdoptionController extends Controller
             'age' => 'required',
             'city_id' => 'required',
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->route('enquiry.add')
@@ -219,7 +225,13 @@ class AdoptionController extends Controller
             'gender' => 'required|string|in:Male,Female,Others',
             'dob' => 'required|date',
             'religion' => 'nullable|string',
-            'email' => 'nullable|email|unique:children,email,' . $id,
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('children')->ignore($id),  // Check 'children' table, excluding current record
+                Rule::unique('staff')->ignore($id),     // Check 'staff' table, excluding current record
+                Rule::unique('users')->ignore($id),     // Check 'users' table, excluding current record
+            ],
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
             'permanent_address' => 'nullable|string',

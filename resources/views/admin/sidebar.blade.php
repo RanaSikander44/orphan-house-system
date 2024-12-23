@@ -20,7 +20,9 @@
             <div class="sidebar-menu">
                 <ul>
                     @foreach ($sidebar as $menu)
+
                         @can($menu->permission)
+
                             <li class="sidebar-dropdown {{ request()->routeIs($menu->route ?? '') ? 'active' : '' }}">
                                 <a href="{{ $menu->route ? route($menu->route) : '#' }}"
                                     class="{{ $menu->is_dropdown && $menu->children->count() ? 'dropdown-toggle' : '' }}">
