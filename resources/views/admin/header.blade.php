@@ -7,13 +7,46 @@
         <!-- Greeting Text -->
         <p class="mb-0 me-3" style="font-size: 1.1rem; color: #B5B5C3; font-weight: 500;">
             {{ getGreeting() . ',' }}
-            <span class="text-dark">{{Auth::user()->role->name}}</span>
+            <span class="text-dark">{{ Auth::user()->role->name }}</span>
         </p>
+
+        <!-- Notifications Icon with Dropdown -->
+        <div class="dropdown" style="margin-right : 30px;">
+            <button class="btn position-relative p-0 border-0 bg-transparent" type="button" id="notificationDropdown"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-bell fa-lg text-dark"></i>
+                @if($notifications->count() > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ $notifications->count() }}
+                        <span class="visually-hidden">unread notifications</span>
+                    </span>
+                @endif
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="width: 300px;">
+                @if($notifications->count() > 0)
+                    @foreach ($notifications as $list)
+                        <li class="dropdown-item">
+                            <p class="mb-0 text-muted" style="font-size: 0.9rem;">{{ $list->message }}</p>
+                            <small class="text-muted">{{ $list->created_at }}</small>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    @endforeach
+                @else
+                    <li class="dropdown-item text-center text-muted">
+                        No new notifications
+                    </li>
+                @endif
+            </ul>
+        </div>
+
         <!-- User Button -->
-        <button class="btn  me-3" style="background-color :#C9F7F5; color : #B5B5C3;" id="sidebarTogglee">
+        <button class="btn me-3" style="background-color: #C9F7F5; color: #B5B5C3;" id="sidebarTogglee">
             <i class="fas fa-user fa-fw"></i>
         </button>
     </div>
+
 </nav>
 
 
