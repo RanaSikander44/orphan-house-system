@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\ChildActiviesController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
@@ -39,7 +40,7 @@ Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->nam
 
 
 Route::middleware(['auth'])->group(function () {
-    
+
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 
@@ -144,5 +145,17 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+    // Child Activities
+    Route::get('child/activities', [ChildActiviesController::class, 'index'])->name('activity.index');
+    Route::get('child/activities/add', [ChildActiviesController::class, 'add'])->name('activity.add');
+    Route::post('child/activities/store', [ChildActiviesController::class, 'store'])->name('activity.store');
+    Route::get('child/activities/edit/{id}', [ChildActiviesController::class, 'edit'])->name('activity.edit');
+    Route::post('child/activities/update/{id}', [ChildActiviesController::class, 'update'])->name('activity.update');
+    Route::get('/delete-image/{imageId}', [ChildActiviesController::class, 'deleteImage'])->name('delete-image');
+    Route::get('/child/activities/delete/{id}', [ChildActiviesController::class, 'delete'])->name('activity.delete');
+    Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
+
+
+    
 });
 
