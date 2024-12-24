@@ -332,7 +332,7 @@
 
 
     .chiller-theme .sidebar-wrapper {
-        background: #31353D;
+        background: none;
     }
 
     .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
@@ -374,7 +374,7 @@
     .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown div,
     .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
     .chiller-theme .sidebar-wrapper .sidebar-search .input-group-text {
-        background: #3a3f48;
+        background: none;
     }
 
     .chiller-theme .sidebar-wrapper .sidebar-menu .header-menu span {
@@ -558,7 +558,3 @@
     #sidebar.show {
         right: 0;
     }
-
-
-
-   

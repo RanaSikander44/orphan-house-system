@@ -1,6 +1,6 @@
 @extends('admin.default')
 
-@section('Page-title', 'Sessions')
+@section('Page-title', 'Enquiry Types')
 
 
 @section('content')

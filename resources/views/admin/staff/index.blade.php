@@ -19,10 +19,10 @@
 
                 @forelse($staff as $list)
                     <tr>
-                        <td>{{ $list->first_name }} {{ $list->last_name }}</td>
-                        <td>{{ $list->email }}</td>
+                        <td>{{ $list->Users->first_name }} {{ $list->Users->last_name }}</td>
+                        <td>{{ $list->Users->email }}</td>
                         <td>{{ $list->gender }}</td>
-                        <td>{{ $list->role->name }}</td>
+                        <td>{{ $list->users->role->name }}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -30,6 +30,14 @@
                                     Action
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
+                                    @if ($list->users->role->name === 'Nanny' || 'nanny')
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('assign.childs', $list->id) }}"
+                                                title="Assign Childs">
+                                                <i class="fa fa-child"></i> Assign Childs
+                                            </a>
+                                        </li>
+                                    @endif
                                     <li>
                                         <a class="dropdown-item" href="{{ route('staff.show', $list->id) }}"
                                             title="View Student">

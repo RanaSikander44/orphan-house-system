@@ -23,6 +23,7 @@ class RolesController extends Controller
 
     public function store(Request $req)
     {
+        // dd($req->all());
         // Validate the input
         $validated = $req->validate([
             'name' => 'required|string|unique:roles,name',
@@ -34,9 +35,10 @@ class RolesController extends Controller
             'name' => $validated['name'],
             'guard_name' => 'web',
         ]);
-
+        
         if (!empty($validated['permissions'])) {
             $permissions = \Spatie\Permission\Models\Permission::whereIn('id', $validated['permissions'])->pluck('name');
+            
             $role->givePermissionTo($permissions);
         }
 

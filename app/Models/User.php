@@ -10,7 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory  , HasRoles;
+    use HasFactory, HasRoles;
 
     // Disable timestamps (created_at, updated_at)
     public $timestamps = false;
@@ -37,16 +37,17 @@ class User extends Authenticatable
             }
         });
 
-        static::updating(function ($user) {
-            // Hash the password before updating the user
-            if ($user->password) {
-                $user->password = Hash::make($user->password);
-            }
-        });
+        // static::updating(function ($user) {
+        //     // Hash the password before updating the user
+        //     if (!empty($user->password)) {
+        //         $user->password = Hash::make($user->password);
+        //     }
+        // });
     }
 
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(Role::class);
     }
+
 }

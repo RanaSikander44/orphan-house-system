@@ -43,13 +43,13 @@ class PermissionController extends Controller
     public function assign($id)
     {
         // Debug Role
-        $role = Role::find(id: $id);
+        $role = Role::find($id);
         if (!$role) {
             return "Not found Role";
         }
 
         // Debug Permission
-        $permission = Permission::find(6); // Replace '6' with your actual permission ID
+        $permission = Permission::find($role->id); // Replace '6' with your actual permission ID
         if (!$permission) {
             return "Not Found Permission";
         }
