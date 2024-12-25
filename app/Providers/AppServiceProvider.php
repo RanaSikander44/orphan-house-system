@@ -33,7 +33,6 @@ class AppServiceProvider extends ServiceProvider
                         ->from('readnotifications')
                         ->where('user_id', $userId);
                 })->get();
-
                 $view->with('notifications', $notifications);
             }
         });

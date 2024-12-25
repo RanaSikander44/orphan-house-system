@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\ChildActivity;
 use App\Models\ChildActivityImages;
+use App\Models\readnotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -175,6 +176,23 @@ class ChildActiviesController extends Controller
             $imagesOfCActivity = 'empty';
         }
         return view('admin/childActivity/view', compact('latestActivity', 'imagesOfCActivity'));
+
+    }
+
+
+    public function markasread(Request $req)
+    {
+        foreach ($req->ids as $list) {
+            $data = new readnotifications();
+            $data->notification_id = $list;
+            $data->user_id = Auth::id();
+            $data->read = '1';
+            $data->save();
+        }
+
+        return response()->json([
+            'success' => 'success',
+        ]);
 
     }
 
