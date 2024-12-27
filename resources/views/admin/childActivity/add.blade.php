@@ -11,11 +11,11 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="select-user" class="form-label">Select Child</label>
-                        @foreach ($children as $list)
-                            <select name="child_id" id="" class="form-control" required>
+                        <select name="child_id" id="" class="form-control" required>
+                            @foreach ($children as $list)
                                 <option value="{{ $list->id }}">{{ $list->first_name }} {{ $list->last_name }}</option>
-                            </select>
-                        @endforeach
+                            @endforeach
+                        </select>
 
                         @error('child_id')
                             <span class="text-danger">{{ $message }}</span>
