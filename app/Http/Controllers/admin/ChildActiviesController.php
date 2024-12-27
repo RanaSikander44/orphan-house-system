@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\ChildActivity;
 use App\Models\ChildActivityImages;
+use App\Models\readnotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Models\notifications;
+use Notification;
 
 
 class ChildActiviesController extends Controller
@@ -39,6 +42,10 @@ class ChildActiviesController extends Controller
             'images' => 'required',
         ]);
 
+        $notify = new notifications();
+        $notify->message = 'A child new activity has occurred.';
+        $notify->save();
+
 
         if ($validate->fails()) {
             return redirect()->route('activity.add')->withErrors($validate->errors())->withInput();
@@ -66,6 +73,8 @@ class ChildActiviesController extends Controller
             $images->save();
         }
 
+
+        // Create Notifications
         return redirect()->route('activity.index')->with('success', 'Activity created !');
 
     }
@@ -78,7 +87,6 @@ class ChildActiviesController extends Controller
         $images = ChildActivityImages::where('activity_id', $activity->id)->get();
 
         return view('admin/childActivity/edit', compact('children', 'activity', 'images'));
-
     }
 
 
@@ -168,6 +176,23 @@ class ChildActiviesController extends Controller
             $imagesOfCActivity = 'empty';
         }
         return view('admin/childActivity/view', compact('latestActivity', 'imagesOfCActivity'));
+
+    }
+
+
+    public function markasread(Request $req)
+    {
+        foreach ($req->ids as $list) {
+            $data = new readnotifications();
+            $data->notification_id = $list;
+            $data->user_id = Auth::id();
+            $data->read = '1';
+            $data->save();
+        }
+
+        return response()->json([
+            'success' => 'success',
+        ]);
 
     }
 

@@ -11,13 +11,13 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="select-user" class="form-label">Select Student</label>
-                        @foreach ($children as $list)
-                            <select name="child_id" class="form-control">
+                        <select name="child_id" class="form-control">
+                            @foreach ($children as $list)
                                 <option value="{{ $list->id }}" {{ $activity->child_id == $list->child_id ? 'selected' : ''}}>
                                     {{ $list->first_name }} {{ $list->last_name }}
                                 </option>
-                            </select>
-                        @endforeach
+                            @endforeach
+                        </select>
 
                         @error('child_id')
                             <span class="text-danger">{{ $message }}</span>

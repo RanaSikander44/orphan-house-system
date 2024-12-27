@@ -154,8 +154,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/delete-image/{imageId}', [ChildActiviesController::class, 'deleteImage'])->name('delete-image');
     Route::get('/child/activities/delete/{id}', [ChildActiviesController::class, 'delete'])->name('activity.delete');
     Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
+    Route::post('notifications/mark-all-as-read', [ChildActiviesController::class, 'markasread']);
 
-
-    
 });
 

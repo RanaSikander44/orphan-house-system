@@ -19,7 +19,7 @@
 
             <div class="sidebar-menu">
                 <ul>
-                    @foreach ($sidebar as $menu)
+                    @foreach ($sidebar as $menu)    
 
                         @can($menu->permission)
 
