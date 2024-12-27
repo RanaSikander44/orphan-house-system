@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid px-4">
 
-    <div class="container mt-5">
+    <div class="container mt-4">
         <div class="card shadow-sm border-0">
             <!-- Header -->
             <div class="card-body">
@@ -15,7 +15,7 @@
                         class="rounded-circle me-3" alt="Profile Image" width="50" height="50">
 
                     <div>
-                        <h6 class="mb-0">{{ $latestActivity->child->first_name }}</h6>
+                        <h6 class="mb-0">{{ $latestActivity->child->first_name ?? 'No Name Found' }}</h6>
                         <small
                             class="text-muted">{{ \Carbon\Carbon::parse($latestActivity->created_at)->format('l \a\t g:i A') }}</small>
                     </div>
