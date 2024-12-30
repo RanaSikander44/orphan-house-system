@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\ChildActiviesController;
+use App\Http\Controllers\admin\DormitoryController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
@@ -158,8 +159,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Dormitory 
-
-    // Route::get('room-list' ,)
+    Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
+    Route::get('add/room', [DormitoryController::class, 'add'])->name('add-room');
 
 
 });
