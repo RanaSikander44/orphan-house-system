@@ -11,6 +11,7 @@ class nannyChilds extends Model
     protected $fillable = [
         'nanny_id',
         'child_id',
+        'school_id',
     ];
 
     public function child()

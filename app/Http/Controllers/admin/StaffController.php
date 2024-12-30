@@ -413,28 +413,40 @@ class StaffController extends Controller
     {
         $selectedChildIds = explode(',', $req->selected_childs);
 
+        // Filter out any empty values
         $selectedChildIds = array_filter($selectedChildIds, function ($value) {
             return !empty($value);
         });
 
         foreach ($selectedChildIds as $childId) {
             if (is_numeric($childId)) {
-                nannyChilds::updateOrCreate(
-                    [
-                        'nanny_id' => $id,
-                        'child_id' => $childId
-                    ],
-                    [
-                        'nanny_id' => $id,
-                        'child_id' => $childId
-                    ]
-                );
+                // Get the child record to fetch the school_id
+                $child = Child::find($childId);
+
+                if ($child && isset($child->school_id)) {
+                    // dd($child->school_id);
+                    // Store the nanny-child relationship with school_id
+                    nannyChilds::updateOrCreate(
+                        [
+                            'nanny_id' => $id,
+                            'child_id' => $childId,
+                            'school_id' => $child->school_id,
+                        ],
+                        [
+                            'nanny_id' => $id,
+                            'child_id' => $childId,
+                            'school_id' => $child->school_id,
+                        ]
+                    );
+                }
             }
         }
 
         return redirect()->route('assign.childs', ['id' => $id])
-            ->with('success', 'Childrens assigned to nanny successfully.');
+            ->with('success', 'Children assigned to nanny successfully.');
     }
+
+
 
     public function unassignChild(Request $req)
     {

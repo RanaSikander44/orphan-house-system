@@ -19,4 +19,8 @@ class child extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
+    public function school()
+    {
+        return $this->belongsTo(Schools::class, 'school_id');
+    }
 }

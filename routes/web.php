@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\ChildActiviesController;
+use App\Http\Controllers\admin\DormitoryController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
@@ -69,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('enquiry/child-update/{id}', [AdoptionController::class, 'update'])->name('enquiry.update');
     Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
-
+    Route::post('enquiry/filter/school', [AdoptionController::class, 'schooldata'])->name('filter.school');
 
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users');    // List users
@@ -155,6 +156,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/child/activities/delete/{id}', [ChildActiviesController::class, 'delete'])->name('activity.delete');
     Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
     Route::post('notifications/mark-all-as-read', [ChildActiviesController::class, 'markasread']);
+
+
+
+    // filter child in activities
+    Route::post('chid/activities/filter', [ChildActiviesController::class, 'filter'])->name('filter.activity');
+
+
+    // Dormitory
+    Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
+    Route::get('add-room', [DormitoryController::class, 'store'])->name('add-room');
 
 });
 
