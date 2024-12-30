@@ -394,7 +394,7 @@ class StaffController extends Controller
 
     public function assignChilds($id)
     {
-        $nanny = Staff::where('user_id', $id)->first();
+        $nanny = user::where('id', $id)->first();
         $childs = Child::whereNotIn('id', function ($query) {
             $query->select('child_id')
                 ->from('nanny_childs');
@@ -407,12 +407,12 @@ class StaffController extends Controller
 
     public function assignChildsToNanny(Request $req, $id)
     {
+
         $selectedChildIds = explode(',', $req->selected_childs);
-        
+
         $selectedChildIds = array_filter($selectedChildIds, function ($value) {
             return !empty($value);
         });
-
 
         foreach ($selectedChildIds as $childId) {
             if (is_numeric($childId)) {

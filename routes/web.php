@@ -15,6 +15,7 @@ use App\Http\Controllers\admin\AdoptionController;
 use App\Http\Controllers\admin\AcademicYearController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\StaffController;
+use App\Http\Controllers\admin\DormitoryController;
 
 
 Route::get('/', function () {
@@ -158,7 +159,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
     Route::post('notifications/mark-all-as-read', [ChildActiviesController::class, 'markasread']);
     Route::post('child/activities/filter', [ChildActiviesController::class, 'filter'])->name('filter.child');
-    //Dormitory
+    
+    // Dormitory 
+    Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
+    Route::get('add/room', [DormitoryController::class, 'add'])->name('add-room');
+
+
 
 });
 

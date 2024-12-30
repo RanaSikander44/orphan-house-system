@@ -16,7 +16,7 @@ class Staff extends Model
 
     public function Users()
     {
-        return $this->belongsTo(User::class, 'user_id' , 'id');
+        return $this->belongsTo(User::class, 'user_id' , ownerKey: 'id');
     }
 
 

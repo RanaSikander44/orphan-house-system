@@ -205,8 +205,7 @@ class ChildActiviesController extends Controller
 
     public function filter(Request $request)
     {
-        dd($request->all());
-        $child = nannyChilds::where('nanny_id', $request->nanny_id)->get();
+        $child = nannyChilds::where('nanny_id', $request->nannyId)->get();
         dd($child);
     }
 
