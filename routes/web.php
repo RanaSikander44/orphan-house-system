@@ -71,6 +71,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
 
 
+
+
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users');    // List users
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');  // Show create user form
@@ -155,6 +157,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/child/activities/delete/{id}', [ChildActiviesController::class, 'delete'])->name('activity.delete');
     Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
     Route::post('notifications/mark-all-as-read', [ChildActiviesController::class, 'markasread']);
+    Route::post('child/activities/filter', [ChildActiviesController::class, 'filter'])->name('filter.child');
+    //Dormitory
 
 });
 

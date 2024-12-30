@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\ChildActivity;
 use App\Models\ChildActivityImages;
+use App\Models\nannyChilds;
 use App\Models\readnotifications;
+use App\Models\Schools;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\notifications;
+use App\Models\Role;
+use App\Models\User;
 use Notification;
 
 
@@ -26,8 +30,11 @@ class ChildActiviesController extends Controller
 
     public function add()
     {
+        $nannyRoleId = Role::where('name', 'Nanny')->value('id');
+        $nannies = User::where('role_id', $nannyRoleId)->get();
         $children = child::all();
-        return view('admin/childActivity/add', compact('children'));
+        $schools = Schools::all();
+        return view('admin/childActivity/add', compact('children', 'nannies', 'schools'));
     }
 
 
@@ -176,7 +183,6 @@ class ChildActiviesController extends Controller
             $imagesOfCActivity = 'empty';
         }
         return view('admin/childActivity/view', compact('latestActivity', 'imagesOfCActivity'));
-
     }
 
 
@@ -194,6 +200,14 @@ class ChildActiviesController extends Controller
             'success' => 'success',
         ]);
 
+    }
+
+
+    public function filter(Request $request)
+    {
+        dd($request->all());
+        $child = nannyChilds::where('nanny_id', $request->nanny_id)->get();
+        dd($child);
     }
 
 }

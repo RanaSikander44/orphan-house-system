@@ -32,7 +32,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     @if ($list->users->role->name === 'nanny' || $list->users->role->name === 'Nanny')
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('assign.childs', $list->id) }}"
+                                            <a class="dropdown-item" href="{{ route('assign.childs', $list->user_id) }}"
                                                 title="Assign Childs">
                                                 <i class="fa fa-child"></i> Assign Childs
                                             </a>

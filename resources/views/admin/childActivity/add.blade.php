@@ -3,7 +3,46 @@
 @section('Page-title', 'Add Child Activity')
 
 @section('content')
+
 <div class="container-fluid px-4">
+
+    <div class="card mt-4 shadow-sm border-0">
+        <div class="card-body px-4">
+            <div class="row">
+                <!-- Nanny Filter -->
+                <div class="col-md-4 mb-3">
+                    <label for="select-nanny" class="fw-bold mb-3">Filter by Nanny</label>
+                    <select name="nanny" id="select-nanny" class="form-control select2">
+                        <option value=""> -- Select Nanny -- </option>
+                        @foreach ($nannies as $list)
+                            <option value="{{ $list->id }}">{{ $list->first_name }} {{ $list->last_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- School Filter -->
+                <div class="col-md-4 mb-3">
+                    <label for="select-school" class="fw-bold mb-3">Filter by School</label>
+                    <select name="school" id="select-school" class="form-control select2">
+                        <option value="">-- Select School --</option>
+                        @foreach ($schools as $list)
+                            <option value="{{ $list->id }}">{{ $list->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Clear Filters -->
+                <div class="col-md-4 mb-3 d-flex align-items-end">
+                    <a href="" class="btn btn-sm btn-primary">
+                        Clear All
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="card mt-4 border-0 shadow-sm rounded">
         <form action="{{ route('activity.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -131,6 +170,51 @@
     });
 </script>
 
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Select an option",
+            allowClear: true
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Attach change event to both Nanny and School selects
+        $('#select-nanny, #select-school').on('change', function () {
+            let nannyId = $('#select-nanny').val(); // Get selected Nanny value
+            let schoolId = $('#select-school').val(); // Get selected School value
+
+            // Ensure null is sent for unselected values
+            nannyId = nannyId ? nannyId : null;
+            schoolId = schoolId ? schoolId : null;
+
+            sendAjaxRequest(nannyId, schoolId); // Send AJAX request
+        });
+
+        // Function to send AJAX request
+        function sendAjaxRequest(nannyId, schoolId) {
+            $.ajax({
+                url: '{{ route('filter.child') }}', // Replace with your endpoint
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}', // Include CSRF token
+                    nannyId: nannyId,
+                    schoolId: schoolId,
+                },
+                success: function (response) {
+                    // Handle successful response
+                    console.log('Response:', response);
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error:', error);
+                },
+            });
+        }
+    });
+</script>
 
 
 @endsection
