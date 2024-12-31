@@ -8,9 +8,6 @@
     @foreach ($activity as $list)
         <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
             <div class="card-body position-relative">
-                <!-- Three Dots Dropdown -->
-
-
                 <div class="dropdown position-absolute activity-dropdown" style="top: 10px; right: 10px;">
                     <button class="btn btn-link text-dark p-0 toggle-menu" type="button"
                         id="dropdownMenuButton{{ $list->id }}">
@@ -19,13 +16,14 @@
                     <ul class="dropdown-menu menu-content" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                         <li><a class="dropdown-item" href="{{ route('activity.edit', $list->id) }}">Edit</a></li>
                         <li>
-                            <form action="" method="POST"
-                                onsubmit="return confirm('Are you sure you want to delete this activity?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="dropdown-item text-danger">Delete</button>
-                            </form>
+                            <button type="button" class="dropdown-item text-danger" onclick="delAct(123)">Delete</button>
                         </li>
+
+                        <!-- Example form -->
+                        <form id="delete-form-act" method="get"
+                            action="{{ route('activity.delete', $list->id) }}" style="display: none;">
+                            @csrf
+                        </form>
                     </ul>
                 </div>
 
@@ -86,6 +84,10 @@
 
 <script>
     $(document).ready(function () {
+
+
+
+
         $(".toggle-menu").on("click", function (e) {
             e.preventDefault();
             const menu = $(this).siblings(".menu-content");
@@ -102,6 +104,28 @@
     });
 
 
+</script>
+
+
+<script>
+    function delAct(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById(`delete-form-act`);
+                if (form) {
+                    form.submit();
+                } 
+            }
+        });
+    }
 </script>
 
 
