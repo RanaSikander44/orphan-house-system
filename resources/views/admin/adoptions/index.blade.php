@@ -5,7 +5,8 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    
+
+
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <h5 class="text-muted mb-3">Adoption List</h5>
         <table class="table table-striped">
