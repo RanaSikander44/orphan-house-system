@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use App\Models\child_documents;
+use App\Models\Schools;
 use App\Models\City;
 
 
@@ -37,8 +38,9 @@ class AdoptionController extends Controller
         $docs = documents_title::where('document_for', 'child')->get();
         $settings = settings::first();
         $enquiry_types = enquiry_types::where('status', '1')->get();
+        $schools = Schools::get();
         $cities = City::all();
-        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities'));
+        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools'));
     }
 
     public function store(Request $req)
@@ -103,6 +105,7 @@ class AdoptionController extends Controller
         $application->weight = $req->weight;
         $application->city_id = $req->city_id;
         $application->age = $req->age;
+        $application->school_id = $req->school_id;
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -201,11 +204,12 @@ class AdoptionController extends Controller
         $cities = City::all();
         $years = academicyear::all();
         $settings = settings::first();
+        $schools = Schools::get();
         $enquiry_types = enquiry_types::where('status', '1')->get();
         $child = child::where('id', $id)->first();
         $parents = ParentModel::where('child_id', $child->id)->first();
         $documents = child_documents::where('child_id', $child->id)->get();
-        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'enquiry_types'));
+        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'schools', 'enquiry_types'));
 
     }
 
@@ -270,6 +274,7 @@ class AdoptionController extends Controller
         $application->height = $req->height;
         $application->weight = $req->weight;
         $application->city_id = $req->city_id;
+        $application->school_id = $req->school_id;
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -354,6 +359,5 @@ class AdoptionController extends Controller
             'success' => 'Document has deleted !',
         ]);
     }
-
 
 }

@@ -4,6 +4,42 @@
 
 @section('content')
 <div class="container-fluid px-4">
+
+    <div class="card mt-4 shadow-sm border-0">
+        <div class="card-body px-4">
+            <div class="row">
+                <!-- Nanny Filter -->
+                <div class="col-md-4 mb-3">
+                    <label for="select-nanny" class="fw-bold mb-3">Filter by Nanny</label>
+                    <select name="nanny" id="select-nanny" class="form-control select2">
+                        <option value=""> -- Select Nanny -- </option>
+                        @foreach ($nannies as $list)
+                            <option value="{{ $list->id }}">{{ $list->first_name }} {{ $list->last_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- School Filter -->
+                <div class="col-md-4 mb-3">
+                    <label for="select-school" class="fw-bold mb-3">Filter by School</label>
+                    <select name="school" id="select-school" class="form-control select2">
+                        <option value="">-- Select School --</option>
+                        @foreach ($schools as $list)
+                            <option value="{{ $list->id }}">{{ $list->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Clear Filters -->
+                <div class="col-md-4 mb-3 d-flex align-items-end">
+                    <button id="clear-filters" class="btn btn-sm btn-primary">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card mt-4 border-0 shadow-sm rounded">
         <form action="{{ route('activity.update', $activity->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -11,10 +47,10 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="select-user" class="form-label">Select Student</label>
-                        <select name="child_id" class="form-control">
+                        <select name="child_id" id="child_id" class="form-control">
                             @foreach ($children as $list)
-                                <option value="{{ $list->id }}" {{ $activity->child_id == $list->child_id ? 'selected' : ''}}>
-                                    {{ $list->first_name }} {{ $list->last_name }}
+                                <option value="{{ $list->id }}">{{ $list->first_name }} {{ $list->last_name }}
+                                    {{ ' (' . $list->age . ' years old)' }}
                                 </option>
                             @endforeach
                         </select>
@@ -187,11 +223,16 @@
                 }
             });
         });
-
-
-
     });
 </script>
 
+<script>
+    window.routes = {
+        filterActivity: '{{ route('filter.activity') }}',
+        csrfToken: '{{ csrf_token() }}'
+    };
+</script>
+
+<script src="{{ asset('backend/js/activityfilter.js') }}"></script>
 
 @endsection
