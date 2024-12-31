@@ -308,9 +308,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                             <!-- Contact Information -->
                             <div class="col-6 mt-4">
                                 <div class="card bg-light border-0 shadow-none">
@@ -401,6 +398,38 @@
                                         </div>
                                     </div>
 
+                                </div>
+                            </div>
+
+                            <!-- Dormitary -->
+                            <div class="col-6 mt-4">
+                                <div class="card bg-light border-0 shadow-none">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">School & Dormitary Information </p>
+                                        <hr class="w-100" style="font-weight: 200px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Religion -->
+                                            <div class="col-6">
+                                                <label for="" class="text-muted mb-2">Select School<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cp_wrapperSchool">
+                                                    <select class="select2School" id="SchoolSelect" name="school_id">
+                                                        @foreach ($schools as $list)
+                                                            <option value="{{ $list->id }}" {{ $child->school_id == $list->id ? 'selected' : '' }}>
+                                                                {{ $list->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                </div>
+                                                @error('school_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -633,7 +662,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 @foreach ($documents as $index => $list)
-                                                
+
                                                     <div class="col-md-6">
                                                         <label for="file_{{ $index }}"
                                                             class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>
@@ -700,6 +729,10 @@
 
         $('.select2Gg').select2({
             dropdownParent: $('.cp_wrapperGg')
+        })
+
+        $('.select2School').select2({
+            dropdownParent: $('.cp_wrapperSchool')
         })
     });
 </script>

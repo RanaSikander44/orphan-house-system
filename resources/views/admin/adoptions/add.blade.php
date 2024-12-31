@@ -260,6 +260,7 @@
                                                 @enderror
                                             </div>
 
+
                                             <!-- Child Image -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Child Image</label>
@@ -279,8 +280,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <!-- Contact Information -->
                             <div class="col-6 mt-4">
@@ -323,7 +322,7 @@
                             </div>
 
                             <!-- Medical Information -->
-                            <div class="col-6 mt-4">
+                            <div class="col-6">
                                 <div class="card bg-light border-0 shadow-none" style="height : 315px;">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
                                         <p class="text-muted fw-bold">Medical Information</p>
@@ -363,6 +362,39 @@
                                         </div>
                                     </div>
 
+                                </div>
+                            </div>
+
+                            <!-- Dormitory -->
+
+                            <div class="col-6 mt-4">
+                                <div class="card bg-light border-0 shadow-none">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">School & Dormitary Information </p>
+                                        <hr class="w-100" style="font-weight: 200px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Religion -->
+                                            <div class="col-6">
+                                                <label for="" class="text-muted mb-2">Select School<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cp_wrapperSchool">
+                                                    <select class="select2School" id="SchoolSelect" name="school_id">
+                                                        @foreach ($schools as $list)
+                                                            <option value="{{ $list->id }}" {{ old('school_id') }}>
+                                                                {{ $list->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                </div>
+                                                @error('school_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -642,6 +674,10 @@
 
         $('.select2Gg').select2({
             dropdownParent: $('.cp_wrapperGg')
+        })
+
+        $('.select2School').select2({
+            dropdownParent: $('.cp_wrapperSchool')
         })
     });
 </script>

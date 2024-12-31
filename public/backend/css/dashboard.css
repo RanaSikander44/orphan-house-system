@@ -14,6 +14,25 @@
         transition: all 0.3s ease;
     }
 
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* dashboard css for activity post */
+
+    .activity-dropdown .menu-content {
+        right: auto !important;
+        left: 0 !important;
+        transform: translateX(-100%);
+        display: none;
+        position: absolute;
+        z-index: 1050;
+    }
+
+    /* ends here */
+
+
     .sidebar-dropdown a span {
         margin-left: 10px;
     }

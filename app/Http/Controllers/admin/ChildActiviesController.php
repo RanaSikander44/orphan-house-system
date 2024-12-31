@@ -6,20 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\ChildActivity;
 use App\Models\ChildActivityImages;
+use App\Models\nannyChilds;
 use App\Models\readnotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\notifications;
+use League\CommonMark\Extension\InlinesOnly\ChildRenderer;
 use Notification;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Schools;
+use App\Models\Staff;
 
 
 class ChildActiviesController extends Controller
 {
     public function index()
     {
-        $activity = ChildActivity::orderBy('id', 'desc')->get();
+        $activity = ChildActivity::with(['child', 'images'])->orderBy('id', 'desc')->paginate(10);
         return view('admin/childActivity/index', compact('activity'));
     }
 
@@ -27,7 +33,10 @@ class ChildActiviesController extends Controller
     public function add()
     {
         $children = child::all();
-        return view('admin/childActivity/add', compact('children'));
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+        return view('admin/childActivity/add', compact('children', 'nannies', 'schools'));
     }
 
 
@@ -86,7 +95,11 @@ class ChildActiviesController extends Controller
         $activity = ChildActivity::findOrFail($id);
         $images = ChildActivityImages::where('activity_id', $activity->id)->get();
 
-        return view('admin/childActivity/edit', compact('children', 'activity', 'images'));
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+
+        return view('admin/childActivity/edit', compact('children', 'activity', 'images', 'nannies', 'schools'));
     }
 
 
@@ -194,6 +207,97 @@ class ChildActiviesController extends Controller
             'success' => 'success',
         ]);
 
+    }
+
+
+    public function filter(Request $req)
+    {
+        // Initialize $result to avoid undefined variable error
+        $result = [];
+
+        // Case where both nanny_id and school_id are provided
+        if ($req->nanny_id !== 'null' && $req->school_id !== 'null') {
+            $nanny = Staff::where('user_id', $req->nanny_id)->first();
+
+            if (!$nanny) {
+                return response()->json(['error' => 'Nanny not found'], 404);
+            }
+
+            $childrenQuery = NannyChilds::with(['child.school'])
+                ->where('nanny_id', $nanny->id)
+                ->whereHas('child', function ($query) use ($req) {
+                    if ($req->school_id && $req->school_id !== 'null') {
+                        $query->where('school_id', $req->school_id);
+                    }
+                });
+
+            $children = $childrenQuery->get();
+
+            $result = $children->map(function ($nannyChild) {
+                return [
+                    'id' => $nannyChild->child->id,
+                    'first_name' => $nannyChild->child->first_name,
+                    'last_name' => $nannyChild->child->last_name,
+                    'age' => $nannyChild->child->age,
+                    'school_name' => $nannyChild->child->school->name ?? 'No School',
+                ];
+            });
+        }
+
+        // Case where only nanny_id is provided
+        if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
+            $nannyID = Staff::where('user_id', $req->nanny_id)->first();
+
+            // Check if nanny exists
+            if (!$nannyID) {
+                return response()->json(['error' => 'Nanny not found'], 404);
+            }
+
+            // Get nanny children
+            $nannyChildren = NannyChilds::with('child.school') // Correcting the model name to PascalCase
+                ->where('nanny_id', $nannyID->id)
+                ->get();
+
+            // Map the result to the desired output format
+            $result = $nannyChildren->map(function ($nannyChild) {
+                return [
+                    'id' => $nannyChild->child->id ?? null, // Safely accessing child properties
+                    'first_name' => $nannyChild->child->first_name ?? 'No Name',
+                    'last_name' => $nannyChild->child->last_name ?? 'No Last Name',
+                    'age' => $nannyChild->child->age ?? 'Unknown Age',
+                    'school_name' => $nannyChild->child->school->name ?? 'No School', // Safely accessing the school name
+                ];
+            });
+        }
+
+        // Case where only school_id is provided
+        if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
+            // Fetch children directly from the Child table
+            $children = Child::with('school')
+                ->where('school_id', $req->school_id)
+                ->get();
+
+            $result = $children->map(function ($child) {
+                return [
+                    'id' => $child->id,
+                    'first_name' => $child->first_name,
+                    'last_name' => $child->last_name,
+                    'age' => $child->age,
+                    'school_name' => $child->school->name ?? 'No School',
+                ];
+            });
+        }
+
+        // If no conditions were met, return an error message
+        if (empty($result)) {
+
+            $data = child::all();
+            return response()->json($data);
+
+        }
+
+        // Return the result
+        return response()->json($result);
     }
 
 }

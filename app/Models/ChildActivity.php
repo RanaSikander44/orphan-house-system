@@ -17,4 +17,9 @@ class ChildActivity extends Model
         return $this->belongsTo(child::class, 'child_id', 'id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(ChildActivityImages::class, 'activity_id');
+    }
+    
 }

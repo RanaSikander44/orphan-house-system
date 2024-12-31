@@ -70,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('enquiry/child-update/{id}', [AdoptionController::class, 'update'])->name('enquiry.update');
     Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
-
+    Route::post('enquiry/filter/school', [AdoptionController::class, 'schooldata'])->name('filter.school');
 
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users');    // List users
@@ -156,16 +156,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/child/activities/delete/{id}', [ChildActiviesController::class, 'delete'])->name('activity.delete');
     Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
     Route::post('notifications/mark-all-as-read', [ChildActiviesController::class, 'markasread']);
-
-
-    // Dormitory 
-    Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
-    Route::get('add/room', [DormitoryController::class, 'add'])->name('add-room');
-    Route::post('add/room/store', [DormitoryController::class, 'store'])->name('room-store');
-    Route::get('add/room/edit/{id}', [DormitoryController::class, 'edit'])->name('room.edit');
-    Route::post('add/room/update/{id}', [DormitoryController::class, 'update'])->name('room.update');
-    Route::get('add/room/delete/{id}', [DormitoryController::class, 'delete'])->name('room.delete');
-
 
 });
 
