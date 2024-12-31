@@ -20,8 +20,8 @@
                         </li>
 
                         <!-- Example form -->
-                        <form id="delete-form-act" method="get"
-                            action="{{ route('activity.delete', $list->id) }}" style="display: none;">
+                        <form id="delete-form-act" method="get" action="{{ route('activity.delete', $list->id) }}"
+                            style="display: none;">
                             @csrf
                         </form>
                     </ul>
@@ -71,6 +71,16 @@
             </div>
         </div>
     @endforeach
+
+    <div class="d-flex justify-content-between mt-3 align-items-center">
+        <div>
+            <span>Showing {{ $activity->firstItem() ?? 0 }} to {{ $activity->lastItem() ?? 0 }} of {{ $activity->total() }}
+                entries</span>
+        </div>
+        <div>
+            {{ $activity->links() }}
+        </div>
+    </div>
 </div>
 
 
@@ -122,11 +132,10 @@
                 const form = document.getElementById(`delete-form-act`);
                 if (form) {
                     form.submit();
-                } 
+                }
             }
         });
     }
 </script>
-
 
 @endsection

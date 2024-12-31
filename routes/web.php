@@ -163,6 +163,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('chid/activities/filter', [ChildActiviesController::class, 'filter'])->name('filter.activity');
 
 
+
     // Dormitory
     Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
     Route::get('add-room', [DormitoryController::class, 'store'])->name('add-room');
