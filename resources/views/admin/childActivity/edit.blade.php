@@ -226,6 +226,16 @@
     });
 </script>
 
+
+<script>
+    $(document).ready(function () {
+        $('#child_id').select2({
+            placeholder: "Select a child", // Optional: Display placeholder text
+            width: '100%' // Optional: Make the Select2 input full width
+        });
+    });
+</script>
+
 <script>
     window.routes = {
         filterActivity: '{{ route('filter.activity') }}',

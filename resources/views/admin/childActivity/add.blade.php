@@ -3,6 +3,7 @@
 @section('Page-title', 'Add Child Activity')
 
 @section('content')
+
 <div class="container-fluid px-4">
 
     <div class="card mt-4 shadow-sm border-0">
@@ -48,7 +49,7 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="select-user" class="form-label">Select Child</label>
-                        <select name="child_id" id="child_id" class="form-control" required>
+                        <select name="child_id" id="child_id" class="form-control select2-container" required>
                             @foreach ($children as $list)
                                 <option value="{{ $list->id }}">{{ $list->first_name }} {{ $list->last_name }}
                                     {{ ' (' . $list->age . ' years old)' }}
@@ -93,7 +94,8 @@
 
                     <div class="col-md-6">
                         <label for="images" class="form-label">Upload Images</label>
-                        <input type="file" id="images" name="images[]" class="form-control" required accept="image/*" multiple>
+                        <input type="file" id="images" name="images[]" class="form-control" required accept="image/*"
+                            multiple>
                         <small class="text-muted">You can upload multiple images (JPEG, PNG, etc.).</small>
 
                         <div id="image-preview-container" class="mt-3 d-flex flex-wrap gap-2"></div>
@@ -170,6 +172,17 @@
     });
 
 </script>
+
+<script>
+    $(document).ready(function () {
+        $('#child_id').select2({
+            placeholder: "Select a child", // Optional: Display placeholder text
+            width: '100%' // Optional: Make the Select2 input full width
+        });
+    });
+</script>
+
+
 
 <script>
     window.routes = {
