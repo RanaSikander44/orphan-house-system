@@ -157,5 +157,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('chid/activities/view/{id}', [ChildActiviesController::class, 'view'])->name('activity.view');
     Route::post('notifications/mark-all-as-read', [ChildActiviesController::class, 'markasread']);
 
+
+
+    // filter child in activities
+    Route::post('chid/activities/filter', [ChildActiviesController::class, 'filter'])->name('filter.activity');
+
+
+
+    // Dormitory
+    Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
+    Route::get('add-room', [DormitoryController::class, 'store'])->name('add-room');
+
 });
 
