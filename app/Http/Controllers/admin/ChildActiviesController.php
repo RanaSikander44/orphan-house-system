@@ -95,7 +95,11 @@ class ChildActiviesController extends Controller
         $activity = ChildActivity::findOrFail($id);
         $images = ChildActivityImages::where('activity_id', $activity->id)->get();
 
-        return view('admin/childActivity/edit', compact('children', 'activity', 'images'));
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+
+        return view('admin/childActivity/edit', compact('children', 'activity', 'images', 'nannies', 'schools'));
     }
 
 
