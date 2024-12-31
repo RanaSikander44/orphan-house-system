@@ -25,7 +25,7 @@ class ChildActiviesController extends Controller
 {
     public function index()
     {
-        $activity = ChildActivity::orderBy('id', 'desc')->get();
+        $activity = ChildActivity::with(['child', 'images'])->orderBy('id', 'desc')->get();
         return view('admin/childActivity/index', compact('activity'));
     }
 
