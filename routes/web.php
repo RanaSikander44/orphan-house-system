@@ -161,6 +161,10 @@ Route::middleware(['auth'])->group(function () {
     // Dormitory 
     Route::get('room-list', [DormitoryController::class, 'index'])->name('room-list');
     Route::get('add/room', [DormitoryController::class, 'add'])->name('add-room');
+    Route::post('add/room/store', [DormitoryController::class, 'store'])->name('room-store');
+    Route::get('add/room/edit/{id}', [DormitoryController::class, 'edit'])->name('room.edit');
+    Route::post('add/room/update/{id}', [DormitoryController::class, 'update'])->name('room.update');
+    Route::get('add/room/delete/{id}', [DormitoryController::class, 'delete'])->name('room.delete');
 
 
 });
