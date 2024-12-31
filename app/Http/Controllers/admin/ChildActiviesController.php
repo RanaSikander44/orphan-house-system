@@ -238,7 +238,9 @@ class ChildActiviesController extends Controller
                     'school_name' => $nannyChild->child->school->name ?? 'No School',
                 ];
             });
-        } else if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
+        }
+
+        if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
             $nannyID = Staff::where('user_id', $req->nanny_id)->first();
 
             if (!$nannyID) {
@@ -258,20 +260,21 @@ class ChildActiviesController extends Controller
                     'school_name' => $nannyChild->child->school->name ?? 'No School',
                 ];
             });
-        } else if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
-            $children = NannyChilds::with(['child.school'])
-                ->whereHas('child', function ($query) use ($req) {
-                    $query->where('school_id', $req->school_id);
-                })
+        }
+
+        if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
+            // Fetch children directly from the Child table
+            $children = Child::with('school')
+                ->where('school_id', $req->school_id)
                 ->get();
 
-            $result = $children->map(function ($nannyChild) {
+            $result = $children->map(function ($child) {
                 return [
-                    'id' => $nannyChild->child->id,
-                    'first_name' => $nannyChild->child->first_name,
-                    'last_name' => $nannyChild->child->last_name,
-                    'age' => $nannyChild->child->age,
-                    'school_name' => $nannyChild->child->school->name ?? 'No School',
+                    'id' => $child->id,
+                    'first_name' => $child->first_name,
+                    'last_name' => $child->last_name,
+                    'age' => $child->age,
+                    'school_name' => $child->school->name ?? 'No School',
                 ];
             });
         } else {
