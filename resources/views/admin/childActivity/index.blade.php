@@ -72,7 +72,7 @@
         </div>
     @endforeach
 
-    <div class="d-flex justify-content-between mt-3 align-items-center">
+    <div class="d-flex justify-content-between mt-3 align-items-center mb-4">
         <div>
             <span>Showing {{ $activity->firstItem() ?? 0 }} to {{ $activity->lastItem() ?? 0 }} of {{ $activity->total() }}
                 entries</span>
