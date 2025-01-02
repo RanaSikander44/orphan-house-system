@@ -9,13 +9,10 @@
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="text-muted">Users List</h5>
-            <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
-                Add New
-            </a>
         </div>
 
         @if($users->count())
-            <table class="table table-bordered table-striped">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -27,15 +24,15 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <span>{{ $user->role->role ?? 'No Role Assigned' }}</span>
+                                <span>{{ $user->role->name ?? 'No Role Assigned' }}</span>
                             </td>
                             <td>
                                 <!-- Edit Button -->
-                                <a href="{{ route('users.edit', $user->id) }}"
-                                    class="btn btn-sm text-white btn-warning">Edit</a>
+                                <!-- <a href="{{ route('users.edit', $user->id) }}"
+                                    class="btn btn-sm text-white btn-warning">Edit</a> -->
 
                                 <!-- Delete Button -->
                                 <button type="button" class="btn btn-sm btn-danger"
