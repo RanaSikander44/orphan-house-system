@@ -23,4 +23,14 @@ class child extends Model
     {
         return $this->belongsTo(Schools::class, 'school_id');
     }
+
+    public function grade()
+    {
+        return $this->belongsTo(school_grades::class, 'grade_id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Dormitory::class, 'room_id');
+    }
 }

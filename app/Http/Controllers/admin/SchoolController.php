@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssingedGradesToSchool;
 use App\Models\school_grades;
 use App\Models\Schools;
 use Illuminate\Http\Request;
@@ -34,9 +35,8 @@ class SchoolController extends Controller
     {
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'fees' => 'required|numeric', // changed to numeric for a fee amount
-            'grade' => 'required|string|max:255', // assuming grade is a string
-            'address' => 'required|string|max:500', // assuming address is a string with a max length
+            'fees' => 'required|numeric',
+            'address' => 'required|string|max:500',
         ]);
 
         // Check if validation fails
@@ -44,18 +44,30 @@ class SchoolController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-
         $school = new Schools();
         $school->name = $request->name;
         $school->fees = $request->fees;
-        $school->grade = $request->grade;
         $school->address = $request->address;
         $school->save();
 
+        if ($request->has('grade')) {
+            if (is_array($request->grade)) {
+                $gradesString = $request->grade[0];
+                $grades = explode(',', $gradesString);
 
-        return redirect()->route('schools.index')->with('success', 'School added !');
+                foreach ($grades as $gradeId) {
+                    $data = new AssingedGradesToSchool();
+                    $data->school_id = $school->id;
+                    $data->grade_id = $gradeId;
+                    $data->save();
+                }
+            }
+        }
 
+        return redirect()->route('schools.index')->with('success', 'School added!');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -71,20 +83,18 @@ class SchoolController extends Controller
     public function edit(string $id)
     {
         $school = Schools::find($id);
-        $grade = school_grades::all();
-        return view('admin.schools.edit', compact('school', 'grade'));
+        $grades = school_grades::all();
+        $assignedGrades = AssingedGradesToSchool::where('school_id', $school->id)->pluck('grade_id')->toArray();
+
+        return view('admin.schools.edit', compact('school', 'grades', 'assignedGrades'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
 
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'fees' => 'required|numeric', // changed to numeric for a fee amount
-            'grade' => 'required|string|max:255', // assuming grade is a string
             'address' => 'required|string|max:500', // assuming address is a string with a max length
         ]);
 
@@ -97,9 +107,28 @@ class SchoolController extends Controller
         $school = Schools::find($id);
         $school->name = $request->name;
         $school->fees = $request->fees;
-        $school->grade = $request->grade;
         $school->address = $request->address;
         $school->update();
+
+
+        if ($request->has('grade')) {
+
+            AssingedGradesToSchool::where('school_id', $id)->delete();
+
+            if ($request->has('grade')) {
+                if (is_array($request->grade)) {
+                    $gradesString = $request->grade[0];
+                    $grades = explode(',', $gradesString);
+
+                    foreach ($grades as $gradeId) {
+                        $data = new AssingedGradesToSchool();
+                        $data->school_id = $school->id;
+                        $data->grade_id = $gradeId;
+                        $data->save();
+                    }
+                }
+            }
+        }
 
 
         return redirect()->route('schools.index')->with('success', 'School updated !');
@@ -117,4 +146,27 @@ class SchoolController extends Controller
         return redirect()->route('schools.index')->with('success', 'School deleted !');
 
     }
+
+    public function findSchool(Request $request)
+    {
+        $school_id = $request->input('school_id');
+
+        $assignedGrades = AssingedGradesToSchool::where('school_id', $school_id)->get();
+
+        $gradeIds = $assignedGrades->pluck('grade_id');
+
+        $grades = school_grades::whereIn('id', $gradeIds)->get(['id', 'grade']);  // Assuming 'title' is the column for grade name/title
+
+        $gradeData = $grades->map(function ($grade) {
+            return [
+                'grade_id' => $grade->id,
+                'grade' => $grade->grade
+            ];
+        });
+
+        return response()->json([
+            'grades' => $gradeData
+        ]);
+    }
+
 }
