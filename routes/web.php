@@ -135,7 +135,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Schools
     Route::resource('schools', SchoolController::class);
-
+    Route::post('find-school', [SchoolController::class, 'findSchool'])->name('find.school');
 
     // Schools Grades
     Route::get('grades/schools', [SchoolGradesController::class, 'index'])->name('add.grades');
@@ -143,7 +143,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('grades/schools/edit/{id}', [SchoolGradesController::class, 'edit'])->name('grades.edit');
     Route::post('grades/schools/update/{id}', [SchoolGradesController::class, 'update'])->name('grades.update');
     Route::get('grades/schools/delete/{id}', [SchoolGradesController::class, 'delete'])->name('grades.delete');
-
 
 
     // Child Activities

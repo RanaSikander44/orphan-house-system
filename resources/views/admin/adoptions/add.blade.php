@@ -322,7 +322,7 @@
                             </div>
 
                             <!-- Medical Information -->
-                            <div class="col-6">
+                            <div class="col-6 mt-4">
                                 <div class="card bg-light border-0 shadow-none" style="height : 315px;">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
                                         <p class="text-muted fw-bold">Medical Information</p>
@@ -346,8 +346,6 @@
                                                 </div>
                                             </div>
 
-
-
                                             <!-- Admission Date -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Height (In)</label>
@@ -365,12 +363,12 @@
                                 </div>
                             </div>
 
-                            <!-- Dormitory -->
+                            <!-- School -->
 
                             <div class="col-6 mt-4">
                                 <div class="card bg-light border-0 shadow-none">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">School & Dormitary Information </p>
+                                        <p class="text-muted fw-bold">School Information </p>
                                         <hr class="w-100" style="font-weight: 200px;">
                                     </div>
                                     <div class="card-body">
@@ -381,15 +379,28 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperSchool">
                                                     <select class="select2School" id="SchoolSelect" name="school_id">
+                                                        <option value="" class="form-control">--Select School--</option>
                                                         @foreach ($schools as $list)
                                                             <option value="{{ $list->id }}" {{ old('school_id') }}>
                                                                 {{ $list->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
-
                                                 </div>
                                                 @error('school_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-6">
+                                                <label for="" class="text-muted mb-2">Select Grade<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cp_wrapperGrade">
+                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id">
+                                                        <option value="">--Select Grade--</option>
+                                                    </select>
+                                                </div>
+                                                @error('grade_id')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -397,6 +408,40 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Dormitory -->
+                            <div class="col-6 mt-4">
+                                <div class="card bg-light border-0 shadow-none">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">Dormitory Information </p>
+                                        <hr class="w-100" style="font-weight: 200px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="" class="text-muted mb-2">Select Room<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cp_wrapperDormitory">
+                                                    <select class="select2Dormitory form-control" id="DormitorySelect"
+                                                        name="room_id">
+                                                        @foreach ($rooms as $list)
+                                                            <option value="{{ $list->id }}" {{ old('room_id') }}>
+                                                                {{ $list->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                </div>
+                                                @error('room_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -648,8 +693,6 @@
 </div>
 
 
-
-
 <script>
     $(document).ready(function () {
         $('.select2').select2({
@@ -678,6 +721,14 @@
 
         $('.select2School').select2({
             dropdownParent: $('.cp_wrapperSchool')
+        })
+
+        $('.select2Dormitory').select2({
+            dropdownParent: $('.cp_wrapperDormitory')
+        })
+
+        $('.select2Grade').select2({
+            dropdownParent: $('.cp_wrapperGrade')
         })
     });
 </script>
@@ -736,10 +787,54 @@
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
     $(".dateselector").flatpickr({
         dateFormat: "Y-m-d", // Define the desired date format
     });
 </script>
+<script>
+    $(document).ready(function () {
+
+        // Function to fetch grades based on the selected school
+        function fetchGrades(school_id) {
+            $.post({
+                url: '{{ route('find.school') }}',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    school_id: school_id
+                },
+
+                success: function (response) {
+                    let select = $('#SchoolGrade');
+                    select.empty();  // Clear the existing options
+                    // Add an option for selecting grade
+                    select.append('<option value="" class="form-control">--Select Grade--</option>');
+                    $.each(response.grades, function (index, grade) {
+                        select.append(`<option value="${grade.grade_id}">${grade.grade}</option>`);
+                    });
+                },
+
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + error);
+                }
+            });
+        }
+
+        // Fetch grades based on the selected school when the select changes
+        $('#SchoolSelect').on('change', function () {
+            let school_id = $(this).val();
+            fetchGrades(school_id);
+        });
+
+        // Trigger the change event on page load to fetch grades for the pre-selected school (if any)
+        let selectedSchoolId = $('#SchoolSelect').val();  // Get the selected school ID
+        if (selectedSchoolId) {
+            fetchGrades(selectedSchoolId);  // Fetch grades for the selected school
+        }
+    });
+</script>
+
+
 
 @endsection

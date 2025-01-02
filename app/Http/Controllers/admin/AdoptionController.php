@@ -5,7 +5,10 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
 use App\Models\documents_title;
+use App\Models\Dormitory;
 use App\Models\enquiry_types;
+use App\Models\nannyChilds;
+use App\Models\school_grades;
 use App\Models\settings;
 use App\Models\child;
 use App\Models\student;
@@ -17,6 +20,8 @@ use Illuminate\Support\Str;
 use App\Models\child_documents;
 use App\Models\Schools;
 use App\Models\City;
+use App\Models\Staff;
+use App\Models\User;
 
 
 
@@ -40,7 +45,8 @@ class AdoptionController extends Controller
         $enquiry_types = enquiry_types::where('status', '1')->get();
         $schools = Schools::get();
         $cities = City::all();
-        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools'));
+        $rooms = Dormitory::all();
+        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
     }
 
     public function store(Request $req)
@@ -61,8 +67,6 @@ class AdoptionController extends Controller
             'email' => [
                 'nullable',
                 'email',
-                Rule::unique('users', 'email'),
-                Rule::unique('staff', 'email'),
                 Rule::unique('children', 'email'),
             ],
             'phone_no' => 'nullable|string',
@@ -73,6 +77,9 @@ class AdoptionController extends Controller
             'weight' => 'nullable|numeric',
             'age' => 'required',
             'city_id' => 'required',
+            'school_id' => 'required',
+            'room_id' => 'required',
+            'grade_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -106,6 +113,22 @@ class AdoptionController extends Controller
         $application->city_id = $req->city_id;
         $application->age = $req->age;
         $application->school_id = $req->school_id;
+        if ($req->has('room_id')) {
+            // Count the number of children currently assigned to the room
+            $totalChildInRoom = child::where('room_id', $req->room_id)->count();
+
+            // Fetch the dormitory details for the given room ID
+            $roomDetails = Dormitory::find($req->room_id);
+
+            // Check if the room exists and has a valid max number of beds
+            if ($roomDetails && $totalChildInRoom >= $roomDetails->max_number_bed) {
+                return redirect()->back()->withInput()->with('error', 'This room is full. Please choose a different room.');
+            } else {
+                $application->room_id = $req->room_id;
+            }
+        }
+
+        $application->grade_id = $req->grade_id;
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -196,7 +219,21 @@ class AdoptionController extends Controller
         $child = child::where('id', $id)->first();
         $parents = ParentModel::where('child_id', $child->id)->first();
         $documents = child_documents::where('child_id', $child->id)->whereNotNull('name')->get();
-        return view('admin.adoptions.view', compact('child', 'parents', 'documents'));
+
+        $nanny = nannyChilds::where('child_id', $child->id)->first();
+
+        if ($nanny) {
+            $nannyID = staff::where('id', $nanny->nanny_id)->first();
+
+            if ($nannyID) {
+                $nannyDetails = User::where('id', $nannyID->user_id)->first();
+            } else {
+                $nannyDetails = null;
+            }
+        } else {
+            $nannyDetails = null;
+        }
+        return view('admin.adoptions.view', compact('child', 'parents', 'documents', 'nannyDetails'));
     }
 
     public function studentEdit($id)
@@ -209,8 +246,9 @@ class AdoptionController extends Controller
         $child = child::where('id', $id)->first();
         $parents = ParentModel::where('child_id', $child->id)->first();
         $documents = child_documents::where('child_id', $child->id)->get();
-        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'schools', 'enquiry_types'));
-
+        $rooms = Dormitory::all();
+        $grades = school_grades::all();
+        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'schools', 'enquiry_types', 'rooms', 'grades'));
     }
 
 
@@ -233,8 +271,6 @@ class AdoptionController extends Controller
                 'nullable',
                 'email',
                 Rule::unique('children')->ignore($id),  // Check 'children' table, excluding current record
-                Rule::unique('staff')->ignore($id),     // Check 'staff' table, excluding current record
-                Rule::unique('users')->ignore($id),     // Check 'users' table, excluding current record
             ],
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
@@ -244,6 +280,9 @@ class AdoptionController extends Controller
             'weight' => 'nullable|numeric',
             'age' => 'required',
             'city_id' => 'required',
+            'school_id' => 'required',
+            'room_id' => 'required',
+            'grade_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -275,6 +314,8 @@ class AdoptionController extends Controller
         $application->weight = $req->weight;
         $application->city_id = $req->city_id;
         $application->school_id = $req->school_id;
+        $application->room_id = $req->room_id;
+        $application->grade_id = $req->grade_id;
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();

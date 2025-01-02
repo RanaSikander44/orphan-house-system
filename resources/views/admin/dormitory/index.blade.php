@@ -9,8 +9,6 @@
                     <th>#</th>
                     <th>Title</th>
                     <th>Max Number of bed</th>
-                    <th>Total Booked</th>
-                    <th>Avaiable</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -20,8 +18,6 @@
                         <td>{{ $list->id }}</td>
                         <td>{{ $list->title }}</td>
                         <td>{{ $list->max_number_bed }}</td>
-                        <td>{{ $list->total_booked }}</td>
-                        <td>{{ $list->total_available }}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
