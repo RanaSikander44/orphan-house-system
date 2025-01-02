@@ -113,7 +113,21 @@ class AdoptionController extends Controller
         $application->city_id = $req->city_id;
         $application->age = $req->age;
         $application->school_id = $req->school_id;
-        $application->room_id = $req->room_id;
+        if ($req->has('room_id')) {
+            // Count the number of children currently assigned to the room
+            $totalChildInRoom = child::where('room_id', $req->room_id)->count();
+
+            // Fetch the dormitory details for the given room ID
+            $roomDetails = Dormitory::find($req->room_id);
+
+            // Check if the room exists and has a valid max number of beds
+            if ($roomDetails && $totalChildInRoom >= $roomDetails->max_number_bed) {
+                return redirect()->back()->withInput()->with('error', 'This room is full. Please choose a different room.');
+            } else {
+                $application->room_id = $req->room_id;
+            }
+        }
+
         $application->grade_id = $req->grade_id;
 
         if ($image = $req->file('child_image')) {
