@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('donor/adoptchild', [AdoptionChildDonor::class, 'index'])->name('donor.adopt.child');
         Route::get('donor/enquiry/view/{id}', [AdoptionChildDonor::class, 'view'])->name('donor.enquiry.view');
+        Route::post('donor/request/childs', [AdoptionChildDonor::class, 'requestforChild'])->name('donor.adopt.request');
 
     });
 

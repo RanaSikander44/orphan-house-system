@@ -2,7 +2,7 @@
 
 @section('Page-title', 'Enquiry View')
 @section('content')
-<div class="container-fluid px-4">
+<div class="container-fluid px-4 mb-5">
 
     <div class="row mt-4">
         <!-- child Details Section -->
@@ -106,7 +106,7 @@
                                         </div>
                                         <div class="col-6 text-muted text-end">
                                             <p class="mb-0">
-                                            {{ \Carbon\Carbon::parse($child->dob)->age . ' years' }}
+                                                {{ \Carbon\Carbon::parse($child->dob)->age . ' years' }}
                                             </p>
                                         </div>
 
@@ -237,6 +237,15 @@
                                         </div>
                                         <div class="col-6 text-muted text-end">
                                             <p class="mb-0">{{ $child->school->name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center py-3 border-bottom">
+                                        <div class="col-6">
+                                            <h6 class="mb-0 text-muted">School Fees</h6>
+                                        </div>
+                                        <div class="col-6 text-muted text-end">
+                                            <p class="mb-0">{{ $child->school->fees}}</p>
                                         </div>
                                     </div>
 
