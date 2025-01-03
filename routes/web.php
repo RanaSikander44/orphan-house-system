@@ -5,8 +5,10 @@ use App\Http\Controllers\admin\DormitoryController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
+use App\Http\Controllers\donor\DonorController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\CityController;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\admin\RolesController;
@@ -38,13 +40,10 @@ Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 
 Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
 
-
-
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-
-
+    Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware('Role:Admin');
+    Route::get('/donor/dashboard', [DonorController::class, 'dashboard'])->name('donor.dashboard')->middleware('Role:Donor');
 
 
     // Academic Year
