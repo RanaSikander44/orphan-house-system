@@ -11,4 +11,11 @@ class DonorController extends Controller
     {
         return view('donor.dashboard');
     }
+
+    public function index()
+    {
+        dd('Adopt a Child');
+    }
+
+
 }

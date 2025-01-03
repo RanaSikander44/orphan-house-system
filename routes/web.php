@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\DormitoryController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
+use App\Http\Controllers\donor\AdoptionChildDonor;
 use App\Http\Controllers\donor\DonorController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\CityController;
@@ -41,6 +42,17 @@ Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::middleware(['auth'])->group(function () {
+
+
+    Route::middleware('Role:Donor')->group(function () {
+
+        Route::get('donor/adoptchild', [AdoptionChildDonor::class, 'index'])->name('donor.adopt.child');
+        Route::get('donor/enquiry/view/{id}', [AdoptionChildDonor::class, 'view'])->name('donor.enquiry.view');
+
+    });
+
+
+
 
     Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware('Role:Admin');
     Route::get('/donor/dashboard', [DonorController::class, 'dashboard'])->name('donor.dashboard')->middleware('Role:Donor');
