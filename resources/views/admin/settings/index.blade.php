@@ -17,6 +17,8 @@
                                 Documents</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="staff_docs">Staff
                                 Documents</button>
+                            <button type="button" class="btn btn-sm btn-block mb-2" id="donor_setting">Donor
+                                Settings</button>
                         </div>
                     </div>
                     <div class="col-8 ms-5">
@@ -111,6 +113,24 @@
                             </div>
                         </div>
 
+                        <div class="donor-tab-settings" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
+                                <!-- <p class="text-dark fw-bold">
+                                    The number of days entered in this field will determine when a reminder notification
+                                    or email is sent to donors if their payment remains pending.
+                                </p> -->
+
+                            </div>
+                            <div class="donor-settings">
+                                <input type="number" class="form-control" name="min_dayes_for_req_donors" value="{{ $donorSetting->min_dayes_for_req_donors }}">
+                                <p class="text-muted mt-3">
+                                    This field allows to set the number of days after which a reminder notification
+                                    will be sent to donors who have requested for donate but have not completed their
+                                    payments. </p>
+                                </p>
+                            </div>
+                        </div>
 
 
                     </div>
@@ -235,6 +255,7 @@
             $('.tab1').show();
             $('.tab-documents').hide();
             $('.staff-tab-documents').hide();
+            $('.donor-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -242,15 +263,27 @@
             $('.tab-documents').show();
             $('.tab1').hide();
             $('.staff-tab-documents').hide();
+            $('.donor-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
         $('#staff_docs').click(function () {
             $('.tab-documents').hide();
             $('.tab1').hide();
+            $('.donor-tab-settings').hide();
             $('.staff-tab-documents').show();
             $(this).addClass('active').siblings().removeClass('active');
         });
+
+
+        $('#donor_setting').click(function () {
+            $('.tab-documents').hide();
+            $('.tab1').hide();
+            $('.staff-tab-documents').hide();
+            $('.donor-tab-settings').show();
+            $(this).addClass('active').siblings().removeClass('active');
+        });
+
 
         $('.add-document').click(function () {
             var newIndex = $('.document-group').length + 1;
