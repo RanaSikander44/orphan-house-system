@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\donorChildReq;
 use Illuminate\Http\Request;
+use App\Models\notifications;
 
 class DonationRequestController extends Controller
 {
@@ -26,25 +27,27 @@ class DonationRequestController extends Controller
 
     public function accept($id)
     {
-        $detail = donorChildReq::find($id);
+        try {
+            $detail = donorChildReq::findOrFail($id);
+            $child = child::findOrFail($detail->child_id);
 
-        if (!$detail) {
-            return redirect()->route('admin.donations.req')->with('error', 'Donation Request not found!');
+            $detail->req_status = '1';
+            $detail->save();
+
+            $child->donor_id = $detail->donor_id;
+            $child->save();
+
+            $notify = new notifications();
+            $notify->message = 'Congratulations! Your donation request for ' . $child->first_name . ' ' . $child->last_name . ' has been successfully accepted on ' . '. You can now proceed with the payment process.';
+            $notify->notification_for = $detail->donor_id;
+            $notify->save();
+
+            return redirect()->route('admin.donations.req')->with('success', 'Donation Request Accepted!');
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->route('admin.donations.req')->with('error', 'Donation Request or Child not found!');
         }
-
-        $detail->req_status = '1';
-        $detail->save();
-
-        $child = child::find($detail->child_id);
-
-        if (!$child) {
-            return redirect()->route('admin.donations.req')->with('error', 'Child not found!');
-        }
-
-        $child->donor_id = $detail->donor_id;
-        $child->save();
-
-        return redirect()->route('admin.donations.req')->with('success', 'Donation Request Accepted!');
     }
+
 
 }

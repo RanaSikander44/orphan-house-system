@@ -25,14 +25,17 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer('*', function ($view) {
             if (Auth::check()) {
-                $userId = Auth::id();
+                $userId = Auth()->user()->id;
+                // Fetch notifications for the logged-in user (based on notify_id)
+                // and exclude those the user has already marked as read
+                $notifications = notifications::where('notification_for', $userId)
+                    ->whereNotIn('id', function ($query) use ($userId) {
+                        $query->select('notification_id')
+                            ->from('readnotifications')
+                            ->where('user_id', $userId);
+                    })
+                    ->get();
 
-                // Fetch notifications where the user hasn't marked them as read
-                $notifications = notifications::whereNotIn('id', function ($query) use ($userId) {
-                    $query->select('notification_id')
-                        ->from('readnotifications')
-                        ->where('user_id', $userId);
-                })->get();
                 $view->with('notifications', $notifications);
             }
         });
