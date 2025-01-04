@@ -68,8 +68,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 
@@ -91,39 +89,15 @@
                         selectedValues: selectedValues
                     },
                     success: function (response) {
-                        // Assuming the total payment is coming from the response object
-                        const totalPayment = response.total_fees;
-
+                        // Assuming the response contains a message property with the success message
                         Swal.fire({
-                            title: 'Total Payment',
-                            text: `The total payment amount is: ${totalPayment} AED. Do you confirm this?`,
-                            icon: 'info',  // You can use a different icon like 'info' for payment-related actions
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',  // Blue for confirmation
-                            cancelButtonColor: '#d33',  // Red for cancel
-                            confirmButtonText: 'Yes, confirm',
-                            cancelButtonText: 'Cancel',
-                            reverseButtons: true,  // Reverses the button order for better UX
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Confirmed!',
-                                    text: 'The payment has been successfully confirmed.',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-                            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                Swal.fire({
-                                    icon: 'info',
-                                    title: 'Cancelled',
-                                    text: 'Payment confirmation was cancelled.',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
-                            }
+                            icon: 'success', // Type of alert: success, error, warning, info, question
+                            title: 'Success!',
+                            text: response.message, // Display the message from the response
+                            confirmButtonText: 'OK'
                         });
                     }
+
                 });
             } else {
                 alert('Please select at least one checkbox');
@@ -134,7 +108,73 @@
 
 
 
+<!-- <script>
+    $(document).ready(function () {
+        $('#adoptionReqBtn').click(function () {
+            var selectedValues = [];
+            $('.checkbox:checked').each(function () {
+                selectedValues.push($(this).val());
+            });
 
-
-
+            var selectedCount = selectedValues.length;
+            if (selectedCount > 0) {
+                $.post({
+                    url: '{{ route('donor.adopt.request') }}',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        selectedValues: selectedValues
+                    },
+                    success: function (response) {
+                        const totalPayment = response.total_fees;
+                        Swal.fire({
+                            title: 'Total Payment',
+                            text: `The total payment amount is: ${totalPayment} AED. Enter your credit card details to proceed.`,
+                            icon: 'info',
+                            input: 'text',
+                            inputAttributes: {
+                                placeholder: 'Enter Credit Card Number',
+                                maxlength: 16
+                            },
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Pay Now',
+                            cancelButtonText: 'Cancel',
+                            reverseButtons: true,
+                            preConfirm: (creditCardNumber) => {
+                                if (!creditCardNumber || creditCardNumber.length !== 16) {
+                                    Swal.showValidationMessage('Please enter a valid credit card number');
+                                }
+                                return creditCardNumber;
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.post({
+                                    url: '{{ route('donor.payment.process') }}',
+                                    data: {
+                                        '_token': '{{ csrf_token() }}',
+                                        selectedValues: selectedValues,
+                                        totalPayment: totalPayment,
+                                        creditCardNumber: result.value
+                                    },
+                                    success: function () {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Payment Successful',
+                                            text: 'Your adoption request has been submitted.',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                alert('Please select at least one checkbox');
+            }
+        });
+    });
+</script> -->
 @endsection
