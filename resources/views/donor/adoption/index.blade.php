@@ -95,7 +95,11 @@
                             title: 'Success!',
                             text: response.message, // Display the message from the response
                             confirmButtonText: 'OK'
-                        });
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Reload the page when "OK" is clicked
+                            }
+                        });;
                     }
 
                 });
