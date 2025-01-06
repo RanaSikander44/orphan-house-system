@@ -61,7 +61,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
                                 <!-- Profile Image -->
-                                <img src="{{ asset('backend/images/childs/' . ($latestActivity->child->child_image ?? 'default-avatar.jpg')) }}"
+                                <img src="{{ asset('backend/images/childs/' . ($latestActivity->child->child_image ?? 'default.jpg')) }}"
                                     class="rounded-circle me-3" alt="Profile Image" width="50" height="50">
 
                                 <div>

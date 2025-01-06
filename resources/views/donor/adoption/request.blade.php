@@ -101,7 +101,13 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-info text-white">Make Payment</a>
+                                        @if($list->donorReq->payment_id != null)
+                                            <button class="btn btn-sm bg-info" disabled>Paid</button>
+                                        @else
+                                            <a href="{{ route('donor.payment.req', $list->id) }}"
+                                                class="btn btn-sm btn-info text-white">Make Payment</a>
+                                        @endif
+
                                     </td>
                                 </tr>
                             @empty

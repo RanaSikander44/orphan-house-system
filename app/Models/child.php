@@ -33,4 +33,9 @@ class child extends Model
     {
         return $this->belongsTo(Dormitory::class, 'room_id');
     }
+
+    public function donorReq()
+    {
+       return  $this->belongsTo(donorChildReq::class, 'id', 'child_id');
+    }
 }

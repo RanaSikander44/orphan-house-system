@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
 use App\Http\Controllers\donor\AdoptionChildDonor;
 use App\Http\Controllers\donor\DonorController;
+use App\Http\Controllers\donor\DonorPaymentController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\CityController;
 use App\Http\Middleware\RoleMiddleware;
@@ -20,6 +21,7 @@ use App\Http\Controllers\admin\AdoptionController;
 use App\Http\Controllers\admin\AcademicYearController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\StaffController;
+use App\Http\Controllers\admin\PaymentController;
 
 
 Route::get('/', function () {
@@ -50,6 +52,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('donor/adoptchild', [AdoptionChildDonor::class, 'index'])->name('donor.adopt.child');
         Route::get('donor/enquiry/view/{id}', [AdoptionChildDonor::class, 'view'])->name('donor.enquiry.view');
         Route::get('donor/adoption/requests', [AdoptionChildDonor::class, 'requests'])->name('donor.reqs');
+        Route::get('donor/adoption/payment/{id}', [DonorPaymentController::class, 'index'])->name('donor.payment.req');
+        Route::post('donor/adoption/make/payment', [DonorPaymentController::class, 'makePayment'])->name('donor.payment');
+
+
+
+        // Activities of Child Assigned To Donors 
+
+        Route::get('donor/child/activites', [DonorController::class, 'donorChildAct'])->name('donor.child.activity');
+
 
 
 

@@ -69,7 +69,7 @@ class AdoptionChildDonor extends Controller
     public function requests()
     {
         $donor_id = auth()->user()->id;
-        $child = child::where('donor_id', $donor_id)->paginate(10);
+        $child = child::where('donor_id', $donor_id)->orderBy('id' , 'desc')->paginate(10);
         $pendingReq = donorChildReq::where('donor_id', $donor_id)->where('req_status', '0')->orderBy('id', 'desc')->paginate(10);
         return view('donor.adoption.request', compact('child', 'pendingReq'));
     }
