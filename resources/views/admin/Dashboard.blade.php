@@ -17,7 +17,7 @@
                                 <h5 class="ms-3 mt-3">Childs</h5>
                                 <p class="ms-3 mt-2">Total Childs</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="{{ route('adoptions') }}">{{ $students }}</a>
+                                    href="{{ route('adoptions') }}">{{ $childs }}</a>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -32,10 +32,10 @@
                         <div class="col-md-3">
                             <div class="card text-white rounded-2 bg-gradient"
                                 style="border: none; background-color: #8D5FF6;">
-                                <h5 class="ms-3 mt-3">Teachers</h5>
-                                <p class="ms-3 mt-2">Total Teachers</p>
+                                <h5 class="ms-3 mt-3">Activities</h5>
+                                <p class="ms-3 mt-2">Total Activities</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">0</a>
+                                    href="{{ route('activity.index') }}">{{ $totalActivities }}</a>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -43,7 +43,7 @@
                                 <h5 class="ms-3 mt-3">Parents</h5>
                                 <p class="ms-3 mt-2">Total Parents</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">0</a>
+                                    href="#">{{ $parents }}</a>
                             </div>
                         </div>
 

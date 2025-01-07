@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\child;
 use App\Models\ChildActivity;
 use App\Models\ChildActivityImages;
 use App\Models\notifications;
 use App\Models\student;
+use App\Models\ParentModel;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Menu;
@@ -23,7 +25,9 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $users_count = user::count();
-        $students = student::count();
+        $childs = child::count();
+        $totalActivities = ChildActivity::count();
+        $parents = ParentModel::count();
 
         $latestActivity = ChildActivity::whereDate('activity_date', Carbon::today())
             ->orderByDesc('created_at')
@@ -49,6 +53,6 @@ class DashboardController extends Controller
 
 
 
-        return view('admin.dashboard', compact('users_count', 'students', 'latestActivity', 'imagesOfCActivity' , 'notifications'));
+        return view('admin.dashboard', compact('users_count', 'childs', 'totalActivities' , 'latestActivity', 'parents', 'imagesOfCActivity', 'notifications'));
     }
 }
