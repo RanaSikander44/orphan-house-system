@@ -293,26 +293,31 @@
                                             <!-- Academic Year -->
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Email Address</label>
-                                                <input type="email" class="form-control" name="email">
+                                                <input type="email" class="form-control" name="email"
+                                                    value="{{ old('email') }}">
                                             </div>
 
                                             <!-- Admission Number -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="number" name="phone_no" class="text-muted form-control">
+                                                <input type="number" name="phone_no" class="text-muted form-control"
+                                                    value="{{ old('phone_no') }}">
                                             </div>
 
                                             <!-- Admission Date -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Current Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
-                                                    name="current_address" class="form-control" rows="3"></textarea>
+                                                    name="current_address" class="form-control" rows="3">
+                                                {{  old('current_address') }}
+                                                </textarea>
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <label for="permanentAddress" class="text-muted mb-2">Permanent
                                                     Address</label>
                                                 <textarea id="permanentAddress" style="resize: none;"
-                                                    name="permanent_address" class="form-control" rows="3"></textarea>
+                                                    name="permanent_address" class="form-control" rows="3">
+                                                    {{  old('permanent_address') }}</textarea>
                                             </div>
 
                                         </div>
@@ -334,27 +339,31 @@
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Blood Group</label>
                                                 <div class="cp_wrapperblgroup">
-                                                    <select class="select2blgroup" name="blood_group">
-                                                        <option value="A+">A+</option>
-                                                        <option value="B+">B+</option>
-                                                        <option value="AB+">AB+</option>
-                                                        <option value="O+">O+</option>
-                                                        <option value="A-">A-</option>
-                                                        <option value="B-">B-</option>
-                                                        <option value="AB-">AB-</option>
+                                                    <select class="select2blgroup form-control" name="blood_group">
+                                                        <option value="A+" {{ old('blood_group') == 'A+' ? 'selected' : '' }}>A+</option>
+                                                        <option value="B+" {{ old('blood_group') == 'B+' ? 'selected' : '' }}>B+</option>
+                                                        <option value="AB+" {{ old('blood_group') == 'AB+' ? 'selected' : '' }}>AB+</option>
+                                                        <option value="O+" {{ old('blood_group') == 'O+' ? 'selected' : '' }}>O+</option>
+                                                        <option value="A-" {{ old('blood_group') == 'A-' ? 'selected' : '' }}>A-</option>
+                                                        <option value="B-" {{ old('blood_group') == 'B-' ? 'selected' : '' }}>B-</option>
+                                                        <option value="AB-" {{ old('blood_group') == 'AB-' ? 'selected' : '' }}>AB-</option>
+                                                        <option value="O-" {{ old('blood_group') == 'O-' ? 'selected' : '' }}>O-</option>
                                                     </select>
+
                                                 </div>
                                             </div>
 
                                             <!-- Admission Date -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Height (In)</label>
-                                                <input type="number" class="form-control" name="height">
+                                                <input type="number" class="form-control" name="weight"
+                                                    value="{{ old('weight') }}" placeholder="Enter weight">
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <label for="permanentAddress" class="text-muted mb-2">Weight
                                                     (Kg)</label>
-                                                <input type="number" class="form-control" name="weight">
+                                                <input type="number" class="form-control" name="weight"
+                                                    value="{{ old('weight') }}" placeholder="Enter weight">
                                             </div>
 
                                         </div>
@@ -497,51 +506,57 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <!-- Academic Year -->
+                                            <!-- Guardian First Name -->
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">First Name</label>
-                                                <input type="text" class="form-control" name="guardian_name">
+                                                <input type="text" class="form-control" name="guardian_name"
+                                                    value="{{ old('guardian_name') }}">
                                             </div>
 
-                                            <!-- Admission Number -->
+                                            <!-- Guardian Last Name -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="text-muted form-control"
-                                                    name="guardian_last_name">
+                                                    name="guardian_last_name" value="{{ old('guardian_last_name') }}">
                                             </div>
 
-                                            <!-- Admission Date -->
+                                            <!-- Guardian Gender -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Gender</label>
                                                 <div class="cp_wrapperGg">
                                                     <select class="select2Gg form-control" name="guardian_gender">
-                                                        <option value=""> --Select-- </option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
+                                                        <option value="">--Select--</option>
+                                                        <option value="Male" {{ old('guardian_gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                                                        <option value="Female" {{ old('guardian_gender') == 'Female' ? 'selected' : '' }}>Female</option>
                                                     </select>
                                                 </div>
                                             </div>
 
+                                            <!-- Guardian Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Email</label>
-                                                <input type="email" class="form-control" name="guardian_email">
+                                                <input type="email" class="form-control" name="guardian_email"
+                                                    value="{{ old('guardian_email') }}">
                                             </div>
 
-
+                                            <!-- Guardian Occupation -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Occupation</label>
-                                                <input type="text" class="form-control" name="guardian_occupation">
+                                                <input type="text" class="form-control" name="guardian_occupation"
+                                                    value="{{ old('guardian_occupation') }}">
                                             </div>
 
+                                            <!-- Guardian Phone Number -->
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
-                                                <input type="text" class="form-control" name="guardian_phone_no">
+                                                <input type="text" class="form-control" name="guardian_phone_no"
+                                                    value="{{ old('guardian_phone_no') }}">
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Mother Information -->
                             <div class="col-6 d-none" id="mother-info">
@@ -557,22 +572,21 @@
                                                 <label for="mother_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="mother_name"
-                                                    id="mother_first_name">
+                                                    id="mother_first_name" value="{{ old('mother_name') }}">
                                             </div>
 
                                             <!-- Last Name -->
                                             <div class="col-6">
-                                                <label for="mother_last_name" class="text-muted mb-2">Last
-                                                    Name</label>
+                                                <label for="mother_last_name" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="form-control" name="mother_last_name"
-                                                    id="mother_last_name">
+                                                    id="mother_last_name" value="{{ old('mother_last_name') }}">
                                             </div>
 
                                             <!-- Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="mother_email" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="mother_email"
-                                                    id="mother_email">
+                                                    id="mother_email" value="{{ old('mother_email') }}">
                                             </div>
 
                                             <!-- Occupation -->
@@ -580,20 +594,20 @@
                                                 <label for="mother_occupation"
                                                     class="text-muted mb-2">Occupation</label>
                                                 <input type="text" class="form-control" name="mother_occupation"
-                                                    id="mother_occupation">
+                                                    id="mother_occupation" value="{{ old('mother_occupation') }}">
                                             </div>
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="mother_phone" class="text-muted mb-2">Phone
-                                                    Number</label>
+                                                <label for="mother_phone" class="text-muted mb-2">Phone Number</label>
                                                 <input type="text" class="form-control" name="mother_phone_no"
-                                                    id="mother_phone">
+                                                    id="mother_phone" value="{{ old('mother_phone_no') }}">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Father Information -->
                             <div class="col-6 d-none" id="father-info">
@@ -609,22 +623,21 @@
                                                 <label for="father_first_name" class="text-muted mb-2">First
                                                     Name</label>
                                                 <input type="text" class="form-control" name="father_name"
-                                                    id="father_first_name">
+                                                    id="father_first_name" value="{{ old('father_name') }}">
                                             </div>
 
                                             <!-- Last Name -->
                                             <div class="col-6">
-                                                <label for="father_last_name" class="text-muted mb-2">Last
-                                                    Name</label>
+                                                <label for="father_last_name" class="text-muted mb-2">Last Name</label>
                                                 <input type="text" class="form-control" name="father_last_name"
-                                                    id="father_last_name">
+                                                    id="father_last_name" value="{{ old('father_last_name') }}">
                                             </div>
 
                                             <!-- Email -->
                                             <div class="col-6 mt-3">
                                                 <label for="father_email" class="text-muted mb-2">Email</label>
                                                 <input type="email" class="form-control" name="father_email"
-                                                    id="father_email">
+                                                    id="father_email" value="{{ old('father_email') }}">
                                             </div>
 
                                             <!-- Occupation -->
@@ -632,20 +645,20 @@
                                                 <label for="father_occupation"
                                                     class="text-muted mb-2">Occupation</label>
                                                 <input type="text" class="form-control" name="father_occupation"
-                                                    id="father_occupation">
+                                                    id="father_occupation" value="{{ old('father_occupation') }}">
                                             </div>
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="father_phone" class="text-muted mb-2">Phone
-                                                    Number</label>
+                                                <label for="father_phone" class="text-muted mb-2">Phone Number</label>
                                                 <input type="text" class="form-control" name="father_phone_no"
-                                                    id="father_phone">
+                                                    id="father_phone" value="{{ old('father_phone_no') }}">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
 
                         </div>
                     </div>
