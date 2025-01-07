@@ -13,7 +13,14 @@ class Role extends Model
     public $timestamps = false;
 
     // Define the fillable properties (columns that can be mass-assigned)
-    protected $fillable = ['name' , 'guard_name'];
+    protected $fillable = ['name', 'guard_name'];
 
     // You can add relationships, scopes, or other methods here as needed
+
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
 }

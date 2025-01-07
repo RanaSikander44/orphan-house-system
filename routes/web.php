@@ -1,12 +1,17 @@
 <?php
 
 use App\Http\Controllers\admin\ChildActiviesController;
+use App\Http\Controllers\admin\DonationRequestController;
 use App\Http\Controllers\admin\DormitoryController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
+use App\Http\Controllers\donor\AdoptionChildDonor;
+use App\Http\Controllers\donor\DonorController;
+use App\Http\Controllers\donor\DonorPaymentController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\CityController;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\admin\RolesController;
@@ -16,6 +21,7 @@ use App\Http\Controllers\admin\AdoptionController;
 use App\Http\Controllers\admin\AcademicYearController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\StaffController;
+use App\Http\Controllers\admin\PaymentController;
 
 
 Route::get('/', function () {
@@ -38,13 +44,37 @@ Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 
 Route::get('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
 
-
-
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    Route::middleware('Role:Donor')->group(function () {
+
+        Route::get('donor/adoptchild', [AdoptionChildDonor::class, 'index'])->name('donor.adopt.child');
+        Route::get('donor/enquiry/view/{id}', [AdoptionChildDonor::class, 'view'])->name('donor.enquiry.view');
+        Route::get('donor/adoption/requests', [AdoptionChildDonor::class, 'requests'])->name('donor.reqs');
+        Route::get('donor/adoption/payment/{id}', [DonorPaymentController::class, 'index'])->name('donor.payment.req');
+        Route::post('donor/adoption/make/payment', [DonorPaymentController::class, 'makePayment'])->name('donor.payment');
 
 
+
+        // Activities of Child Assigned To Donors 
+
+        Route::get('donor/child/activites', [DonorController::class, 'donorChildAct'])->name('donor.child.activity');
+
+
+
+
+        Route::post('/donor/adopt/request', [AdoptionChildDonor::class, 'requestAdoption'])->name('donor.adopt.request');
+
+        Route::post('/donor/payment/process', [AdoptionChildDonor::class, 'processPayment'])->name('donor.payment.process');
+
+    });
+
+
+
+
+    Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware('Role:Admin');
+    Route::get('/donor/dashboard', [DonorController::class, 'dashboard'])->name('donor.dashboard')->middleware('Role:Donor');
 
 
     // Academic Year
@@ -114,6 +144,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('staff', StaffController::class);
     Route::get('staff/delete/{id}', [StaffController::class, 'delete'])->name('staff.delete');
     Route::get('staff/documents/delete/{id}', [StaffController::class, 'deleteStaffDocs'])->name('staff.docs.delete');
+
     // Assign Childs to nanny
     Route::get('staff/nanny/assign-childs/{id}', [StaffController::class, 'assignChilds'])->name('assign.childs');
     Route::post('staff/nanny/assign-childs-nanny/{id}', [StaffController::class, 'assignChildsToNanny'])->name('assign.childs.submit');
@@ -126,7 +157,6 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Settings
-
     Route::get('settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('settings/stores', [SettingsController::class, 'store'])->name('settings.store');
     Route::put('settings/update/{id}', [SettingsController::class, 'update'])->name('settings.update');
@@ -169,6 +199,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('add/room/edit/{id}', [DormitoryController::class, 'edit'])->name('room.edit');
     Route::post('add/room/update/{id}', [DormitoryController::class, 'update'])->name('room.update');
     Route::get('add/room/delete/{id}', [DormitoryController::class, 'delete'])->name('room.delete');
+
+    // Donation Requests of donors
+    Route::get('admin/donation/requests', [DonationRequestController::class, 'index'])->name('admin.donations.req');
+    Route::get('admin/donation/requests/{id}', [DonationRequestController::class, 'view'])->name('admin.donations.req.view');
+    Route::get('admin/donation/requests/accept/{id}', [DonationRequestController::class, 'accept'])->name('admin.adopt.req.accept');
 
 
 

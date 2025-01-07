@@ -126,7 +126,7 @@
                                                 <div class="cp_wrapper">
                                                     <select class="select2" name="role_id">
                                                         @forelse($roles as $list)
-                                                            <option value="{{ $list->id }}" {{ $list->id == $edit->role_id ? 'selected' : '' }}>{{ $list->name }}</option>
+                                                            <option value="{{ $list->id }}" {{ $list->id == $edit->Users->role_id ? 'selected' : '' }}>{{ $list->name }}</option>
                                                         @empty
                                                             <option value="">No Data Found !</option>
                                                         @endforelse

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\donorSettings;
 use App\Models\settings;
 use App\Models\documents_title;
 use Illuminate\Http\Request;
@@ -12,9 +13,10 @@ class SettingsController extends Controller
     public function index()
     {
         $settings = settings::first();
+        $donorSetting = donorSettings::first();
         $child_documents = documents_title::where('document_for', 'child')->get();
         $staff_documents = documents_title::where('document_for', 'staff')->get();
-        return view('admin.settings.index', compact('settings', 'child_documents', 'staff_documents'));
+        return view('admin.settings.index', compact('settings', 'child_documents', 'staff_documents' , 'donorSetting'));
     }
 
     public function store(Request $req)
@@ -79,6 +81,17 @@ class SettingsController extends Controller
                         ]);
                     }
                 }
+            }
+        }
+
+
+        // Settings of donors 
+
+        if ($req->has('min_dayes_for_req_donors')) {
+            $donorSettings = donorSettings::where('id', '1')->first();
+            if ($donorSettings) {
+                $donorSettings->min_dayes_for_req_donors = $req->min_dayes_for_req_donors;
+                $donorSettings->save();
             }
         }
 

@@ -13,9 +13,12 @@
                 </tr>
             </thead>
             <tbody>
+                @php 
+                     $index = 1;
+                @endphp
                 @foreach ($dormitory as $list)                
                     <tr>
-                        <td>{{ $list->id }}</td>
+                        <td>{{ $index++ }}</td>
                         <td>{{ $list->title }}</td>
                         <td>{{ $list->max_number_bed }}</td>
                         <td>
