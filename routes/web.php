@@ -101,6 +101,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
     Route::post('enquiry/filter/school', [AdoptionController::class, 'schooldata'])->name('filter.school');
+    Route::post('chids/filter', [AdoptionController::class, 'filter'])->name('filter.childs');
+
+
+
 
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users');    // List users

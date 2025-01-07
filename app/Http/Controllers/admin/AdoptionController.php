@@ -22,6 +22,7 @@ use App\Models\Schools;
 use App\Models\City;
 use App\Models\Staff;
 use App\Models\User;
+use App\Models\Role;
 
 
 
@@ -30,8 +31,13 @@ class AdoptionController extends Controller
 {
     public function index()
     {
+
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+
         $childrens = child::orderBy('id', 'desc')->paginate(10);
-        return view('admin.adoptions.index', compact('childrens'));
+        return view('admin.adoptions.index', compact('childrens', 'roles', 'nannies', 'schools'));
     }
 
 
@@ -400,5 +406,176 @@ class AdoptionController extends Controller
             'success' => 'Document has deleted !',
         ]);
     }
+    
+
+    public function filter(Request $req)
+    {
+        // Helper function to map child data consistently
+        $mapChildData = function ($child) {
+            return [
+                'id' => $child->id ?? null,
+                'enquiry_no' => $child->enquiry_no ?? 'N/A',
+                'first_name' => $child->first_name ?? 'N/A',
+                'last_name' => $child->last_name ?? 'N/A',
+                'academicyear_title' => $child->academicyear->title ?? 'N/A',
+                'adoption_date' => $child->adoption_date ?? null,
+                'status_of_adoption' => $child->status_of_adoption ?? 'N/A',
+                'age' => $child->age ?? 'Unknown Age',
+                'school_name' => $child->school->name ?? 'No School',
+            ];
+        };
+
+        // Initialize the result collection
+        $result = collect();
+
+        // Case: Both `nanny_id` and `school_id` are provided
+        if ($req->nanny_id !== 'null' && $req->school_id !== 'null') {
+            $nanny = Staff::where('user_id', $req->nanny_id)->first();
+
+            if ($nanny) {
+                $children = NannyChilds::with(['child.school', 'child.academicyear'])
+                    ->where('nanny_id', $nanny->id)
+                    ->whereHas('child', function ($query) use ($req) {
+                        $query->where('school_id', $req->school_id);
+                    })
+                    ->get();
+
+                $result = $children->map(fn($nannyChild) => $mapChildData($nannyChild->child));
+            }
+        }
+
+        // Case: Only `nanny_id` is provided
+        if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
+            $nanny = Staff::where('user_id', $req->nanny_id)->first();
+
+            if ($nanny) {
+                $children = NannyChilds::with(['child.school', 'child.academicyear'])
+                    ->where('nanny_id', $nanny->id)
+                    ->get();
+
+                $result = $children->map(fn($nannyChild) => $mapChildData($nannyChild->child));
+            }
+        }
+
+        // Case: Only `school_id` is provided
+        if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
+            $children = Child::with(['school', 'academicyear'])
+                ->where('school_id', $req->school_id)
+                ->get();
+
+            $result = $children->map(fn($child) => $mapChildData($child));
+        }
+
+        // Case: No filters or both filters are null
+        if ($req->nanny_id === 'null' && $req->school_id === 'null') {
+            $children = Child::with(['school', 'academicyear'])->get();
+            $result = $children->map(fn($child) => $mapChildData($child));
+        }
+
+        // Return filtered data or all data if no filters matched
+        return response()->json($result);
+    }
+
+
+
+
+
+    // public function filter(Request $req)
+    // {
+    //     // Initialize $result to avoid undefined variable error
+    //     $result = [];
+
+    //     // Case where both nanny_id and school_id are provided
+    //     if ($req->nanny_id !== 'null' && $req->school_id !== 'null') {
+    //         $nanny = Staff::where('user_id', $req->nanny_id)->first();
+
+    //         if (!$nanny) {
+    //             return response()->json(['error' => 'Nanny not found'], 404);
+    //         }
+
+    //         $childrenQuery = NannyChilds::with(['child.school'])
+    //             ->where('nanny_id', $nanny->id)
+    //             ->whereHas('child', function ($query) use ($req) {
+    //                 if ($req->school_id && $req->school_id !== 'null') {
+    //                     $query->where('school_id', $req->school_id);
+    //                 }
+    //             });
+
+    //         $children = $childrenQuery->get();
+
+    //         $result = $children->map(function ($nannyChild) {
+    //             return [
+    //                 'id' => $nannyChild->child->id ?? null,
+    //                 'enquiry_no' => $nannyChild->child->enquiry_no ?? 'N/A',
+    //                 'first_name' => $nannyChild->child->first_name ?? 'N/A',
+    //                 'last_name' => $nannyChild->child->last_name ?? 'N/A',
+    //                 'academicyear_title' => $nannyChild->child->academicyear->title ?? 'N/A',
+    //                 'adoption_date' => $nannyChild->child->adoption_date ?? null,
+    //                 'status_of_adoption' => $nannyChild->child->status_of_adoption ?? 'N/A',
+    //             ];
+    //         });
+    //     }
+
+    //     // Case where only nanny_id is provided
+    //     if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
+    //         $nannyID = Staff::where('user_id', $req->nanny_id)->first();
+
+    //         // Check if nanny exists
+    //         if (!$nannyID) {
+    //             return response()->json(['error' => 'Nanny not found'], 404);
+    //         }
+
+    //         // Get nanny children
+    //         $nannyChildren = NannyChilds::with('child.school') // Correcting the model name to PascalCase
+    //             ->where('nanny_id', $nannyID->id)
+    //             ->get();
+
+    //         // Map the result to the desired output format
+    //         $result = $nannyChildren->map(function ($nannyChild) {
+    //             return [
+    //                 'id' => $nannyChild->child->id ?? null,
+    //                 'enquiry_no' => $nannyChild->child->enquiry_no ?? 'N/A',
+    //                 'first_name' => $nannyChild->child->first_name ?? 'N/A',
+    //                 'last_name' => $nannyChild->child->last_name ?? 'N/A',
+    //                 'academicyear_title' => $nannyChild->child->academicyear->title ?? 'N/A',
+    //                 'adoption_date' => $nannyChild->child->adoption_date,
+    //                 'status_of_adoption' => $nannyChild->child->status_of_adoption ?? 'N/A',
+    //             ];
+    //         });
+    //     }
+
+    //     // Case where only school_id is provided
+    //     if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
+    //         // Fetch children directly from the Child table
+    //         $children = Child::with('school')
+    //             ->where('school_id', $req->school_id)
+    //             ->get();
+
+    //         $result = $children->map(function ($child) {
+    //             return [
+    //                 'id' => $child->id,
+    //                 'first_name' => $child->first_name,
+    //                 'last_name' => $child->last_name,
+    //                 'age' => $child->age,
+    //                 'school_name' => $child->school->name ?? 'No School',
+    //             ];
+    //         });
+    //     }
+
+
+    //     // If no conditions were met, return an error message
+    //     if (empty($result)) {
+
+    //         $data = child::all();
+    //         return response()->json($data);
+
+    //     }
+
+    //     // Return the result
+    //     return response()->json($result);
+    // }
+
+
+
 
 }
