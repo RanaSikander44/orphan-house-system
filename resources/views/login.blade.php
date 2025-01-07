@@ -66,7 +66,28 @@
             </div>
         </div>
     </div>
-<!-- 
+
+
+    <script>
+        $(document).ready(function () {
+            @if(session('error'))
+                $.toast({
+                    heading: 'Error',
+                    text: '{{ session('error') }}',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    position: 'top-right',
+                    loader: true,
+                    loaderBg: '#f44336', // Red color for the loader
+                });
+            @endif
+        });
+    </script>
+
+
+
+
+    <!-- 
     <script>
         $(document).ready(function () {
             $("#loginForm").on("submit", function (event) {

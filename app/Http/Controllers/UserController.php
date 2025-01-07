@@ -84,11 +84,10 @@ class UserController extends Controller
         }
 
         // Redirect back to login with error
-        dd('not matched');
-        // return redirect()
-        //     ->route('login')
-        //     ->withErrors(['email' => 'Invalid credentials. Please try again.'])
-        //     ->withInput($request->only('email'));
+        return redirect()
+            ->route('login')
+            ->with('error', 'Invalid credentials. Please try again.')
+            ->withInput($request->only('email'));
     }
 
     public function dashboardPage()
