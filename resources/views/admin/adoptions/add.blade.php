@@ -212,9 +212,9 @@
                                                 <input type="text" class="form-control bg-light" name="age"
                                                     id="ChildAge" readonly value="{{ old('age') }}">
                                                 <input type="text" class="d-none"
-                                                    value="{{ $settings->min_age_of_child }}" id="minAge">
+                                                    value="{{ $settings->min_age_of_child ?? '' }}" id="minAge">
                                                 <input type="text" class="d-none"
-                                                    value="{{ $settings->max_age_of_child }}" id="maxAge">
+                                                    value="{{ $settings->max_age_of_child ?? '' }}" id="maxAge">
                                                 @error('age')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror

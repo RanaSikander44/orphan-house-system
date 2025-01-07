@@ -16,7 +16,13 @@ class Staff extends Model
 
     public function Users()
     {
-        return $this->belongsTo(User::class, 'user_id' , 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
 

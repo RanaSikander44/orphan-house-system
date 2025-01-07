@@ -76,17 +76,15 @@ class StaffController extends Controller
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        // $user->password = bcrypt($request->password);
 
-        $user->password = $request->password; // Hash the password securely
+        $user->password = $request->password; 
 
         $user->role_id = $request->role_id;
         $user->save();
 
         // Assign role using Spatie
-        $role = Role::findById($request->role_id); // Fetch the role by ID
-        // dd($role);
-        $user->assignRole($role->name); // Assign the role by name
+        $role = Role::findById($request->role_id);
+        $user->assignRole($role->name); 
 
         // Create staff record
         $Staff = new Staff();
@@ -143,104 +141,6 @@ class StaffController extends Controller
     }
 
 
-
-    // public function store(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'first_name' => 'required|string',
-    //         'last_name' => 'required',
-    //         'dob' => 'required',
-    //         'age' => 'required',
-    //         'gender' => 'required|string',
-    //         'email' => [
-    //             'required',
-    //             'email',
-    //             Rule::unique('users', 'email'),
-    //         ],
-    //         'password' => 'required|min:8',
-    //         'religion' => 'required|string',
-    //         'role_id' => 'required|integer',
-    //         'phone_no' => 'required',
-    //         'emergency_contact_number' => 'required',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return redirect()->route('staff.create')
-    //             ->withErrors($validator)
-    //             ->withInput();
-    //     }
-
-    //     $user = new User();
-    //     $user->first_name = $request->first_name;
-    //     $user->last_name = $request->last_name;
-    //     $user->email = $request->email;
-    //     $user->password = bcrypt($request->password);
-    //     $user->role_id = $request->role_id;
-    //     $user->save();
-
-    //     //  dd($req->all());
-    //     $Staff = new Staff();
-    //     $Staff->user_id = $user->id;
-    //     $Staff->dob = $request->dob;
-    //     $Staff->age = $request->age;
-    //     $Staff->gender = $request->gender;
-    //     $Staff->religion = $request->religion;
-    //     $Staff->phone_no = $request->phone_no;
-    //     $Staff->emergency_contact_number = $request->emergency_contact_number;
-    //     $Staff->caste = $request->caste;
-    //     $Staff->current_address = $request->current_address;
-    //     $Staff->permanent_address = $request->permanent_address;
-
-
-
-    //     if ($image = $request->file('staff_image')) {
-    //         $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
-    //         $destinationPath = public_path('backend/images/staff');
-    //         $image->move($destinationPath, $uniqueName);
-    //         $Staff->staff_image = $uniqueName ? $uniqueName : 'null';
-    //     }
-
-    //     $Staff->save();
-
-
-    //     $titles = $request->input('document_titles');
-    //     $documents = $request->file('document_names');
-
-    //     foreach ($titles as $index => $title) {
-    //         if (isset($documents[$index])) {
-    //             $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
-
-    //             $uploadPath = public_path('backend/documents');
-
-    //             if (!file_exists($uploadPath)) {
-    //                 mkdir($uploadPath, 0777, true);
-    //             }
-
-    //             $documents[$index]->move($uploadPath, $uniqueName);
-
-    //             StaffDocuments::create([
-    //                 'staff_id' => $Staff->id,
-    //                 'title' => $title,
-    //                 'name' => $uniqueName,
-    //             ]);
-
-    //         } else {
-    //             StaffDocuments::create([
-    //                 'staff_id' => $Staff->id,
-    //                 'title' => $title,
-    //                 'name' => null,
-    //             ]);
-    //         }
-    //     }
-
-    //     if ($Staff->save()) {
-    //         return redirect()->route('staff.index')->with('success', 'Staff Added !');
-    //     }
-    // }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $staff = staff::where('id', $id)->first();

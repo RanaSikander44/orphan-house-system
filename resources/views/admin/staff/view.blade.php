@@ -27,7 +27,7 @@
                     <div class="white-box text-muted mt-5 p-3 border rounded shadow-sm text-center">
                         <div class="row py-2 border-bottom align-items-center">
                             <div class="col-6 fw-bold">Name:</div>
-                            <div class="col-6">{{ $staff->first_name }} {{ $staff->last_name }}</div>
+                            <div class="col-6">{{ $staff->Users->first_name }} {{ $staff->Users->last_name }}</div>
                         </div>
 
                         <!-- <div class="row py-2 border-bottom align-items-center">
@@ -55,7 +55,7 @@
                             </button>
                         </li>
 
-                        @if($staff->role->name === 'Nanny')
+                        @if($staff->Users->role->name === 'Nanny')
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link custom-btn" id="childs-tab" data-bs-toggle="pill"
                                     data-bs-target="#childs" type="button" role="tab" aria-controls="childs"
@@ -89,7 +89,7 @@
                                             <h6 class="mb-0 text-muted">First Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->user_id }}</p>
+                                            <p class="mb-0">{{ $staff->Users->first_name }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
@@ -97,7 +97,7 @@
                                             <h6 class="mb-0 text-muted">Last Name</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->user_id }}</p>
+                                            <p class="mb-0">{{ $staff->Users->last_name }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
@@ -105,7 +105,7 @@
                                             <h6 class="mb-0 text-muted">Role</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->role->name }}</p>
+                                            <p class="mb-0">{{ $staff->Users->role->name }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
@@ -121,7 +121,9 @@
                                             <h6 class="mb-0 text-muted">Age</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->age . ' Years' }}</p>
+                                            <p class="mb-0">
+                                                {{ \Carbon\Carbon::parse($staff->dob)->age }} years old
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
@@ -137,7 +139,7 @@
                                             <h6 class="mb-0 text-muted">Email</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $staff->email }}</p>
+                                            <p class="mb-0">{{ $staff->Users->email }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center py-3 border-bottom">
@@ -185,7 +187,7 @@
                         </div>
 
                         <!-- Childs Tab Pane (Visible only if the role is 'Nanny') -->
-                        @if($staff->role->name === 'Nanny')
+                        @if($staff->Users->role->name === 'Nanny')
                             <div class="tab-pane fade" id="childs" role="tabpanel" aria-labelledby="childs-tab">
                                 <h4 class="p-4 text-muted">Assigned Childs</h4>
                                 <div class="pt-0 p-4 rounded-3">

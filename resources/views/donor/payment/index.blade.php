@@ -24,7 +24,7 @@
             <div class="mb-3">
                 <label for="cardNumber" class="form-label"><i class="fas fa-credit-card"></i> Credit Card Number</label>
                 <input type="text" class="form-control" id="cardNumber" name="cardNumber"
-                    placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    placeholder="1234 5678 9012 3456" required>
             </div>
 
             <!-- Expiration Date -->

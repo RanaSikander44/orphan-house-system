@@ -123,7 +123,7 @@
 
                             </div>
                             <div class="donor-settings">
-                                <input type="number" class="form-control" name="min_dayes_for_req_donors" value="{{ $donorSetting->min_dayes_for_req_donors }}">
+                                <input type="number" class="form-control" name="min_dayes_for_req_donors" value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
                                 <p class="text-muted mt-3">
                                     This field allows to set the number of days after which a reminder notification
                                     will be sent to donors who have requested for donate but have not completed their
