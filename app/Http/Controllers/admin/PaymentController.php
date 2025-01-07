@@ -9,5 +9,11 @@ use App\Models\payment;
 
 class PaymentController extends Controller
 {
-   
+
+    public function index()
+    {
+        $payments = payment::orderBy('id' , 'desc')->get();
+        return view('admin.payments.index', compact('payments'));
+    }
+
 }

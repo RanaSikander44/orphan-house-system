@@ -18,6 +18,10 @@
                 <label for="amount" class="form-label"><i class="fas fa-money-bill-wave"></i> Amount to be Paid</label>
                 <input type="text" class="form-control" id="amount" name="amount" value="{{ $data->school->fees }}"
                     readonly>
+
+                @error ('amount')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Credit Card Number -->
@@ -25,6 +29,10 @@
                 <label for="cardNumber" class="form-label"><i class="fas fa-credit-card"></i> Credit Card Number</label>
                 <input type="text" class="form-control" id="cardNumber" name="cardNumber"
                     placeholder="1234 5678 9012 3456" required>
+
+                @error ('cardNumber')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Expiration Date -->
@@ -34,12 +42,19 @@
                         Month</label>
                     <input type="text" class="form-control" id="expiryMonth" name="expiryMonth" placeholder="MM"
                         maxlength="2" required>
+
+                    @error ('expiryMonth')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="col-md-6">
                     <label for="expiryYear" class="form-label"><i class="far fa-calendar-alt"></i> Expiration
                         Year</label>
                     <input type="text" class="form-control" id="expiryYear" name="expiryYear" placeholder="YY"
                         maxlength="2" required>
+                    @error ('expiryYear')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -47,6 +62,9 @@
             <div class="mb-3">
                 <label for="cvc" class="form-label"><i class="fas fa-lock"></i> CVC</label>
                 <input type="text" class="form-control" id="cvc" name="cvc" placeholder="123" maxlength="3" required>
+                @error ('cvc')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Cardholder Name -->
@@ -54,6 +72,9 @@
                 <label for="cardHolderName" class="form-label"><i class="fas fa-user"></i> Cardholder Name</label>
                 <input type="text" class="form-control" id="cardHolderName" name="cardHolderName" placeholder="John Doe"
                     required>
+                @error ('cardHolderName')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Submit Button -->

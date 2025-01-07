@@ -211,5 +211,9 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+    // Payments
+    Route::get('admin/payments', [PaymentController::class, 'index'])->name('payments');
+
+
 });
 
