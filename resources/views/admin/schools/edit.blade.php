@@ -89,9 +89,7 @@
             if (!$('.selected-options').find(`[data-value="${value}"]`).length) {
                 const text = $('li[data-value="' + value + '"]').text();
                 gradeSelectedOptionsContainer.append(`
-                <span class="bg-success text-white px-2 py-1 rounded mx-1 mb-1" data-value="${value}">
-                    ${text} <span class="remove-option text-white">&times;</span>
-                </span>
+                
             `);
             }
 

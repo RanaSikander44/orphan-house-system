@@ -74,6 +74,7 @@ class AdoptionController extends Controller
                 'nullable',
                 'email',
                 Rule::unique('children', 'email'),
+                Rule::unique('user', 'email'),
             ],
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
@@ -184,32 +185,34 @@ class AdoptionController extends Controller
         }
 
 
-        $titles = $req->input('document_titles');
-        $documents = $req->file('document_names');
+        if ($req->has('document_titles' && $req->has('document_names'))) {
+            $titles = $req->input('document_titles');
+            $documents = $req->file('document_names');
 
-        foreach ($titles as $index => $title) {
-            if (isset($documents[$index])) {
-                $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
+            foreach ($titles as $index => $title) {
+                if (isset($documents[$index])) {
+                    $uniqueName = uniqid() . '.' . $documents[$index]->getClientOriginalExtension();
 
-                $uploadPath = public_path('backend/documents/childs/');
+                    $uploadPath = public_path('backend/documents/childs/');
 
-                if (!file_exists($uploadPath)) {
-                    mkdir($uploadPath, 0777, true);
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0777, true);
+                    }
+
+                    $documents[$index]->move($uploadPath, $uniqueName);
+
+                    child_documents::create([
+                        'child_id' => $application->id,
+                        'title' => $title,
+                        'name' => $uniqueName,
+                    ]);
+                } else {
+                    child_documents::create([
+                        'child_id' => $application->id,
+                        'title' => $title,
+                        'name' => null,
+                    ]);
                 }
-
-                $documents[$index]->move($uploadPath, $uniqueName);
-
-                child_documents::create([
-                    'child_id' => $application->id,
-                    'title' => $title,
-                    'name' => $uniqueName,
-                ]);
-            } else {
-                child_documents::create([
-                    'child_id' => $application->id,
-                    'title' => $title,
-                    'name' => null,
-                ]);
             }
         }
 
@@ -276,7 +279,8 @@ class AdoptionController extends Controller
             'email' => [
                 'nullable',
                 'email',
-                Rule::unique('children')->ignore($id),  // Check 'children' table, excluding current record
+                Rule::unique('children')->ignore($id),
+                Rule::unique('Users', 'email'),
             ],
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
@@ -406,7 +410,7 @@ class AdoptionController extends Controller
             'success' => 'Document has deleted !',
         ]);
     }
-    
+
 
     public function filter(Request $req)
     {

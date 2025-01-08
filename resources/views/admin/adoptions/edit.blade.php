@@ -321,7 +321,12 @@
                                             <div class="col-6 mb-2">
                                                 <label for="" class="text-muted mb-2">Email Address</label>
                                                 <input type="email" class="form-control" name="email"
-                                                    value="{{ $child->email }}">
+                                                    value="{{ old('email', $child->email) }}">
+
+
+                                                @error('email')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
 
                                             <!-- Admission Number -->
