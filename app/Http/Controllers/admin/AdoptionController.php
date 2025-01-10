@@ -74,7 +74,7 @@ class AdoptionController extends Controller
                 'nullable',
                 'email',
                 Rule::unique('children', 'email'),
-                Rule::unique('user', 'email'),
+                Rule::unique('users', 'email'),
             ],
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
