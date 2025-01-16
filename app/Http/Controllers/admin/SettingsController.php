@@ -16,18 +16,18 @@ class SettingsController extends Controller
         $donorSetting = donorSettings::first();
         $child_documents = documents_title::where('document_for', 'child')->get();
         $staff_documents = documents_title::where('document_for', 'staff')->get();
-        return view('admin.settings.index', compact('settings', 'child_documents', 'staff_documents' , 'donorSetting'));
+        return view('admin.settings.index', compact('settings', 'child_documents', 'staff_documents', 'donorSetting'));
     }
 
     public function store(Request $req)
     {
-
         // Update or create the settings record
         $settings = settings::updateOrCreate(
             ['id' => 1],  // Assuming you're updating the first record
             [
                 'min_age_of_child' => $req->min_age_of_child,
                 'max_age_of_child' => $req->max_age_of_child,
+                'charges_of_a_child' => $req->charges_of_a_child
             ]
         );
 
@@ -57,7 +57,7 @@ class SettingsController extends Controller
         }
 
 
-        // Stafff Titles
+        // Staff Titles
 
 
         if ($req->has('staff_document_title') && is_array($req->staff_document_title)) {
@@ -88,11 +88,13 @@ class SettingsController extends Controller
         // Settings of donors 
 
         if ($req->has('min_dayes_for_req_donors')) {
-            $donorSettings = donorSettings::where('id', '1')->first();
-            if ($donorSettings) {
-                $donorSettings->min_dayes_for_req_donors = $req->min_dayes_for_req_donors;
-                $donorSettings->save();
-            }
+
+            $donorSettings = donorSettings::updateOrCreate(
+                ['id' => 1],
+                [
+                    'min_dayes_for_req_donors' => $req->min_dayes_for_req_donors,
+                ]
+            );
         }
 
         // Redirect with success message

@@ -44,7 +44,13 @@
                                 style="{{ $details->req_status == 1 ? 'pointer-events: none; opacity: 0.65;' : '' }}">
                                 {{ $details->req_status == 1 ? 'Accepted' : 'Accept' }}
                             </a>
+
+                            @if($details->req_status != 1)
+                                <a href="{{ route('admin.adopt.req.reject', $details->id)}}"
+                                    class="btn btn-sm btn-danger">Reject</a>
+                            @endif
                         </th>
+
                     </tr>
                 </tbody>
             </table>

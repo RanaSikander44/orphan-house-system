@@ -208,6 +208,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/donation/requests', [DonationRequestController::class, 'index'])->name('admin.donations.req');
     Route::get('admin/donation/requests/{id}', [DonationRequestController::class, 'view'])->name('admin.donations.req.view');
     Route::get('admin/donation/requests/accept/{id}', [DonationRequestController::class, 'accept'])->name('admin.adopt.req.accept');
+    Route::get('admin/donation/requests/reject/{id}', [DonationRequestController::class, 'reject'])->name('admin.adopt.req.reject');
 
 
 

@@ -10,4 +10,9 @@ class payment extends Model
     {
         return $this->belongsTo(User::class, 'paid_by', 'id');
     }
+
+    public function renewalType()
+    {
+        return $this->belongsTo(Payment_renewal::class , 'id' , 'payment_id');
+    }
 }

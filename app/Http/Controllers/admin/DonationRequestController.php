@@ -49,5 +49,23 @@ class DonationRequestController extends Controller
         }
     }
 
+    public function reject($id)
+    {
+        $detail = donorChildReq::findOrFail($id);
+
+        $child = child::where('id', $detail->child_id)->first();
+        $child->donor_req_donation_status = 0;
+        $child->update();
+
+        $notify = new notifications();
+        $notify->message = ' Your donation request for ' . $child->first_name . ' ' . $child->last_name . ' has been rejected' . '.';
+        $notify->notification_for = $detail->donor_id;
+        $notify->save();
+
+        $detail->delete();
+
+        return redirect()->route('admin.donations.req')->with('success', 'Donation Request rejected!');
+    }
+
 
 }

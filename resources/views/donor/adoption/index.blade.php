@@ -26,7 +26,7 @@
                     <th scope="col">Date Of Birth</th>
                     <th scope="col">Adoption Date</th>
                     <th scope="col">Status Of Adoption</th>
-                    <th scope="col">School Fees</th>
+                    <th scope="col">Child Fees</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -41,7 +41,7 @@
                         <td>{{$list->dob}}</td>
                         <td>{{ $list->adoption_date }}</td>
                         <td>{{$list->status_of_adoption}}</td>
-                        <td>{{$list->school->fees}}</td>
+                        <td>{{$list->school->fees + $child_fess->charges_of_a_child }}</td>
                         <td>
                             <a class="btn btn-sm btn-primary" href="{{ route('donor.enquiry.view', $list->id) }}"
                                 title="View Enquiry">Details
