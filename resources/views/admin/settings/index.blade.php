@@ -12,7 +12,8 @@
                 <div class="row">
                     <div class="col-3 p-0">
                         <div class="p-3" style="background-color: #f8f9fa;">
-                            <button type="button" class="btn btn-sm btn-block mb-2 active" id="tab1">Child Age</button>
+                            <button type="button" class="btn btn-sm btn-block mb-2 active" id="tab1">Child
+                                Settings</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="docs">Child
                                 Documents</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="staff_docs">Staff
@@ -24,7 +25,11 @@
                     <div class="col-8 ms-5">
                         <!-- Child Age Tab Content -->
                         <div class="tab1">
-                            <div class="d-flex mb-4">
+                            <div>
+                                <label for="charges_of_a_child" class="mb-2">Charges of a Child</label>
+                                <input type="number" min="0" class="form-control" name="charges_of_a_child" value="{{ $settings->charges_of_a_child }}">
+                            </div>
+                            <div class="d-flex mb-4 mt-4">
                                 <div class="flex-fill pe-2">
                                     <label for="min_age_of_student" class="mb-2">Min Age Of Child</label>
                                     <input type="text" class="form-control" name="min_age_of_child"
@@ -123,7 +128,8 @@
 
                             </div>
                             <div class="donor-settings">
-                                <input type="number" class="form-control" name="min_dayes_for_req_donors" value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
+                                <input type="number" class="form-control" name="min_dayes_for_req_donors"
+                                    value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
                                 <p class="text-muted mt-3">
                                     This field allows to set the number of days after which a reminder notification
                                     will be sent to donors who have requested for donate but have not completed their

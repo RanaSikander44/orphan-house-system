@@ -1,4 +1,16 @@
 <?php
+
+use App\Models\Schools;
+use App\Models\payment;
+use App\Models\settings;
+use Carbon\Carbon;
+use App\Models\Payment_renewal;
+use App\Models\child;
+use Illuminate\Support\Facades\Log;
+
+
+
+
 if (!function_exists('getGreeting')) {
     function getGreeting()
     {
@@ -18,3 +30,14 @@ if (!function_exists('getGreeting')) {
         return $greeting;
     }
 }
+
+
+if (!function_exists('DonationPaymnetRenewal')) {
+    function DonationPaymnetRenewal()
+    {
+        
+    }
+}
+
+
+

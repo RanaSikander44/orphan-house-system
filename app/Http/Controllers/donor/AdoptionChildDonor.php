@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\donorChildReq;
 use App\Models\Schools;
+use App\Models\settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class AdoptionChildDonor extends Controller
     public function index()
     {
         $childrens = child::orderBy('enquiry_no', 'desc')->where('donor_id', null)->where('donor_req_donation_status', '0')->paginate(10);
-        return view('donor.adoption.index', compact('childrens'));
+        $child_fess = settings::first('charges_of_a_child');
+        return view('donor.adoption.index', compact('childrens' , 'child_fess'));
     }
 
     public function view($id)

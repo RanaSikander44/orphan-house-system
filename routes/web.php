@@ -101,6 +101,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
     Route::post('enquiry/filter/school', [AdoptionController::class, 'schooldata'])->name('filter.school');
+    Route::post('chids/filter', [AdoptionController::class, 'filter'])->name('filter.childs');
+
+
+
 
     // Users Routes
     Route::get('/users', [UserController::class, 'index'])->name('users');    // List users
@@ -204,7 +208,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/donation/requests', [DonationRequestController::class, 'index'])->name('admin.donations.req');
     Route::get('admin/donation/requests/{id}', [DonationRequestController::class, 'view'])->name('admin.donations.req.view');
     Route::get('admin/donation/requests/accept/{id}', [DonationRequestController::class, 'accept'])->name('admin.adopt.req.accept');
+    Route::get('admin/donation/requests/reject/{id}', [DonationRequestController::class, 'reject'])->name('admin.adopt.req.reject');
 
+
+
+    // Payments
+    Route::get('admin/payments', [PaymentController::class, 'index'])->name('payments');
 
 
 });

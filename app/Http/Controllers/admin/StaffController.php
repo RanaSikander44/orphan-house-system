@@ -10,6 +10,7 @@ use App\Models\StaffDocuments;
 use App\Models\student;
 use Illuminate\Http\Request;
 use App\Models\Staff;
+use App\Models\Schools;
 use App\Models\User;
 // use App\Models\Role;
 use Illuminate\Support\Facades\Validator;

@@ -60,7 +60,6 @@ class SchoolGradesController extends Controller
 
     public function update(Request $req, $id)
     {
-
         // Validate the incoming request data
         $validator = \Validator::make($req->all(), [
             'grade' => 'required|string|max:255',

@@ -295,6 +295,10 @@
                                                 <label for="" class="text-muted mb-2">Email Address</label>
                                                 <input type="email" class="form-control" name="email"
                                                     value="{{ old('email') }}">
+
+                                                @error('email')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
 
                                             <!-- Admission Number -->
@@ -302,6 +306,10 @@
                                                 <label for="" class="text-muted mb-2">Phone Number</label>
                                                 <input type="number" name="phone_no" class="text-muted form-control"
                                                     value="{{ old('phone_no') }}">
+
+                                                @error('phone_no')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
 
                                             <!-- Admission Date -->
@@ -311,6 +319,9 @@
                                                     name="current_address" class="form-control" rows="3">
                                                 {{  old('current_address') }}
                                                 </textarea>
+                                                @error('phone_no')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="col-6 mt-3">
                                                 <label for="permanentAddress" class="text-muted mb-2">Permanent
@@ -318,6 +329,10 @@
                                                 <textarea id="permanentAddress" style="resize: none;"
                                                     name="permanent_address" class="form-control" rows="3">
                                                     {{  old('permanent_address') }}</textarea>
+
+                                                @error('permanent_address')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
 
                                         </div>
@@ -349,7 +364,6 @@
                                                         <option value="AB-" {{ old('blood_group') == 'AB-' ? 'selected' : '' }}>AB-</option>
                                                         <option value="O-" {{ old('blood_group') == 'O-' ? 'selected' : '' }}>O-</option>
                                                     </select>
-
                                                 </div>
                                             </div>
 

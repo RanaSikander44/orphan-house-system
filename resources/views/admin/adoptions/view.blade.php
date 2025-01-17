@@ -142,7 +142,7 @@
                                             <h6 class="mb-0 text-muted">City</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->city->name }}</p>
+                                            <p class="mb-0">{{ $child->city->name ?? '' }}</p>
                                         </div>
                                     </div>
 
@@ -191,7 +191,7 @@
                                             <h6 class="mb-0 text-muted">Campaign</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->academicyear->title }}</p>
+                                            <p class="mb-0">{{ $child->academicyear->title ?? '' }}</p>
                                         </div>
                                     </div>
 
@@ -210,7 +210,7 @@
                                             <h6 class="mb-0 text-muted">Enquiry Type</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->enquiryType->title }}</p>
+                                            <p class="mb-0">{{ $child->enquiryType->title  ?? ''}}</p>
                                         </div>
                                     </div>
 
@@ -219,7 +219,7 @@
                                             <h6 class="mb-0 text-muted">Source Of Information</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->source_of_information }}</p>
+                                            <p class="mb-0">{{ $child->source_of_information  }}</p>
                                         </div>
                                     </div>
 
@@ -252,7 +252,7 @@
                                             <h6 class="mb-0 text-muted">School</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->school->name }}</p>
+                                            <p class="mb-0">{{ $child->school->name ?? ''}}</p>
                                         </div>
                                     </div>
 
@@ -261,7 +261,7 @@
                                             <h6 class="mb-0 text-muted">Grade</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->grade->grade }}</p>
+                                            <p class="mb-0">{{ $child->grade->grade ?? '' }}</p>
                                         </div>
                                     </div>
 
@@ -270,7 +270,7 @@
                                             <h6 class="mb-0 text-muted">Room</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->room->title }}</p>
+                                            <p class="mb-0">{{ $child->room->title ?? '' }}</p>
                                         </div>
                                     </div>
                                 </div>

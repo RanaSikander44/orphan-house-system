@@ -94,8 +94,8 @@ class SchoolController extends Controller
 
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'fees' => 'required|numeric', // changed to numeric for a fee amount
-            'address' => 'required|string|max:500', // assuming address is a string with a max length
+            'fees' => 'required|numeric',
+            'address' => 'required|string|max:500',
         ]);
 
         // Check if validation fails
@@ -112,23 +112,27 @@ class SchoolController extends Controller
 
 
         if ($request->has('grade')) {
+            if (is_array($request->grade)) {
+                AssingedGradesToSchool::where('school_id', $school->id)->delete();
 
-            AssingedGradesToSchool::where('school_id', $id)->delete();
+                $gradesString = $request->grade[0];
+                $grades = explode(',', $gradesString);
 
-            if ($request->has('grade')) {
-                if (is_array($request->grade)) {
-                    $gradesString = $request->grade[0];
-                    $grades = explode(',', $gradesString);
-
-                    foreach ($grades as $gradeId) {
+                foreach ($grades as $gradeId) {
+                    if (empty($gradeId)) {
+                        // Delete the record where grade_id is null for the school
+                        AssingedGradesToSchool::where('school_id', $school->id)->delete();
+                    } else {
+                        // Otherwise, update or create a new entry
                         $data = new AssingedGradesToSchool();
                         $data->school_id = $school->id;
-                        $data->grade_id = $gradeId;
+                        $data->grade_id = (int) $gradeId; // Cast to integer
                         $data->save();
                     }
                 }
             }
         }
+
 
 
         return redirect()->route('schools.index')->with('success', 'School updated !');
