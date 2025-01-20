@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\documents_title;
+use App\Models\DocumentTitlesStaff;
 use App\Models\nannyChilds;
 use App\Models\StaffDocuments;
 use App\Models\student;
@@ -38,7 +39,7 @@ class StaffController extends Controller
     public function create()
     {
         $roles = Role::where('name', '!=', 'Admin')->get();
-        $staff_docs = documents_title::where('document_for', 'staff')->get();
+        $staff_docs = DocumentTitlesStaff::get();
         return view('admin.staff.add', compact('roles', 'staff_docs'));
     }
 
@@ -78,14 +79,14 @@ class StaffController extends Controller
         $user->last_name = $request->last_name;
         $user->email = $request->email;
 
-        $user->password = $request->password; 
+        $user->password = $request->password;
 
         $user->role_id = $request->role_id;
         $user->save();
 
         // Assign role using Spatie
         $role = Role::findById($request->role_id);
-        $user->assignRole($role->name); 
+        $user->assignRole($role->name);
 
         // Create staff record
         $Staff = new Staff();
@@ -248,7 +249,7 @@ class StaffController extends Controller
 
                 $documents[$index]->move($uploadPath, $uniqueName);
 
-                StaffDocuments::where('title', $title)->update([
+                StaffDocuments::where('title', $title)->where('staff_id', $id)->update([
                     'name' => $uniqueName
                 ]);
             }

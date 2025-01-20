@@ -44,27 +44,14 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- Campaign Year -->
-                                            <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Campaign Type <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="cp_wrapper">
-                                                    <select class="select2" name="compaign_id">
-                                                        @forelse ($years as $list)
-                                                            <option value="{{ $list->id }}" {{$child->compaign_id == $list->id ? 'selected' : '' }}>
-                                                                {{ $list->title . ' [' . $list->year . ']' }}
-                                                            </option>
-                                                        @empty
-                                                            <option value="">No Years available</option>
-                                                        @endforelse
-                                                    </select>
-                                                </div>
-                                                @error('compaign_id')
-                                                    <span class="text-danger">The Field is Required.</span>
-                                                @enderror
+
+                                            <div class="cp_wrapper">
+
                                             </div>
 
+
                                             <!-- Enquiry Type -->
-                                            <div class="col-6">
+                                            <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Enquiry Type <span
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="enquiry_type_id">
@@ -73,7 +60,7 @@
                                                             {{ $list->title }}
                                                         </option>
                                                     @empty
-                                                        <option value="">Please add at least one enquiry type from settings
+                                                        <option value="">Please add at least one enquiry type
                                                         </option>
                                                     @endforelse
                                                 </select>
@@ -718,7 +705,7 @@
                                                         <label for="file_{{ $index }}"
                                                             class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>
                                                         <input type="text" class="d-none" name="document_titles[]"
-                                                            value="{{ $list->documentTitle->id }}">
+                                                            value="{{ $list->documentTitle->id}}">
                                                         <input type="file" class="form-control" name="document_names[]"
                                                             id="file_{{ $index }}">
                                                         <div class="docs">

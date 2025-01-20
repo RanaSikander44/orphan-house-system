@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
 use App\Models\documents_title;
+use App\Models\DocumentTitleChild;
 use App\Models\Dormitory;
 use App\Models\enquiry_types;
 use App\Models\nannyChilds;
@@ -43,28 +44,22 @@ class AdoptionController extends Controller
 
     public function add()
     {
-        $years = academicyear::where('status', '1')->get();
         $lastEnquiryID = child::max('enquiry_no');
         $newEnquiryId = $lastEnquiryID ? $lastEnquiryID + 1 : 1;
-        $docs = documents_title::where('document_for', 'child')->get();
+        $docs = DocumentTitleChild::all();
         $settings = settings::first();
         $enquiry_types = enquiry_types::where('status', '1')->get();
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
+        return view('admin.adoptions.add', compact( 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
     }
 
     public function store(Request $req)
     {
 
-
-
-
-
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
-            'compaign_id' => 'required',
             'enquiry_no' => 'required',
             'source_of_information' => 'required',
             'status_of_adoption' => 'required',
@@ -102,7 +97,6 @@ class AdoptionController extends Controller
 
 
         $application = new child();
-        $application->campaign_id = $req->compaign_id;
         $application->enquiry_id = $req->enquiry_type_id;
         $application->enquiry_no = $req->enquiry_no;
         $application->source_of_information = $req->source_of_information;
@@ -271,7 +265,6 @@ class AdoptionController extends Controller
     {
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
-            'compaign_id' => 'required',
             'enquiry_no' => 'required',
             'source_of_information' => 'required',
             'status_of_adoption' => 'required',
@@ -308,7 +301,6 @@ class AdoptionController extends Controller
         }
 
         $application = child::findOrFail($id);
-        $application->campaign_id = $req->compaign_id;
         $application->enquiry_id = $req->enquiry_type_id;
         $application->enquiry_no = $req->enquiry_no;
         $application->source_of_information = $req->source_of_information;
@@ -388,7 +380,7 @@ class AdoptionController extends Controller
 
                     $documents[$index]->move($uploadPath, $uniqueName);
 
-                    child_documents::where('title', $title)->update([
+                    child_documents::where('title', $title)->where('child_id', $id)->update([
                         'name' => $uniqueName
                     ]);
                 }

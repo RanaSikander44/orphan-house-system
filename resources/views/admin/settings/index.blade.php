@@ -27,7 +27,8 @@
                         <div class="tab1">
                             <div>
                                 <label for="charges_of_a_child" class="mb-2">Charges of a Child</label>
-                                <input type="number" min="0" class="form-control" name="charges_of_a_child" value="{{ $settings->charges_of_a_child }}">
+                                <input type="number" min="0" class="form-control" name="charges_of_a_child"
+                                    value="{{ $settings->charges_of_a_child }}">
                             </div>
                             <div class="d-flex mb-4 mt-4">
                                 <div class="flex-fill pe-2">
@@ -43,7 +44,7 @@
                             </div>
                         </div>
 
-                        <!-- Required Documents Tab Content For Child -->
+                        <!-- Documents For Child -->
                         <div class="tab-documents" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h6 class="mb-0 text-muted">Required Documents Title</h6>
@@ -57,21 +58,21 @@
                                         <div class="document-group mb-3">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="{{ $document->id }}"
-                                                    name="student_document_title[{{ $document->id }}]"
+                                                    name="child_documents_title[{{ $document->id }}]"
                                                     value="{{ $document->title }}" placeholder="Enter document title">
                                                 @if ($key > 0)
                                                     <button type="button" class="btn btn-danger btn-sm" title="Remove"
                                                         onclick="deletedoc({{ $document->id }})">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                @endif
+                                                @endif  
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
                                     <div class="document-group mb-3">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="student_document_title[]"
+                                            <input type="text" class="form-control" name="child_documents_title[]"
                                                 placeholder="Enter document title">
                                         </div>
                                     </div>
@@ -79,8 +80,10 @@
                             </div>
                         </div>
 
-                        <!-- Staff Documents -->
+                        <!-- Documents For Child End -->
 
+
+                        <!-- Staff Documents Start -->
 
                         <div class="staff-tab-documents" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
@@ -117,7 +120,6 @@
                                 @endif
                             </div>
                         </div>
-
                         <div class="donor-tab-settings" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
@@ -125,7 +127,6 @@
                                     The number of days entered in this field will determine when a reminder notification
                                     or email is sent to donors if their payment remains pending.
                                 </p> -->
-
                             </div>
                             <div class="donor-settings">
                                 <input type="number" class="form-control" name="min_dayes_for_req_donors"
@@ -137,6 +138,10 @@
                                 </p>
                             </div>
                         </div>
+
+
+                        <!-- Staff Document end -->
+
 
 
                     </div>
@@ -222,7 +227,7 @@
 <script>
     const deletedoc = (id) => {
         $.ajax({
-            url: `{{ route('settings.delete', ':id') }}`.replace(':id', id),
+            url: `{{ route('settings.child.delete', ':id') }}`.replace(':id', id),
             type: 'DELETE',
             data: {
                 _token: csrf, // Include CSRF token
@@ -239,7 +244,7 @@
 
     const deletestaffdoc = (id) => {
         $.ajax({
-            url: `{{ route('settings.delete', ':id') }}`.replace(':id', id),
+            url: `{{ route('settings.staff.delete', ':id') }}`.replace(':id', id),
             type: 'DELETE',
             data: {
                 _token: csrf, // Include CSRF token
@@ -297,7 +302,7 @@
             var newDocument = `
                 <div class="document-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="student_document_title[]" placeholder="Enter document title">
+                        <input type="text" class="form-control" name="child_documents_title[]" placeholder="Enter document title">
                         <button type="button" class="btn btn-sm btn-danger remove-document">×</button>
                     </div>
                 </div>
