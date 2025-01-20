@@ -27,7 +27,8 @@
                         <div class="tab1">
                             <div>
                                 <label for="charges_of_a_child" class="mb-2">Charges of a Child</label>
-                                <input type="number" min="0" class="form-control" name="charges_of_a_child" value="{{ $settings->charges_of_a_child }}">
+                                <input type="number" min="0" class="form-control" name="charges_of_a_child"
+                                    value="{{ $settings->charges_of_a_child }}">
                             </div>
                             <div class="d-flex mb-4 mt-4">
                                 <div class="flex-fill pe-2">
@@ -57,7 +58,7 @@
                                         <div class="document-group mb-3">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="{{ $document->id }}"
-                                                    name="student_document_title[{{ $document->id }}]"
+                                                    name="child_documents_title[{{ $document->id }}]"
                                                     value="{{ $document->title }}" placeholder="Enter document title">
                                                 @if ($key > 0)
                                                     <button type="button" class="btn btn-danger btn-sm" title="Remove"
@@ -71,7 +72,7 @@
                                 @else
                                     <div class="document-group mb-3">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="student_document_title[]"
+                                            <input type="text" class="form-control" name="child_documents_title[]"
                                                 placeholder="Enter document title">
                                         </div>
                                     </div>
@@ -81,62 +82,6 @@
 
                         <!-- Staff Documents -->
 
-
-                        <div class="staff-tab-documents" style="display:none;">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <h6 class="mb-0 text-muted">Staff Documents Title</h6>
-                                <button type="button" class="btn btn-sm btn-success staff-add-document"
-                                    title="Add Document">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                            <div class="staff-documents">
-                                @if ($staff_documents->isNotEmpty())
-                                    @foreach ($staff_documents as $key => $document)
-                                        <div class="document-group mb-3">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="{{ $document->id }}"
-                                                    name="staff_document_title[{{ $document->id }}]"
-                                                    value="{{ $document->title }}" placeholder="Enter document title">
-                                                @if ($key > 0)
-                                                    <button type="button" class="btn btn-danger btn-sm staff-remove-document"
-                                                        title="Remove" onclick="deletestaffdoc({{ $document->id }})">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div class="document-group mb-3">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="staff_document_title[]"
-                                                placeholder="Enter document title">
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="donor-tab-settings" style="display:none;">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
-                                <!-- <p class="text-dark fw-bold">
-                                    The number of days entered in this field will determine when a reminder notification
-                                    or email is sent to donors if their payment remains pending.
-                                </p> -->
-
-                            </div>
-                            <div class="donor-settings">
-                                <input type="number" class="form-control" name="min_dayes_for_req_donors"
-                                    value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
-                                <p class="text-muted mt-3">
-                                    This field allows to set the number of days after which a reminder notification
-                                    will be sent to donors who have requested for donate but have not completed their
-                                    payments. </p>
-                                </p>
-                            </div>
-                        </div>
 
 
                     </div>
@@ -297,7 +242,7 @@
             var newDocument = `
                 <div class="document-group mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="student_document_title[]" placeholder="Enter document title">
+                        <input type="text" class="form-control" name="child_documents_title[]" placeholder="Enter document title">
                         <button type="button" class="btn btn-sm btn-danger remove-document">×</button>
                     </div>
                 </div>

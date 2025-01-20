@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class documents_title extends Model
 {
     use HasFactory;
+
+    protected $table = ['documents_titles_child'];
+
     protected $fillable = [
         'title',        // Add all other fields you want to mass assign
         'document_for', // Add document_for for mass assignment

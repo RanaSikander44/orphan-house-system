@@ -705,7 +705,7 @@
                                                         <label for="file_{{ $index }}"
                                                             class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>
                                                         <input type="text" class="d-none" name="document_titles[]"
-                                                            value="{{ $list->documentTitle->id }}">
+                                                            value="{{ $list->documentTitle->id}}">
                                                         <input type="file" class="form-control" name="document_names[]"
                                                             id="file_{{ $index }}">
                                                         <div class="docs">
