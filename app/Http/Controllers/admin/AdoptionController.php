@@ -57,6 +57,11 @@ class AdoptionController extends Controller
 
     public function store(Request $req)
     {
+
+
+
+
+
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
             'compaign_id' => 'required',
@@ -185,7 +190,8 @@ class AdoptionController extends Controller
         }
 
 
-        if ($req->has('document_titles' && $req->has('document_names'))) {
+        if ($req->document_titles && $req->document_names) {
+
             $titles = $req->input('document_titles');
             $documents = $req->file('document_names');
 

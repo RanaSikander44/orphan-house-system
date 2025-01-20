@@ -76,7 +76,6 @@
                     <label for="paymentSchedule" class="form-label">Automatic Payment Schedule</label>
                     <select name="paymentSchedule" id="paymentSchedule" class="form-control">
                         <option value="monthly">Monthly</option>
-                        <option value="annually">Annually</option>
                         <option value="custom_date">Custom Date</option>
                     </select>
 
