@@ -65,7 +65,7 @@
                                                         onclick="deletedoc({{ $document->id }})">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                @endif
+                                                @endif  
                                             </div>
                                         </div>
                                     @endforeach
