@@ -185,16 +185,6 @@
 
                                     <h5 class="text-muted fw-bold text-center pt-5">Enquiry Details</h5>
 
-
-                                    <div class="d-flex align-items-center py-3 border-bottom">
-                                        <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Campaign</h6>
-                                        </div>
-                                        <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->academicyear->title ?? '' }}</p>
-                                        </div>
-                                    </div>
-
                                     <!-- Row 1 -->
                                     <div class="d-flex align-items-center py-3 border-bottom">
                                         <div class="col-6">

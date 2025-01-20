@@ -47,28 +47,15 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- Campaign Year -->
-                                            <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Campaign Type <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="cp_wrapper">
-                                                    <select class="select2" name="compaign_id">
-                                                        @forelse ($years as $list)
-                                                            <option value="{{ $list->id }}" {{ old('compaign_id') == $list->id ? 'selected' : '' }}>
-                                                                {{ $list->title . ' [' . $list->year . ']' }}
-                                                            </option>
-                                                        @empty
-                                                            <option value="">No Years available</option>
-                                                        @endforelse
-                                                    </select>
-                                                </div>
-                                                @error('compaign_id')
-                                                    <span class="text-danger">The Field is Required.</span>
-                                                @enderror
+
+                                            <div class="cp_wrapper">
+
                                             </div>
+
 
                                             <!-- Enquiry Type -->
                                             <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Enquiry Type <span
+                                                <label for="" class="text-muted mb-2 mt-3">Enquiry Type <span
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="enquiry_type_id">
                                                     @forelse($enquiry_types as $list)
@@ -76,7 +63,7 @@
                                                             {{ $list->title }}
                                                         </option>
                                                     @empty
-                                                        <option value="">Please add at least one enquiry type from settings
+                                                        <option value="">Please add at least one enquiry type 
                                                         </option>
                                                     @endforelse
                                                 </select>
@@ -114,7 +101,7 @@
 
                                             <!-- Adoption Date -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Adoption Date <span
+                                                <label for="" class="text-muted mb-2">Enquiry Date <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector"
                                                     name="adoption_date" value="{{ old('adoption_date') }}">

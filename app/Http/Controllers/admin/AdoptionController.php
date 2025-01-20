@@ -58,13 +58,8 @@ class AdoptionController extends Controller
     public function store(Request $req)
     {
 
-
-
-
-
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
-            'compaign_id' => 'required',
             'enquiry_no' => 'required',
             'source_of_information' => 'required',
             'status_of_adoption' => 'required',
@@ -102,7 +97,6 @@ class AdoptionController extends Controller
 
 
         $application = new child();
-        $application->campaign_id = $req->compaign_id;
         $application->enquiry_id = $req->enquiry_type_id;
         $application->enquiry_no = $req->enquiry_no;
         $application->source_of_information = $req->source_of_information;
