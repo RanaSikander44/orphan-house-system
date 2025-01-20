@@ -164,7 +164,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('settings/stores', [SettingsController::class, 'store'])->name('settings.store');
     Route::put('settings/update/{id}', [SettingsController::class, 'update'])->name('settings.update');
-    Route::delete('settings/delete/{id}', [SettingsController::class, 'delete'])->name('settings.delete');
+    Route::delete('settings/delete/child/{id}', [SettingsController::class, 'ChildDocDelete'])->name('settings.child.delete');
+    Route::delete('settings/delete/staff/{id}', [SettingsController::class, 'ChildStaffDelete'])->name('settings.staff.delete');
 
 
     // Schools

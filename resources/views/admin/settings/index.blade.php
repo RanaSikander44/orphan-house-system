@@ -44,7 +44,7 @@
                             </div>
                         </div>
 
-                        <!-- Required Documents Tab Content For Child -->
+                        <!-- Documents For Child -->
                         <div class="tab-documents" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h6 class="mb-0 text-muted">Required Documents Title</h6>
@@ -80,7 +80,67 @@
                             </div>
                         </div>
 
-                        <!-- Staff Documents -->
+                        <!-- Documents For Child End -->
+
+
+                        <!-- Staff Documents Start -->
+
+                        <div class="staff-tab-documents" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h6 class="mb-0 text-muted">Staff Documents Title</h6>
+                                <button type="button" class="btn btn-sm btn-success staff-add-document"
+                                    title="Add Document">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="staff-documents">
+                                @if ($staff_documents->isNotEmpty())
+                                    @foreach ($staff_documents as $key => $document)
+                                        <div class="document-group mb-3">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="{{ $document->id }}"
+                                                    name="staff_document_title[{{ $document->id }}]"
+                                                    value="{{ $document->title }}" placeholder="Enter document title">
+                                                @if ($key > 0)
+                                                    <button type="button" class="btn btn-danger btn-sm staff-remove-document"
+                                                        title="Remove" onclick="deletestaffdoc({{ $document->id }})">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="document-group mb-3">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="staff_document_title[]"
+                                                placeholder="Enter document title">
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="donor-tab-settings" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
+                                <!-- <p class="text-dark fw-bold">
+                                    The number of days entered in this field will determine when a reminder notification
+                                    or email is sent to donors if their payment remains pending.
+                                </p> -->
+                            </div>
+                            <div class="donor-settings">
+                                <input type="number" class="form-control" name="min_dayes_for_req_donors"
+                                    value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
+                                <p class="text-muted mt-3">
+                                    This field allows to set the number of days after which a reminder notification
+                                    will be sent to donors who have requested for donate but have not completed their
+                                    payments. </p>
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <!-- Staff Document end -->
 
 
 
@@ -167,7 +227,7 @@
 <script>
     const deletedoc = (id) => {
         $.ajax({
-            url: `{{ route('settings.delete', ':id') }}`.replace(':id', id),
+            url: `{{ route('settings.child.delete', ':id') }}`.replace(':id', id),
             type: 'DELETE',
             data: {
                 _token: csrf, // Include CSRF token
@@ -184,7 +244,7 @@
 
     const deletestaffdoc = (id) => {
         $.ajax({
-            url: `{{ route('settings.delete', ':id') }}`.replace(':id', id),
+            url: `{{ route('settings.staff.delete', ':id') }}`.replace(':id', id),
             type: 'DELETE',
             data: {
                 _token: csrf, // Include CSRF token

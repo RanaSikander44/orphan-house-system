@@ -44,7 +44,6 @@ class AdoptionController extends Controller
 
     public function add()
     {
-        $years = academicyear::where('status', '1')->get();
         $lastEnquiryID = child::max('enquiry_no');
         $newEnquiryId = $lastEnquiryID ? $lastEnquiryID + 1 : 1;
         $docs = DocumentTitleChild::all();
@@ -53,7 +52,7 @@ class AdoptionController extends Controller
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        return view('admin.adoptions.add', compact('years', 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
+        return view('admin.adoptions.add', compact( 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
     }
 
     public function store(Request $req)

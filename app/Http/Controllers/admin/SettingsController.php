@@ -5,10 +5,13 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\child;
 use App\Models\child_documents;
+use App\Models\DocumentTitlesStaff;
 use App\Models\donorSettings;
 use App\Models\settings;
 use App\Models\DocumentTitleChild;
 use App\Models\documents_title;
+use App\Models\Staff;
+use App\Models\StaffDocuments;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -18,8 +21,8 @@ class SettingsController extends Controller
         $settings = settings::first();
         $donorSetting = donorSettings::first();
         $child_documents = DocumentTitleChild::all();
-        // $staff_documents = documents_title::all();
-        return view('admin.settings.index', compact('settings', 'child_documents', 'donorSetting'));
+        $staff_documents = DocumentTitlesStaff::all();
+        return view('admin.settings.index', compact('settings', 'child_documents', 'donorSetting', 'staff_documents'));
     }
 
     public function store(Request $req)
@@ -88,29 +91,55 @@ class SettingsController extends Controller
         // Staff Titles
 
 
-        // if ($req->has('staff_document_title') && is_array($req->staff_document_title)) {
-        //     foreach ($req->staff_document_title as $id => $title) {
-        //         // Skip empty titles
-        //         if (!empty($title)) {
-        //             if ($id) {
-        //                 // Update existing document if an ID exists
-        //                 documents_title::updateOrCreate(
-        //                     ['id' => $id],  // If document ID exists, it will update
-        //                     [
-        //                         'document_for' => 'staff',
-        //                         'title' => $title,
-        //                     ]
-        //                 );
-        //             } else {
-        //                 // Create new document if no ID exists (empty string passed)
-        //                 documents_title::create([
-        //                     'document_for' => 'staff',
-        //                     'title' => $title,
-        //                 ]);
-        //             }
-        //         }
-        //     }
-        // }
+        if ($req->has('staff_document_title') && is_array($req->staff_document_title)) {
+            foreach ($req->staff_document_title as $id => $title) {
+                // Skip empty titles
+                if (!empty($title)) {
+                    if ($id) {
+                        // Update existing document if an ID exists
+                        $document = DocumentTitlesStaff::updateOrCreate(
+                            ['id' => $id],  // If document ID exists, it will update
+                            ['title' => $title]
+                        );
+
+                        // Now, link this title to all staff who don't already have it
+                        $staffMembers = Staff::all();
+                        foreach ($staffMembers as $staff) {
+                            // Check if the document title is not already linked to this staff member
+                            if (!StaffDocuments::where('staff_id', $staff->id)->where('title', $document->id)->exists()) {
+                                // If not, create an entry for this staff and title
+                                StaffDocuments::create([
+                                    'staff_id' => $staff->id,
+                                    'title' => $document->id,
+                                    'name' => null,  // Default file name is null, can be updated later
+                                ]);
+                            }
+                        }
+
+                    } else {
+                        // Create new document if no ID exists (empty string passed)
+                        $document = DocumentTitlesStaff::create([
+                            'title' => $title,
+                        ]);
+
+                        // Now, link this new title to all staff who don't already have it
+                        $staffMembers = Staff::all();
+                        foreach ($staffMembers as $staff) {
+                            // Check if the document title is not already linked to this staff member
+                            if (!StaffDocuments::where('staff_id', $staff->id)->where('title', $document->id)->exists()) {
+                                // If not, create an entry for this staff and title
+                                StaffDocuments::create([
+                                    'staff_id' => $staff->id,
+                                    'title' => $document->id,
+                                    'name' => null,  // Default file name is null, can be updated later
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
 
         // Settings of donors 
@@ -130,9 +159,24 @@ class SettingsController extends Controller
     }
 
 
-    public function delete($id)
+    public function ChildDocDelete($id)
     {
         $doc = DocumentTitleChild::findOrFail($id);
+        $doc->delete();
+
+        $childDocuments = child_documents::where('title', $id)->delete();
+
+        return response()->json([
+
+            'success' => 'Document has been delete !',
+
+        ]);
+    }
+
+
+    public function ChildStaffDelete($id)
+    {
+        $doc = DocumentTitlesStaff::findOrFail($id);
         $doc->delete();
 
         return response()->json([
