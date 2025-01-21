@@ -3,7 +3,7 @@
 @section('Page-title', 'Settings')
 
 @section('content')
-
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <div class="container-fluid px-4 mt-4">
     <form method="post" action="{{ route('settings.store') }}">
         @csrf
@@ -16,6 +16,8 @@
                                 Settings</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="docs">Child
                                 Documents</button>
+                            <button type="button" class="btn btn-sm btn-block mb-2" id="admissionSettings">Admission
+                                Settings</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="staff_docs">Staff
                                 Documents</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="donor_setting">Donor
@@ -45,6 +47,8 @@
                         </div>
 
                         <!-- Documents For Child -->
+
+
                         <div class="tab-documents" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h6 class="mb-0 text-muted">Required Documents Title</h6>
@@ -65,7 +69,7 @@
                                                         onclick="deletedoc({{ $document->id }})">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                @endif  
+                                                @endif
                                             </div>
                                         </div>
                                     @endforeach
@@ -120,6 +124,8 @@
                                 @endif
                             </div>
                         </div>
+
+                        <!-- donor -->
                         <div class="donor-tab-settings" style="display:none;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
@@ -139,10 +145,15 @@
                             </div>
                         </div>
 
-
                         <!-- Staff Document end -->
 
+                        <!-- admission settings -->
 
+                        <div class="admission-tab-settings" style="display:none;">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <textarea id="editor1"></textarea>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -157,7 +168,6 @@
 
 
 @endsection
-
 <style>
     .tab-documents {
         padding: 20px;
@@ -260,6 +270,11 @@
 
 
     $(document).ready(function () {
+
+        CKEDITOR.replace('editor1');
+
+
+
         $('.tab-documents').hide();
 
         $('#tab1').click(function () {
@@ -267,6 +282,7 @@
             $('.tab-documents').hide();
             $('.staff-tab-documents').hide();
             $('.donor-tab-settings').hide();
+            $('.admission-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -275,6 +291,7 @@
             $('.tab1').hide();
             $('.staff-tab-documents').hide();
             $('.donor-tab-settings').hide();
+            $('.admission-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -283,6 +300,7 @@
             $('.tab1').hide();
             $('.donor-tab-settings').hide();
             $('.staff-tab-documents').show();
+            $('.admission-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -291,9 +309,22 @@
             $('.tab-documents').hide();
             $('.tab1').hide();
             $('.staff-tab-documents').hide();
+            $('.admission-tab-settings').hide();
             $('.donor-tab-settings').show();
             $(this).addClass('active').siblings().removeClass('active');
         });
+
+
+        $('#admissionSettings').click(function () {
+            $('.tab-documents').hide();
+            $('.tab1').hide();
+            $('.staff-tab-documents').hide();
+            $('.admission-tab-settings').show();
+            $('.donor-tab-settings').hide();
+            $(this).addClass('active').siblings().removeClass('active');
+
+        });
+
 
 
         $('.add-document').click(function () {
