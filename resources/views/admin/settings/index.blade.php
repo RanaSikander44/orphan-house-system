@@ -16,6 +16,8 @@
                                 Settings</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="docs">Child
                                 Documents</button>
+                            <button type="button" class="btn btn-sm btn-block mb-2" id="enquiryForms">Enquiry
+                                Forms</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="staff_docs">Staff
                                 Documents</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="donor_setting">Donor
@@ -65,7 +67,7 @@
                                                         onclick="deletedoc({{ $document->id }})">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                @endif  
+                                                @endif
                                             </div>
                                         </div>
                                     @endforeach
@@ -121,15 +123,32 @@
                             </div>
                         </div>
                         <div class="donor-tab-settings" style="display:none;">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
-                                <!-- <p class="text-dark fw-bold">
-                                    The number of days entered in this field will determine when a reminder notification
-                                    or email is sent to donors if their payment remains pending.
-                                </p> -->
-                            </div>
+                            <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
+
+                            <!-- <div id="fb-editor"></div> -->
+
+                            <!-- @push('scripts') -->
+                            <!-- jQuery -->
+                            <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+
+                            <!-- jQuery UI -->
+                            <!-- <script
+                                    src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script> -->
+
+                            <!-- FormBuilder -->
+                            <!-- <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
+                                <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+
+                                <script>
+                                    $(function () {
+                                        // Initialize FormBuilder
+                                        $('#fb-editor').formBuilder();
+                                    });
+                                </script> -->
+                            <!-- @endpush -->
+
                             <div class="donor-settings">
-                                <input type="number" class="form-control" name="min_dayes_for_req_donors"
+                                <input type="number" class="form-control mt-2" name="min_dayes_for_req_donors"
                                     value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
                                 <p class="text-muted mt-3">
                                     This field allows to set the number of days after which a reminder notification
@@ -140,7 +159,68 @@
                         </div>
 
 
+                        <div class="enquiryForms-tab-settings" style="display:none;">
+
+                            <div class="donor-settings">
+
+                                <a href="{{ route('enquiry.forms.create') }}"
+                                    class="btn btn-sm btn-success float-end"><i class="fa-solid fa-plus"></i></a>
+
+                                <table class="table table-striped">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach ($forms as $list)
+                                            <tr>
+                                                <td>{{ $list->name }}</td>
+                                                <td>{{ $list->status }}</td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <a href="" class="btn btn-sm">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm">
+                                                            <i class="fa-solid fa-pencil"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+
+                                </table>
+
+                                <div class="d-flex justify-content-between mt-3 align-items-center">
+                                <!-- Left side: Showing results -->
+                                <div class="small text-muted">
+                                        Showing {{ $forms->firstItem() }} to {{ $forms->lastItem() }} of
+                                        {{ $forms->total() }}
+                                        results
+                                    </div>
+
+                                <!-- Right side: Pagination links -->
+                                <div id="pagination-links">
+                                        {{ $forms->links('pagination::bootstrap-4') }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
                         <!-- Staff Document end -->
+
+
 
 
 
@@ -157,6 +237,10 @@
 
 
 @endsection
+
+
+
+
 
 <style>
     .tab-documents {
@@ -218,7 +302,7 @@
 </style>
 
 <script>
-    let csrf = "{{ csrf_token() }}"; // This will output the CSRF token correctly
+    let csrf = "{{ csrf_token() }}"; 
 </script>
 
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
@@ -267,6 +351,7 @@
             $('.tab-documents').hide();
             $('.staff-tab-documents').hide();
             $('.donor-tab-settings').hide();
+            $('.enquiryForms-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -275,6 +360,7 @@
             $('.tab1').hide();
             $('.staff-tab-documents').hide();
             $('.donor-tab-settings').hide();
+            $('.enquiryForms-tab-settings').hide();
             $(this).addClass('active').siblings().removeClass('active');
         });
 
@@ -282,6 +368,7 @@
             $('.tab-documents').hide();
             $('.tab1').hide();
             $('.donor-tab-settings').hide();
+            $('.enquiryForms-tab-settings').hide();
             $('.staff-tab-documents').show();
             $(this).addClass('active').siblings().removeClass('active');
         });
@@ -291,8 +378,19 @@
             $('.tab-documents').hide();
             $('.tab1').hide();
             $('.staff-tab-documents').hide();
+            $('.enquiryForms-tab-settings').hide();
             $('.donor-tab-settings').show();
             $(this).addClass('active').siblings().removeClass('active');
+        });
+
+        $('#enquiryForms').click(function () {
+            $('.tab-documents').hide();
+            $('.tab1').hide();
+            $('.staff-tab-documents').hide();
+            $('.enquiryForms-tab-settings').show();
+            $('.donor-tab-settings').hide();
+            $(this).addClass('active').siblings().removeClass('active');
+
         });
 
 

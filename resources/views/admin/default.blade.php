@@ -35,6 +35,8 @@
 
 </head>
 
+@stack('style')
+
 <body class="sb-nav-fixed bg-light">
 
     @include('admin.header')
@@ -86,5 +88,7 @@
         crossorigin="anonymous"></script>
     <script src="{{ asset('backend/js/datatables-simple-demo.js') }}"></script>
 </body>
+@stack('scripts')
+
 
 </html>

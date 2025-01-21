@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\ChildActiviesController;
 use App\Http\Controllers\admin\DonationRequestController;
 use App\Http\Controllers\admin\DormitoryController;
+use App\Http\Controllers\admin\FormsController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\SchoolController;
 use App\Http\Controllers\admin\SchoolGradesController;
@@ -166,6 +167,14 @@ Route::middleware(['auth'])->group(function () {
     Route::put('settings/update/{id}', [SettingsController::class, 'update'])->name('settings.update');
     Route::delete('settings/delete/child/{id}', [SettingsController::class, 'ChildDocDelete'])->name('settings.child.delete');
     Route::delete('settings/delete/staff/{id}', [SettingsController::class, 'ChildStaffDelete'])->name('settings.staff.delete');
+
+
+    // Enquiry Forms Settings
+    Route::get('settings/forms/create', [FormsController::class, 'create'])->name('enquiry.forms.create');
+    Route::post('settings/forms/save', [FormsController::class, 'save'])->name('enquiry.forms.save');
+
+
+
 
 
     // Schools

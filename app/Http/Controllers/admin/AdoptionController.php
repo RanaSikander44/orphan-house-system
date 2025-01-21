@@ -8,6 +8,7 @@ use App\Models\documents_title;
 use App\Models\DocumentTitleChild;
 use App\Models\Dormitory;
 use App\Models\enquiry_types;
+use App\Models\enquiryForms;
 use App\Models\nannyChilds;
 use App\Models\school_grades;
 use App\Models\settings;
@@ -52,7 +53,8 @@ class AdoptionController extends Controller
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        return view('admin.adoptions.add', compact( 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
+        $forms =  enquiryForms::all();
+        return view('admin.adoptions.add', compact( 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms' , 'forms'));
     }
 
     public function store(Request $req)

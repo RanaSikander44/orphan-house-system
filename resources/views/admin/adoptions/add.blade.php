@@ -11,19 +11,37 @@
     <!-- <h3 class="mt-4">Add New Application</h3> -->
 
     <div class="card bg-white p-3 mt-4 border-0 shadow-sm rounded">
-        <div class="student-buttons pt-3">
-            <!-- Centered Pills -->
-            <ul class="nav nav-pills nav-justified flex-wrap" id="menuTabs" style="white-space: nowrap;">
+        <div class="pt-3">
+            <ul class="nav nav-pills nav-justified" id="menuTabs" style="white-space: nowrap;">
+                <!-- Personal Info Tab -->
                 <li class="nav-item">
-                    <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">Personal Info</a>
+                    <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">
+                        <i class="bi bi-person-fill"></i> Personal Info
+                    </a>
                 </li>
+
+                <!-- Parents & Guardian Info Tab -->
                 <li class="nav-item">
-                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">Parents & Guardian
-                        Info</a>
+                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">
+                        <i class="bi bi-person-lines-fill"></i> Parents & Guardian Info
+                    </a>
                 </li>
+
+                <!-- Documents Tab -->
                 <li class="nav-item">
-                    <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">Documents </a>
+                    <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">
+                        <i class="bi bi-file-earmark"></i> Documents
+                    </a>
                 </li>
+
+                <!-- Dynamic Tabs from Forms -->
+                @foreach ($forms as $key => $list)
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" id="formTab{{$key}}" data-bs-toggle="pill" href="#form{{$key}}">
+                            <i class="bi bi-file-earmark-post"></i> {{ $list->name }}
+                        </a>
+                    </li>
+                @endforeach
             </ul>
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
@@ -63,7 +81,7 @@
                                                             {{ $list->title }}
                                                         </option>
                                                     @empty
-                                                        <option value="">Please add at least one enquiry type 
+                                                        <option value="">Please add at least one enquiry type
                                                         </option>
                                                     @endforelse
                                                 </select>
@@ -696,6 +714,73 @@
 
                     </div>
                 </div>
+
+
+                @foreach ($forms as $key => $list)
+                <div class="tab-pane fade" id="form{{$key}}">
+                    @php
+                        $formData = json_decode($list->formData->form_data, true);
+                    @endphp
+
+                
+                        <div class="row">
+                            @foreach ($formData as $field)
+                                @if (isset($field['label']))  <!-- Check if the 'label' key exists -->
+                                    <div class="col-6 mb-3">
+                                        <label for="{{ $field['name'] }}" class="form-label">{{ $field['label'] }}</label>
+                                        
+                                        @if($field['type'] === 'text')
+                                            <!-- Text Input Field -->
+                                            <input type="text" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
+                                                @if($field['required']) required @endif 
+                                                placeholder="{{ $field['label'] }}">
+                                        @elseif($field['type'] === 'textarea')
+                                            <!-- Textarea Field -->
+                                            <textarea class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
+                                                @if($field['required']) required @endif 
+                                                placeholder="{{ $field['label'] }}"></textarea>
+                                        @elseif($field['type'] === 'checkbox')
+                                            <!-- Checkbox Field -->
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
+                                                    @if($field['required']) required @endif>
+                                                <label class="form-check-label" for="{{ $field['name'] }}">{{ $field['label'] }}</label>
+                                            </div>
+                                        @elseif($field['type'] === 'radio')
+                                            <!-- Radio Buttons -->
+                                            <div class="form-check">
+                                                @foreach ($field['values'] as $option)
+                                                    <input type="radio" class="form-check-input" id="{{ $field['name'] }}_{{ $option['value'] }}" name="{{ $field['name'] }}" value="{{ $option['value'] }}" 
+                                                        @if($field['required']) required @endif>
+                                                    <label class="form-check-label" for="{{ $field['name'] }}_{{ $option['value'] }}">{{ $option['label'] }}</label>
+                                                @endforeach
+                                            </div>
+                                        @elseif($field['type'] === 'select')
+                                            <!-- Select Field -->
+                                            <select class="form-select" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
+                                                @if($field['required']) required @endif>
+                                                <option value="" disabled selected>{{ $field['label'] }}</option>
+                                                @foreach ($field['values'] as $option)  <!-- Using 'values' instead of 'options' -->
+                                                    <option value="{{ $option['value'] }}" @if($option['selected']) selected @endif>
+                                                        {{ $option['label'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    </div>
+                                @else
+                                    <div class="col-6 mb-3">
+                                        <p class="text-danger">Label missing for field: {{ $field['name'] }}</p>  <!-- Display error if label is missing -->
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        
+                </div>
+            @endforeach
+
+
+
             </div>
             <div class="text-end mt-3">
                 <button class="btn btn-primary btn-sm" type="submit">
