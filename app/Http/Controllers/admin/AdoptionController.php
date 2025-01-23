@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
+use App\Models\ChildFormData;
 use App\Models\documents_title;
 use App\Models\DocumentTitleChild;
 use App\Models\Dormitory;
@@ -53,13 +54,13 @@ class AdoptionController extends Controller
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        $forms =  enquiryForms::all();
-        return view('admin.adoptions.add', compact( 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms' , 'forms'));
+        $forms = enquiryForms::all();
+        dd($forms);
+        return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms'));
     }
 
     public function store(Request $req)
     {
-
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
             'enquiry_no' => 'required',
@@ -186,6 +187,32 @@ class AdoptionController extends Controller
         }
 
 
+
+        // child dynamic forms data saving here 
+
+        if ($req->has('forms')) {
+            foreach ($req->forms as $form) {
+                foreach ($form['inputs'] as $input_name => $input_value) {
+                    $formsData = new ChildFormData();
+                    $formsData->form_id = $form['form_id'];
+                    $formsData->child_id = $application->id;
+
+                    // Extract the part of the input_name after the last underscore
+                    $lastUnderscorePos = strrpos($input_name, '_');
+                    $label = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+
+                    $formsData->input_label = $label; // Store the extracted label
+                    $formsData->input_name = $input_name;
+                    $formsData->input_value = $input_value;
+                    $formsData->save();
+                }
+            }
+        }
+
+
+
+
+
         if ($req->document_titles && $req->document_names) {
 
             $titles = $req->input('document_titles');
@@ -244,7 +271,11 @@ class AdoptionController extends Controller
         } else {
             $nannyDetails = null;
         }
-        return view('admin.adoptions.view', compact('child', 'parents', 'documents', 'nannyDetails'));
+
+
+        $forms = enquiryForms::all();
+        $formsData = ChildFormData::all();
+        return view('admin.adoptions.view', compact('child', 'parents', 'documents', 'nannyDetails', 'formsData', 'forms'));
     }
 
     public function studentEdit($id)

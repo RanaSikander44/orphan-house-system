@@ -16,8 +16,8 @@
                                 Settings</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="docs">Child
                                 Documents</button>
-                            <button type="button" class="btn btn-sm btn-block mb-2" id="enquiryForms">Enquiry
-                                Forms</button>
+                            <button type="button" class="btn btn-sm btn-block mb-2" id="enquiryForms">Induction
+                                Workflow</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="staff_docs">Staff
                                 Documents</button>
                             <button type="button" class="btn btn-sm btn-block mb-2" id="donor_setting">Donor
@@ -84,7 +84,6 @@
 
                         <!-- Documents For Child End -->
 
-
                         <!-- Staff Documents Start -->
 
                         <div class="staff-tab-documents" style="display:none;">
@@ -122,31 +121,10 @@
                                 @endif
                             </div>
                         </div>
+
+
                         <div class="donor-tab-settings" style="display:none;">
                             <h6 class="mb-0 text-muted">Reminder Days for Payment Completion</h6>
-
-                            <!-- <div id="fb-editor"></div> -->
-
-                            <!-- @push('scripts') -->
-                            <!-- jQuery -->
-                            <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
-
-                            <!-- jQuery UI -->
-                            <!-- <script
-                                    src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script> -->
-
-                            <!-- FormBuilder -->
-                            <!-- <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
-                                <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
-
-                                <script>
-                                    $(function () {
-                                        // Initialize FormBuilder
-                                        $('#fb-editor').formBuilder();
-                                    });
-                                </script> -->
-                            <!-- @endpush -->
-
                             <div class="donor-settings">
                                 <input type="number" class="form-control mt-2" name="min_dayes_for_req_donors"
                                     value="{{ $donorSetting->min_dayes_for_req_donors ?? '' }}">
@@ -177,21 +155,19 @@
 
                                     <tbody>
                                         @foreach ($forms as $list)
-                                            <tr>
+                                            <tr class="FormData_{{ $list->id }}">
                                                 <td>{{ $list->name }}</td>
                                                 <td>{{ $list->status }}</td>
                                                 <td>
-                                                    <div class="d-flex">
-                                                        <a href="" class="btn btn-sm">
-                                                            <i class="fa-solid fa-eye"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm">
-                                                            <i class="fa-solid fa-pencil"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </a>
-                                                    </div>
+                                                    <a href="{{ route('enquiry.forms.edit', $list->id) }}"
+                                                        class="btn btn-sm">
+                                                        <i class="fa-solid fa-pencil"></i>
+                                                    </a>
+
+                                                    <button type="button" onclick="DelForms({{ $list->id }})"
+                                                        class="btn btn-sm">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -201,15 +177,15 @@
                                 </table>
 
                                 <div class="d-flex justify-content-between mt-3 align-items-center">
-                                <!-- Left side: Showing results -->
-                                <div class="small text-muted">
+                                    <!-- Left side: Showing results -->
+                                    <div class="small text-muted">
                                         Showing {{ $forms->firstItem() }} to {{ $forms->lastItem() }} of
                                         {{ $forms->total() }}
                                         results
                                     </div>
 
-                                <!-- Right side: Pagination links -->
-                                <div id="pagination-links">
+                                    <!-- Right side: Pagination links -->
+                                    <div id="pagination-links">
                                         {{ $forms->links('pagination::bootstrap-4') }}
                                     </div>
                                 </div>
@@ -217,13 +193,7 @@
                             </div>
                         </div>
 
-
                         <!-- Staff Document end -->
-
-
-
-
-
                     </div>
                 </div>
             </div>
@@ -309,6 +279,46 @@
     integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
 
 <script>
+
+
+    const DelForms = (id) => {
+        if (!id) return;
+
+        // Show SweetAlert confirmation
+        Swal.fire({
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `{{ route('enquiry.forms.delete', ':id') }}`.replace(':id', id),
+                    type: 'get',
+                    data: {
+                        _token: csrf,
+                    },
+                    success: (response) => {
+                        const status = response[0];
+                        const message = response[1];
+                        if (status === "success") {
+                            $('.FormData_' + id).remove();
+                            toastr.success(message);
+                        } else {
+                            toastr.error(message || 'An error occurred while deleting the form.');
+                        }
+                    },
+                    error: (xhr, status, error) => {
+                        console.error(error);
+                        toastr.error('An unexpected error occurred.');
+                    },
+                });
+            }
+        });
+    };
+
+
     const deletedoc = (id) => {
         $.ajax({
             url: `{{ route('settings.child.delete', ':id') }}`.replace(':id', id),
@@ -432,7 +442,5 @@
         $('.staff-documents').on('click', '.staff-remove-document', function () {
             $(this).closest('.document-group').remove();
         });
-
-
     });
 </script>

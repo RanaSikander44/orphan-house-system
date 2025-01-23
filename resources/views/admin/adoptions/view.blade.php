@@ -69,8 +69,39 @@
                             </button>
                         </li>
 
+                        @foreach ($forms as $form)
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link custom-btn" id="form-tab-{{ $form->id }}" data-bs-toggle="pill"
+                                    data-bs-target="#form-content-{{ $form->id }}" type="button" role="tab"
+                                    aria-controls="form-content-{{ $form->id }}" aria-selected="false">
+                                    <i class="bi bi-calendar-check me-2"></i>Form {{ $form->id }}
+                                </button>
+                            </li>
+                        @endforeach
                     </ul>
+
                     <hr>
+                    <div class="tab-content" id="form-tabs-content">
+                        @foreach ($formsData->groupBy('form_id') as $formId => $formDataGroup)
+                            <div class="tab-pane fade" id="form-content-{{ $formId }}" role="tabpanel"
+                                aria-labelledby="form-tab-{{ $formId }}">
+                                <div class="pt-0 p-4 rounded-3">
+                                    @foreach ($formDataGroup as $formData)
+                                        <div class="d-flex align-items-center py-2 border-bottom">
+                                            <div class="col-6">
+                                                <p>{{ $formData->input_label}}</p>
+                                            </div>
+                                            <div class="col-6 text-muted text-end">
+                                                <p class="mb-0">{{ $formData->input_value }}</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+
                     <!-- Pills Content -->
                     <div class="tab-content" id="infoTabsContent">
                         <div class="tab-pane fade show active" id="academic" role="tabpanel"
@@ -200,7 +231,7 @@
                                             <h6 class="mb-0 text-muted">Enquiry Type</h6>
                                         </div>
                                         <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->enquiryType->title  ?? ''}}</p>
+                                            <p class="mb-0">{{ $child->enquiryType->title ?? ''}}</p>
                                         </div>
                                     </div>
 

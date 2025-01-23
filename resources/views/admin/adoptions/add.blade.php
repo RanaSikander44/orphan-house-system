@@ -37,7 +37,7 @@
                 <!-- Dynamic Tabs from Forms -->
                 @foreach ($forms as $key => $list)
                     <li class="nav-item mb-2">
-                        <a class="nav-link" id="formTab{{$key}}" data-bs-toggle="pill" href="#form{{$key}}">
+                        <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
                             <i class="bi bi-file-earmark-post"></i> {{ $list->name }}
                         </a>
                     </li>
@@ -49,7 +49,6 @@
         <form method="post" action="{{route('enquiry.store')}}" enctype="multipart/form-data">
             @csrf
             <div class="tab-content">
-
                 <!-- Home Tab -->
                 <div class="tab-pane fade show active" style="width: 100%;" id="home">
                     <div class="p-3">
@@ -717,75 +716,237 @@
 
 
                 @foreach ($forms as $key => $list)
-                <div class="tab-pane fade" id="form{{$key}}">
-                    @php
-                        $formData = json_decode($list->formData->form_data, true);
-                    @endphp
+               <div class="tab-pane fade" id="form{{ $key }}" role="tabpanel">
+                @php
+                    $formData = json_decode($list->formData->form_data, true);
+                @endphp
 
-                
-                        <div class="row">
-                            @foreach ($formData as $field)
-                                @if (isset($field['label']))  <!-- Check if the 'label' key exists -->
-                                    <div class="col-6 mb-3">
-                                        <label for="{{ $field['name'] }}" class="form-label">{{ $field['label'] }}</label>
-                                        
-                                        @if($field['type'] === 'text')
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <input type="hidden" name="forms[{{ $key }}][form_id]" value="{{ $list->id }}">
+                        <div class="card bg-light border-0 shadow-none" style="height: auto;">
+                            <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                <p class="text-muted fw-bold">{{ $list->name }}</p>
+                                <hr class="w-100" style="border-width: 2px;">
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    @foreach ($formData as $field)
+                                        @if (isset($field['label']))
                                             <!-- Text Input Field -->
-                                            <input type="text" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
-                                                @if($field['required']) required @endif 
-                                                placeholder="{{ $field['label'] }}">
-                                        @elseif($field['type'] === 'textarea')
+                                            @if ($field['type'] === 'text')
+                                                <div class="col-6 mb-3">
+                                                    <label for="{{ $field['name'] }}" class="form-label">
+                                                        {{ $field['label'] }}
+                                                        @if ($field['required'])
+                                                            <span class="text-danger">*</span>
+                                                        @endif
+                                                    </label>
+                                                    <input type="text" class="form-control" id="{{ $field['name'] }}" name="forms[{{ $key }}][inputs][{{ $field['name'] }}_{{ $field['label'] }}]"
+                                                        @if ($field['required']) required @endif 
+                                                        placeholder="{{ $field['label'] }}">
+                                                </div>
+                                            @endif
+
                                             <!-- Textarea Field -->
-                                            <textarea class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
-                                                @if($field['required']) required @endif 
-                                                placeholder="{{ $field['label'] }}"></textarea>
-                                        @elseif($field['type'] === 'checkbox')
+                                            @if ($field['type'] === 'textarea')
+                                                <div class="col-6 mb-3">
+                                                    <label for="{{ $field['name'] }}" class="form-label">
+                                                        {{ $field['label'] }}
+                                                        @if ($field['required'])
+                                                            <span class="text-danger">*</span>
+                                                        @endif
+                                                    </label>
+                                                    <textarea class="form-control" id="{{ $field['name'] }}" name="forms[{{ $key }}][inputs][{{ $field['name'] }}]"
+                                                        @if ($field['required']) required @endif 
+                                                        placeholder="{{ $field['label'] }}"></textarea>
+                                                </div>
+                                            @endif
+
                                             <!-- Checkbox Field -->
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
-                                                    @if($field['required']) required @endif>
-                                                <label class="form-check-label" for="{{ $field['name'] }}">{{ $field['label'] }}</label>
-                                            </div>
-                                        @elseif($field['type'] === 'radio')
-                                            <!-- Radio Buttons -->
-                                            <div class="form-check">
-                                                @foreach ($field['values'] as $option)
-                                                    <input type="radio" class="form-check-input" id="{{ $field['name'] }}_{{ $option['value'] }}" name="{{ $field['name'] }}" value="{{ $option['value'] }}" 
-                                                        @if($field['required']) required @endif>
-                                                    <label class="form-check-label" for="{{ $field['name'] }}_{{ $option['value'] }}">{{ $option['label'] }}</label>
-                                                @endforeach
-                                            </div>
-                                        @elseif($field['type'] === 'select')
-                                            <!-- Select Field -->
-                                            <select class="form-select" id="{{ $field['name'] }}" name="{{ $field['name'] }}" 
-                                                @if($field['required']) required @endif>
-                                                <option value="" disabled selected>{{ $field['label'] }}</option>
-                                                @foreach ($field['values'] as $option)  <!-- Using 'values' instead of 'options' -->
-                                                    <option value="{{ $option['value'] }}" @if($option['selected']) selected @endif>
-                                                        {{ $option['label'] }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                            @if ($field['type'] === 'checkbox')
+                                                <div class="col-6 mb-3">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="{{ $field['name'] }}" name="forms[{{ $key }}][inputs][{{ $field['name'] }}]" 
+                                                            @if ($field['required']) required @endif>
+                                                        <label class="form-check-label" for="{{ $field['name'] }}">
+                                                            {{ $field['label'] }}
+                                                            @if ($field['required'])
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            <!-- Autocomplete Field -->
+                                            @if ($field['type'] === 'autocomplete' && isset($field['values']))
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">
+                                                        {{ $field['label'] }}
+                                                        @if ($field['required'])
+                                                            <span class="text-danger">*</span>
+                                                        @endif
+                                                    </label>
+                                                    <input type="text" class="{{ $field['className'] }}" id="{{ $field['name'] }}" name="forms[{{ $key }}][inputs][{{ $field['name'] }}]_{{ $field['label'] }}"
+                                                        @if ($field['required']) required @endif placeholder="{{ $field['label'] }}" autocomplete="off">
+                                                    <ul id="{{ $field['name'] }}_suggestions" class="autocomplete-suggestions" style="display: none; list-style-type: none; padding: 0; margin: 0; background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"></ul>
+                                                </div>
+                                                <script>
+                                                    $(document).ready(function() {
+                                                        var options = @json($field['values']);
+                                                        var inputField = $('#{{ $field['name'] }}');
+                                                        var suggestionsBox = $('#{{ $field['name'] }}_suggestions');
+
+                                                        inputField.on('input', function() {
+                                                            var query = inputField.val().toLowerCase();
+                                                            suggestionsBox.empty().hide();
+
+                                                            if (query.length > 0) {
+                                                                var filteredOptions = options.filter(function(option) {
+                                                                    return option.label.toLowerCase().includes(query);
+                                                                });
+
+                                                                if (filteredOptions.length > 0) {
+                                                                    suggestionsBox.show();
+                                                                    filteredOptions.forEach(function(option) {
+                                                                        var suggestionItem = $('<li>').text(option.label).data('value', option.value).css('padding', '8px').css('cursor', 'pointer').on('click', function() {
+                                                                            inputField.val(option.label);  // Set the input field value
+                                                                            inputField.trigger('change');  // Trigger change event
+                                                                            suggestionsBox.hide();  // Hide suggestions
+                                                                        });
+                                                                        suggestionsBox.append(suggestionItem);
+                                                                    });
+                                                                } else {
+                                                                    suggestionsBox.hide(); // Hide if no matching options
+                                                                }
+                                                            } else {
+                                                                suggestionsBox.hide();  // Hide suggestions if input is empty
+                                                            }
+                                                        });
+
+                                                        $(document).on('click', function(event) {
+                                                            if (!$(event.target).closest('#{{ $field['name'] }}_suggestions').length && !$(event.target).is(inputField)) {
+                                                                suggestionsBox.hide();  // Hide suggestions when clicking outside
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                            @endif
+
+                                            <!-- Other Fields (Radio, Select, etc.) -->
+                                            <!-- Repeat similar code as above for radio-group, select, date, number, file, etc. -->
+                                            @if ($field['type'] === 'radio-group' && isset($field['values']))
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label">
+                                                                {{ $field['label'] }}
+                                                                @if ($field['required'])
+                                                                    <span class="text-danger">*</span>
+                                                                @endif
+                                                            </label>
+                                                            @foreach ($field['values'] as $option)
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="{{ $field['name'] }}" id="{{ $field['name'] }}-{{ $option['value'] }}" value="{{ $option['value'] }}" 
+                                                                        @if ($option['selected']) checked @endif>
+                                                                    <label class="form-check-label" for="{{ $field['name'] }}-{{ $option['value'] }}">
+                                                                        {{ $option['label'] }}
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                            @endif
+
+
+                                             <!-- Select Field -->
+                                             @if ($field['type'] === 'select' && isset($field['values']))
+                                                        <div class="col-6 mb-3">
+                                                            <label for="{{ $field['name'] }}" class="form-label">
+                                                                {{ $field['label'] }}
+                                                                @if ($field['required'])
+                                                                    <span class="text-danger">*</span>
+                                                                @endif
+                                                            </label>
+                                                            <select class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}" @if ($field['required']) required @endif>
+                                                                @foreach ($field['values'] as $option)
+                                                                    <option value="{{ $option['value'] }}" @if ($option['selected']) selected @endif>
+                                                                        {{ $option['label'] }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Date Field -->
+                                                    @if ($field['type'] === 'date')
+                                                        <div class="col-6 mb-3">
+                                                            <label for="{{ $field['name'] }}" class="form-label">
+                                                                {{ $field['label'] }}
+                                                                @if ($field['required'])
+                                                                    <span class="text-danger">*</span>
+                                                                @endif
+                                                            </label>
+                                                            <input type="date" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
+                                                                @if ($field['required']) required @endif placeholder="{{ $field['label'] }}">
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Number Field -->
+                                                    @if ($field['type'] === 'number')
+                                                            <div class="col-6 mb-3">
+                                                                <label for="{{ $field['name'] }}" class="form-label">
+                                                                    {{ $field['label'] }}
+                                                                    @if ($field['required'])
+                                                                        <span class="text-danger">*</span>
+                                                                    @endif
+                                                                </label>
+                                                                <input type="number" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
+                                                                    @if ($field['required']) required @endif 
+                                                                    placeholder="{{ $field['label'] }}">
+                                                            </div>
+                                                    @endif
+
+                                                    <!-- File Upload Field -->
+                                                    @if ($field['type'] === 'file')
+                                                        <div class="col-6 mb-3">
+                                                            <label for="{{ $field['name'] }}" class="form-label">
+                                                                {{ $field['label'] }}
+                                                                @if ($field['required'])
+                                                                    <span class="text-danger">*</span>
+                                                                @endif
+                                                            </label>
+                                                            <input type="file" class="form-control" id="{{ $field['name'] }}" name="{{ $field['name'] }}"
+                                                                @if ($field['required']) required @endif>
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Hidden Field -->
+                                                    @if ($field['type'] === 'hidden')
+                                                        <input type="hidden" name="{{ $field['name'] }}" id="{{ $field['name'] }}" value="{{ $field['value'] ?? '' }}">
+                                                    @endif
                                         @endif
-                                    </div>
-                                @else
-                                    <div class="col-6 mb-3">
-                                        <p class="text-danger">Label missing for field: {{ $field['name'] }}</p>  <!-- Display error if label is missing -->
-                                    </div>
-                                @endif
-                            @endforeach
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
-                        
+                    </div>
                 </div>
-            @endforeach
-
-
-
             </div>
-            <div class="text-end mt-3">
-                <button class="btn btn-primary btn-sm" type="submit">
-                    <i class="fa fa-save"></i> Save
-                </button>
+        @endforeach
+
+
+
+
+
+                <div class="text-end mt-3">
+                    <button class="btn btn-sm btn-success" type="button" id="nextButton">Next</button>
+
+                    <button class="btn btn-primary btn-sm d-none" id="adoptionFormBtn" type="submit">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+
+
+
             </div>
         </form>
     </div>
@@ -857,6 +1018,69 @@
         $('.image-button').css('display', 'block');
     });
 </script>
+
+
+<!-- Next Btn Js -->
+<script>
+    function toggleButtons() {
+        // Find the active tab
+        var activeTab = $('.nav-pills .nav-link.active');
+        
+        // Check if the active tab is the last tab
+        var isLastTab = activeTab.parent().is(':last-child');
+        
+        if (isLastTab) {
+            // Hide the Next button and show the Save button
+            $('#nextButton').addClass('d-none');
+            $('#adoptionFormBtn').removeClass('d-none');
+        } else {
+            // Show the Next button and hide the Save button
+            $('#nextButton').removeClass('d-none');
+            $('#adoptionFormBtn').addClass('d-none');
+        }
+    }
+
+    // Handle Next button click
+    $('#nextButton').on('click', function () {
+        // Find the active tab and its corresponding pane
+        var activeTab = $('.nav-pills .nav-link.active');
+        var activePane = $(activeTab.attr('href'));
+        
+        // Find the next tab and pane
+        var nextTab = activeTab.parent().next().find('.nav-link');
+        var nextPane = $(nextTab.attr('href'));
+
+        if (nextTab.length) {
+            // Remove active class from the current tab and pane
+            activeTab.removeClass('active');
+            activePane.removeClass('show active');
+            
+            // Add active class to the next tab and pane
+            nextTab.addClass('active');
+            nextPane.addClass('show active');
+        }
+
+        // Toggle button visibility
+        toggleButtons();
+    });
+
+    // Handle manual tab change
+    $('.nav-pills .nav-link').on('click', function () {
+        toggleButtons();
+    });
+
+    // Initial toggle on page load
+    $(document).ready(function () {
+        toggleButtons();
+    });
+</script>
+
+
+
+
+
+
+
 
 <!-- Add JavaScript for Toggling -->
 <script>
