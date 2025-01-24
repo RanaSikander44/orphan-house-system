@@ -91,7 +91,6 @@ class FormsController extends Controller
     }
 
 
-
     public function updateForm(Request $request, $id)
     {
         $form = enquiryForms::findOrFail($id);
@@ -102,60 +101,61 @@ class FormsController extends Controller
 
         if (is_array($fields)) {
             $requestFieldIds = [];
+            $newlyCreatedFieldIds = []; 
 
             foreach ($fields as $field) {
-                // Generate a unique name if 'name' is not set
                 $fieldId = isset($field['name']) ? str_replace('field_', '', $field['name']) : null;
                 $requestFieldIds[] = $fieldId;
 
                 $formField = $fieldId ? enquiryFormData::find($fieldId) : null;
 
                 if ($formField) {
-                    // Update existing field
                     $formField->form_id = $id;
                     $formField->form_data = json_encode($field);
                     $formField->type = $field['type'] ?? null;
                     $formField->sub_type = $field['subtype'] ?? null;
                     $formField->access = $field['access'] ?? null;
-                    $formField->name = $field['name'] ?? "field_{$id}";
+                    $formField->name = "field_{$fieldId}";
                     $formField->label = $field['label'] ?? null;
                     $formField->className = $field['className'] ?? null;
                     $formField->multiple = isset($field['multiple']) ? ($field['multiple'] ? '1' : '0') : null;
                     $formField->required = isset($field['required']) ? ($field['required'] ? '1' : null) : null;
                     $formField->save();
-
-
-                    $existingFieldIds = enquiryFormData::where('form_id', $id)->pluck('id')->toArray();
-                    $idsForDelete = array_diff($existingFieldIds, $requestFieldIds);
-                    if (!empty($idsForDelete)) {
-                        enquiryFormData::whereIn('id', $idsForDelete)->delete();
-                    }
                 } else {
-                    // Create new field
-                    enquiryFormData::create([
+                    $newField = enquiryFormData::create([
                         'form_id' => $form->id,
                         'form_data' => json_encode($field),
                         'type' => $field['type'] ?? null,
                         'sub_type' => $field['subtype'] ?? null,
                         'access' => $field['access'] ?? null,
-                        'name' => $field['name'] ?? "field_{$id}",
+                        'name' => "field_{$field['name']}",
                         'label' => $field['label'] ?? null,
                         'className' => $field['className'] ?? 'form-control',
                         'multiple' => isset($field['multiple']) ? ($field['multiple'] ? '1' : '0') : null,
                         'required' => isset($field['required']) ? ($field['required'] ? '1' : null) : null,
                     ]);
 
-                    // $existingFieldIds = enquiryFormData::where('form_id', $id)->pluck('id')->toArray();
-                    // $idsForDelete = array_diff($existingFieldIds, $requestFieldIds);
-                    // if (!empty($idsForDelete)) {
-                    //     enquiryFormData::whereIn('id', $idsForDelete)->delete();
-                    // }
+                    $newlyCreatedFieldIds[] = $newField->id;
+
+                    $newField->name = "field_{$newField->id}";
+                    $newField->save();
                 }
+            }
+
+            $existingFieldIds = enquiryFormData::where('form_id', $id)->pluck('id')->toArray();
+
+            $idsForDelete = array_diff($existingFieldIds, $requestFieldIds, $newlyCreatedFieldIds);
+
+            if (!empty($idsForDelete)) {
+                enquiryFormData::whereIn('id', $idsForDelete)->delete();
             }
         }
 
         return redirect()->route('settings')->with('success', 'Form updated successfully!');
     }
+
+
+
 
 
     public function deleteForm($id)
