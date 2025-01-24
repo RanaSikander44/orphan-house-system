@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class enquiryFormOptions extends Model
 {
-    protected $fillable = ['field_id', 'label', 'value', 'selected'];
+    protected $fillable = ['field_id', 'label', 'value', 'selected', 'order'];
 
     public function field()
     {

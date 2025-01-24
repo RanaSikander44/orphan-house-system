@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class enquiryFormData extends Model
 {
 
-    protected $fillable = ['form_id', 'form_data', 'type', 'sub_type', 'access', 'name', 'label', 'className', 'multiple', 'required'];
+    protected $fillable = ['form_id', 'form_data', 'type', 'sub_type', 'access', 'name', 'label', 'className', 'multiple', 'required' , 'order'];
 
     public function formName()
     {

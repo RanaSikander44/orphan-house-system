@@ -39,8 +39,8 @@ class FormsController extends Controller
         $formElements = json_decode($req->form_data, true);
 
         if ($formElements) {
-            foreach ($formElements as $element) {
-                // Save the form field
+            foreach ($formElements as $index => $element) {
+                // Save the form field, using the array index + 1 as the order
                 $newField = enquiryFormData::create([
                     'form_id' => $form->id,
                     'form_data' => json_encode($element),
@@ -52,13 +52,14 @@ class FormsController extends Controller
                     'className' => $element['className'] ?? null,
                     'multiple' => !empty($element['multiple']) ? '1' : '0',
                     'required' => !empty($element['required']) ? '1' : null,
+                    'order' => $index + 1, // Assign order based on array index
                 ]);
 
                 // Check if the element has options (for select or checkbox group)
                 if ($element['type'] === 'select' && isset($element['values'])) {
                     foreach ($element['values'] as $option) {
                         enquiryFormOptions::create([
-                            'field_id' => $newField->id, // Associate the option with the field
+                            'field_id' => $newField->id,
                             'label' => $option['label'],
                             'value' => $option['value'],
                             'selected' => $option['selected'] ?? false,
@@ -73,18 +74,19 @@ class FormsController extends Controller
                             'field_id' => $newField->id,
                             'label' => $option['label'],
                             'value' => $option['value'],
-                            'selected' => $option['selected'] ?? false, // Store selected value
+                            'selected' => $option['selected'] ?? false,
                         ]);
                     }
                 }
 
+                // Handle radio group (saving selected values)
                 if ($element['type'] === 'radio-group' && isset($element['values'])) {
                     foreach ($element['values'] as $option) {
                         enquiryFormOptions::create([
                             'field_id' => $newField->id,
-                            'label' => $option['label'], // Save label for the radio option
-                            'value' => $option['value'], // Save value for the radio option
-                            'selected' => $option['selected'] ?? false, // Store whether the option is selected
+                            'label' => $option['label'],
+                            'value' => $option['value'],
+                            'selected' => $option['selected'] ?? false,
                         ]);
                     }
                 }
@@ -96,10 +98,11 @@ class FormsController extends Controller
 
 
 
+
     public function editForm($id)
     {
         $form = enquiryForms::findOrFail($id); // Fetch the form by ID
-        $formFields = enquiryFormData::where('form_id', $id)->get(); // Get all fields for the form
+        $formFields = enquiryFormData::where('form_id', $id)->orderBy('order')->get(); // Get all fields for the form
 
         $formFieldsJson = $formFields->map(function ($field) {
             // Map the fields and include options for `select` and `checkbox-group`
@@ -116,7 +119,7 @@ class FormsController extends Controller
 
             // Add options if the field type is `select`
             if ($field->type === 'select') {
-                $fieldData['values'] = enquiryFormOptions::where('field_id', $field->id)->get()->map(function ($option) {
+                $fieldData['values'] = enquiryFormOptions::where('field_id', $field->id)->orderBy('order')->get()->map(function ($option) {
                     return [
                         'id' => $option->id,
                         'label' => $option->label,
@@ -128,7 +131,7 @@ class FormsController extends Controller
 
             // Add options if the field type is `checkbox-group`
             if ($field->type === 'checkbox-group') {
-                $fieldData['values'] = enquiryFormOptions::where('field_id', $field->id)->get()->map(function ($option) {
+                $fieldData['values'] = enquiryFormOptions::where('field_id', $field->id)->orderBy('order')->get()->map(function ($option) {
                     return [
                         'id' => $option->id,
                         'label' => $option->label,
@@ -140,7 +143,7 @@ class FormsController extends Controller
 
             // Add options if the field type is `radio-group`
             if ($field->type === 'radio-group') {
-                $fieldData['values'] = enquiryFormOptions::where('field_id', $field->id)->get()->map(function ($option) {
+                $fieldData['values'] = enquiryFormOptions::where('field_id', $field->id)->orderBy('order')->get()->map(function ($option) {
                     return [
                         'id' => $option->id, // Option ID
                         'label' => $option->label, // Option label
@@ -175,7 +178,8 @@ class FormsController extends Controller
             $requestFieldIds = [];
             $newlyCreatedFieldIds = [];
 
-            foreach ($fields as $field) {
+            foreach ($fields as $index => $field) {
+                // Use $index + 1 for order
                 $fieldId = isset($field['name']) ? str_replace('field_', '', $field['name']) : null;
                 $requestFieldIds[] = $fieldId;
 
@@ -193,14 +197,15 @@ class FormsController extends Controller
                     $formField->className = $field['className'] ?? null;
                     $formField->multiple = isset($field['multiple']) ? ($field['multiple'] ? '1' : '0') : null;
                     $formField->required = isset($field['required']) ? ($field['required'] ? '1' : null) : null;
+                    $formField->order = $index + 1; // Set the order based on the index
                     $formField->save();
 
                     // Update options for `select` and `checkbox-group` fields
-                    if (in_array($formField->type, ['select', 'checkbox-group']) && isset($field['values'])) {
+                    if (in_array($formField->type, ['select', 'checkbox-group', 'radio-group']) && isset($field['values'])) {
                         $existingOptions = enquiryFormOptions::where('field_id', $formField->id)->pluck('id')->toArray();
                         $requestOptionIds = [];
 
-                        foreach ($field['values'] as $option) {
+                        foreach ($field['values'] as $optionIndex => $option) {
                             $optionId = $option['id'] ?? null;
                             $requestOptionIds[] = $optionId;
 
@@ -210,6 +215,7 @@ class FormsController extends Controller
                                 $formOption->label = $option['label'];
                                 $formOption->value = $option['value'];
                                 $formOption->selected = $option['selected'] ?? false;
+                                $formOption->order = $optionIndex + 1; // Set order for options
                                 $formOption->save();
                             } else {
                                 // Create new option
@@ -218,6 +224,7 @@ class FormsController extends Controller
                                     'label' => $option['label'],
                                     'value' => $option['value'],
                                     'selected' => $option['selected'] ?? false,
+                                    'order' => $optionIndex + 1, // Set order for options
                                 ]);
                             }
                         }
@@ -229,7 +236,6 @@ class FormsController extends Controller
                         }
                     }
                 } else {
-
                     // Create new field
                     $newField = enquiryFormData::create([
                         'form_id' => $form->id,
@@ -242,6 +248,7 @@ class FormsController extends Controller
                         'className' => $field['className'] ?? '',
                         'multiple' => isset($field['multiple']) ? ($field['multiple'] ? '1' : '0') : null,
                         'required' => isset($field['required']) ? ($field['required'] ? '1' : null) : null,
+                        'order' => $index + 1, // Set the order based on the index
                     ]);
 
                     $newlyCreatedFieldIds[] = $newField->id;
@@ -252,45 +259,42 @@ class FormsController extends Controller
 
                     // Add options for the new `select` field
                     if ($field['type'] === 'select' && isset($field['values'])) {
-                        foreach ($field['values'] as $option) {
+                        foreach ($field['values'] as $optionIndex => $option) {
                             enquiryFormOptions::create([
                                 'field_id' => $newField->id,
                                 'label' => $option['label'],
                                 'value' => $option['value'],
                                 'selected' => $option['selected'] ?? false,
+                                'order' => $optionIndex + 1, // Set order for options
                             ]);
                         }
                     }
 
                     // Add options for checkboxes
                     if ($field['type'] === 'checkbox-group' && isset($field['values'])) {
-                        foreach ($field['values'] as $checkboxOption) {
-                            // Assuming $checkboxOption is an array with 'label', 'value', and 'selected'
+                        foreach ($field['values'] as $checkboxOptionIndex => $checkboxOption) {
                             enquiryFormOptions::create([
                                 'field_id' => $newField->id,
-                                'label' => $checkboxOption['label'], // Access label correctly
-                                'value' => $checkboxOption['value'], // Access value correctly
-                                'selected' => $checkboxOption['selected'] ?? false, // Use selected or false as default
+                                'label' => $checkboxOption['label'],
+                                'value' => $checkboxOption['value'],
+                                'selected' => $checkboxOption['selected'] ?? false,
+                                'order' => $checkboxOptionIndex + 1, // Set order for checkbox options
                             ]);
                         }
                     }
-
 
                     // Add options for the new `radio-group` field
                     if ($field['type'] === 'radio-group' && isset($field['values'])) {
-                        foreach ($field['values'] as $radioOption) {
+                        foreach ($field['values'] as $radioOptionIndex => $radioOption) {
                             enquiryFormOptions::create([
                                 'field_id' => $newField->id,
-                                'label' => $radioOption['label'], // Access label from the radio option
-                                'value' => $radioOption['value'], // Access value from the radio option
-                                'selected' => $radioOption['selected'] ?? false, // Use selected or false as default
+                                'label' => $radioOption['label'],
+                                'value' => $radioOption['value'],
+                                'selected' => $radioOption['selected'] ?? false,
+                                'order' => $radioOptionIndex + 1, // Set order for radio options
                             ]);
                         }
                     }
-
-
-
-
                 }
             }
 

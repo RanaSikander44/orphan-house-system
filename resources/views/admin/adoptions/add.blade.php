@@ -734,7 +734,7 @@
                                                         <div class="col-md-6">
                                                             <{{ $formData->sub_type }} class="text-muted">{{ $formData->label }}</{{ $formData->sub_type }}> 
                                                         </div>
-                                                    @elseif ($formData->type === 'text')
+                                                    @elseif ($formData->type === 'text' || $formData->type === 'autocomplete')
                                                         <div class="col-md-6">
                                                             <label for="{{ $formData->name }}" class="form-label">
                                                                 {{ $formData->label }}
@@ -829,7 +829,26 @@
                                                                 @endforeach
                                                             </div>
                                                         </div>
+
+                                                    @elseif ($formData->type === 'paragraph')
+                                                            <div class="col-md-6">
+                                                                <label for="{{ $formData->name }}" class="form-label">
+                                                                    {{ $formData->label }}
+                                                                    @if ($formData->required)
+                                                                        <span class="text-danger">*</span>
+                                                                    @endif
+                                                                </label>
+                                                                <textarea 
+                                                                    class="form-control mb-2" 
+                                                                    name="forms[{{ $key }}][inputs][{{ $formData->name }}]" 
+                                                                    id="{{ $formData->name }}" 
+                                                                    rows="6" 
+                                                                    placeholder="Enter your paragraph here..." 
+                                                                    @if ($formData->required) required @endif
+                                                                >{{ old("forms.$key.inputs.$formData->name", $formData->value ?? '') }}</textarea>
+                                                            </div>
                                                     @endif
+    
                                                 @endif
                                             @endforeach
                                         </div>
