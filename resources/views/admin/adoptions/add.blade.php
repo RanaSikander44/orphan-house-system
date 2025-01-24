@@ -729,117 +729,108 @@
                                     <div class="card-body">
                                         <div class="row">
                                             @foreach ($enquiryFormsData as $enquiryKey => $formData)
-                                                <!--  input type text -->
-                                                @if ($formData->form_id === $list->id && $formData->type === 'text')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}
-                                                            @if ($formData->required != null)
-                                                                <span class="text-danger">*</span>
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control mb-2" id="{{ $formData->name }}"
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
-                                                            @if ($formData->required != null) required @endif
-                                                            placeholder="{{ $formData->label }}">
-                                                    </div>
+                                                @if ($formData->form_id === $list->id)
+                                                    @if ($formData->type === 'header')
+                                                        <div class="col-md-6">
+                                                            <{{ $formData->sub_type }} class="text-muted">{{ $formData->label }}</{{ $formData->sub_type }}> 
+                                                        </div>
+                                                    @elseif ($formData->type === 'text')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <input type="text" class="form-control mb-2" id="{{ $formData->name }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                                @if ($formData->required) required @endif
+                                                                placeholder="{{ $formData->label }}">
+                                                        </div>
+                                                    @elseif ($formData->type === 'date')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <input type="date" class="form-control mb-2" id="{{ $formData->name }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                                @if ($formData->required) required @endif
+                                                                placeholder="{{ $formData->label }}">
+                                                        </div>
+                                                    @elseif ($formData->type === 'file')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <input type="file" class="form-control mb-2" id="{{ $formData->name }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                                @if ($formData->required) required @endif>
+                                                        </div>
+                                                    @elseif ($formData->type === 'number')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <input type="number" class="form-control mb-2" id="{{ $formData->name }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                                @if ($formData->required) required @endif
+                                                                placeholder="{{ $formData->label }}">
+                                                        </div>
+                                                    @elseif ($formData->type === 'button')
+                                                        <div class="col-md-6">
+                                                            <button class="btn mt-2 {{ $formData->className }} mb-2">{{ $formData->label }}</button>
+                                                        </div>
+                                                    @elseif ($formData->type === 'textarea')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <textarea name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                                id="{{ $formData->name }}" class="form-control mb-2" @if ($formData->required) required @endif></textarea>
+                                                        </div>
+                                                    @elseif ($formData->type === 'select')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <select class="form-control mb-2" id="{{ $formData->name }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                                @if ($formData->required) required @endif>
+                                                                <option value="" disabled selected>Select {{ $formData->label }}</option>
+                                                                @foreach ($formData->optionsForm as $option)
+                                                                    <option value="{{ $option->value }}" @if ($option->selected) selected @endif>
+                                                                        {{ $option->label }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @elseif ($formData->type === 'checkbox-group' || $formData->type === 'radio-group')
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <div class="mb-2">
+                                                                @foreach ($formData->optionsForm as $option)
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input"
+                                                                            type="{{ $formData->type === 'checkbox-group' ? 'checkbox' : 'radio' }}"
+                                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]{{ $formData->type === 'checkbox-group' ? '[]' : '' }}"
+                                                                            value="{{ $option->value }}"
+                                                                            id="{{ $formData->name }}_{{ $option->value }}"
+                                                                            @if ($option->selected) checked @endif>
+                                                                        <label class="form-check-label" for="{{ $formData->name }}_{{ $option->value }}">
+                                                                            {{ $option->label }}
+                                                                        </label>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                 @endif
-
-                                                <!--  input type date -->
-
-                                                @if($formData->form_id === $list->id && $formData->type === 'date')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}
-                                                            @if ($formData->required != null)
-                                                                <span class="text-danger">*</span>
-                                                            @endif
-                                                        </label>
-                                                        <input type="date" class="form-control mb-2" id="{{ $formData->name }}"
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
-                                                            @if ($formData->required != null) required @endif
-                                                            placeholder="{{ $formData->label }}">
-                                                    </div>
-                                                @endif
-
-                                                <!--  input type file -->
-
-                                                @if($formData->form_id === $list->id && $formData->type === 'file')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}
-                                                            @if ($formData->required != null)
-                                                                <span class="text-danger">*</span>
-                                                            @endif
-                                                        </label>
-                                                        <input type="file" class="form-control mb-2" id="{{ $formData->name }}"
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
-                                                            @if ($formData->required != null) required @endif
-                                                            placeholder="{{ $formData->label }}">
-                                                    </div>
-                                                @endif
-
-
-                                                <!-- input type number -->
-
-                                                @if($formData->form_id === $list->id && $formData->type === 'number')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}
-                                                            @if ($formData->required != null)
-                                                                <span class="text-danger">*</span>
-                                                            @endif
-                                                        </label>
-                                                        <input type="number" class="form-control mb-2" id="{{ $formData->name }}"
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
-                                                            @if ($formData->required != null) required @endif
-                                                            placeholder="{{ $formData->label }}">
-                                                    </div>
-                                                @endif
-
-
-                                                <!-- button -->
-                                                @if($formData->form_id === $list->id && $formData->type === 'button')
-                                                    <div class="col-md-6">
-                                                        <button
-                                                            class="btn mt-2 {{ $formData->className }} mb-2">{{ $formData->label }}</button>
-                                                    </div>
-                                                @endif
-
-
-                                                <!-- textarea -->
-                                                @if($formData->form_id === $list->id && $formData->type === 'textarea')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}
-                                                            @if ($formData->required != null)
-                                                                <span class="text-danger">*</span>
-                                                            @endif
-                                                        </label>
-                                                        <textarea
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
-                                                            id="{{ $formData->name }}" class="form-control mb-2" @if ($formData->required != null) required @endif></textarea>
-                                                    </div>
-                                                @endif
-
-                                                <!-- Paragraph -->
-                                                @if($formData->form_id === $list->id && $formData->type === 'paragraph')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}
-                                                            @if ($formData->required)
-                                                                <span class="text-danger">*</span>
-                                                            @endif
-                                                        </label>
-
-                                                        <input type="text" class="form-control mb-2" id="{{ $formData->name }}"
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
-                                                            @if ($formData->required != null) required @endif
-                                                            placeholder="{{ $formData->label }}">
-
-                                                    </div>
-                                                @endif
-
                                             @endforeach
                                         </div>
                                     </div>
@@ -849,22 +840,12 @@
                     </div>
                 @endforeach
 
-
-
-
-
-
-
                 <div class="text-end mt-3">
                     <button class="btn btn-sm btn-success" type="button" id="nextButton">Next</button>
-
                     <button class="btn btn-primary btn-sm d-none" id="adoptionFormBtn" type="submit">
                         <i class="fa fa-save"></i> Save
                     </button>
                 </div>
-
-
-
             </div>
         </form>
     </div>
