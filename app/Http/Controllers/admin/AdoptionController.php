@@ -55,7 +55,7 @@ class AdoptionController extends Controller
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        $forms = enquiryForms::all();
+        $forms = enquiryForms::where('status' , '1')->get();
         $enquiryFormsIDs = enquiryForms::pluck('id');
         $enquiryFormsData = enquiryFormData::whereIn('form_id', $enquiryFormsIDs)->get();
         return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms' , 'enquiryFormsData'));
