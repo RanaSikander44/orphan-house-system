@@ -816,10 +816,29 @@
                                                                 <span class="text-danger">*</span>
                                                             @endif
                                                         </label>
-                                                        <textarea name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]" id="{{ $formData->name }}" class="form-control mb-2" @if ($formData->required != null) required @endif></textarea>
+                                                        <textarea
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            id="{{ $formData->name }}" class="form-control mb-2" @if ($formData->required != null) required @endif></textarea>
                                                     </div>
                                                 @endif
 
+                                                <!-- Paragraph -->
+                                                @if($formData->form_id === $list->id && $formData->type === 'paragraph')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+
+                                                        <input type="text" class="form-control mb-2" id="{{ $formData->name }}"
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            @if ($formData->required != null) required @endif
+                                                            placeholder="{{ $formData->label }}">
+
+                                                    </div>
+                                                @endif
 
                                             @endforeach
                                         </div>
