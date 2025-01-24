@@ -9,6 +9,7 @@ use App\Models\documents_title;
 use App\Models\DocumentTitleChild;
 use App\Models\Dormitory;
 use App\Models\enquiry_types;
+use App\Models\enquiryFormData;
 use App\Models\enquiryForms;
 use App\Models\nannyChilds;
 use App\Models\school_grades;
@@ -55,8 +56,9 @@ class AdoptionController extends Controller
         $cities = City::all();
         $rooms = Dormitory::all();
         $forms = enquiryForms::all();
-        dd($forms);
-        return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms'));
+        $enquiryFormsIDs = enquiryForms::pluck('id');
+        $enquiryFormsData = enquiryFormData::whereIn('form_id', $enquiryFormsIDs)->get();
+        return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms' , 'enquiryFormsData'));
     }
 
     public function store(Request $req)
@@ -208,10 +210,6 @@ class AdoptionController extends Controller
                 }
             }
         }
-
-
-
-
 
         if ($req->document_titles && $req->document_names) {
 

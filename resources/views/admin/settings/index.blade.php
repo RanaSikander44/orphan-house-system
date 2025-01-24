@@ -157,7 +157,25 @@
                                         @foreach ($forms as $list)
                                             <tr class="FormData_{{ $list->id }}">
                                                 <td>{{ $list->name }}</td>
-                                                <td>{{ $list->status }}</td>
+                                                <td>
+                                                    <!-- Active Button -->
+                                                    <button
+                                                        class="btn btn-sm text-white {{ $list->status === 1 ? '' : 'd-none' }} {{ $list->status === 1 ? 'bg-success ' : '' }}"
+                                                        id="FormActive{{ $list->id }}" type="button"
+                                                        onclick="FormStatusActive({{ $list->id }})">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+
+                                                    <!-- Inactive Button -->
+                                                    <button
+                                                        class="btn btn-sm text-white  {{ $list->status === 0 ? '' : 'd-none' }} {{ $list->status === 0 ? 'bg-danger' : '' }}"
+                                                        id="FormInactive{{ $list->id }}" type="button"
+                                                        onclick="FormStatusInactive({{ $list->id }})">
+
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </button>
+
+                                                </td>
                                                 <td>
                                                     <a href="{{ route('enquiry.forms.edit', $list->id) }}"
                                                         class="btn btn-sm">
@@ -277,6 +295,62 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
     integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+
+<script>
+    const FormStatusActive = (id) => {
+        let formID = id;
+        let task = 'Inactive';
+        let csrfToken = '{{ csrf_token() }}'; // Get CSRF token from Blade template
+
+        $.ajax({
+            url: `{{ route('enquiry.forms.status', ':id') }}`.replace(':id', formID),
+            type: 'POST',
+            data: {
+                _token: csrfToken, // Pass CSRF token
+                task: task
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#FormActive' + id).addClass('d-none');
+                    $('#FormInactive' + id).removeClass('d-none').addClass('bg-danger');
+                    toastr.success(response.success); // Show the success message from the response
+                }
+            },
+            error: function (error) {
+                // Handle error here
+                toastr.error(response.error);
+                console.error('Error:', error);
+            }
+        });
+    };
+
+
+    const FormStatusInactive = (id) => {
+        let formID = id;
+        let task = 'Active';
+
+        $.ajax({
+            url: `{{ route('enquiry.forms.status', ':id') }}`.replace(':id', formID),
+            type: 'POST',
+            data: {
+                _token: csrf,
+                task: task
+            },
+            success: function (response) {
+                $('#FormActive' + id).removeClass('d-none').addClass('bg-success');
+                $('#FormInactive' + id).addClass('d-none');
+                toastr.success(response.success);
+                console.log(response);
+            },
+            error: function (error) {
+                // Handle error here
+                console.error('Error:', error);
+            }
+        });
+    };
+</script>
+
+
 
 <script>
 
@@ -443,4 +517,5 @@
             $(this).closest('.document-group').remove();
         });
     });
+
 </script>

@@ -175,6 +175,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/forms/edit/{id}', [FormsController::class, 'editForm'])->name('enquiry.forms.edit');
     Route::put('settings/forms/update/{id}', [FormsController::class, 'updateForm'])->name('enquiry.forms.update');
     Route::get('settings/forms/delete/{id}', [FormsController::class, 'deleteForm'])->name('enquiry.forms.delete');
+    Route::post('settings/forms/status/{id}', [FormsController::class, 'FormStatus'])->name('enquiry.forms.status');
 
 
 

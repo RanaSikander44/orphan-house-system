@@ -8,6 +8,6 @@ class enquiryForms extends Model
 {
     public function formData()
     {
-        return $this->belongsTo(enquiryFormData::class, 'id', 'form_id');
+        return $this->hasMany(enquiryFormData::class, 'form_id');
     }
 }
