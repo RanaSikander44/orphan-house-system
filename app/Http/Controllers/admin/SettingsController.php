@@ -7,6 +7,7 @@ use App\Models\child;
 use App\Models\child_documents;
 use App\Models\DocumentTitlesStaff;
 use App\Models\donorSettings;
+use App\Models\enquiryForms;
 use App\Models\settings;
 use App\Models\DocumentTitleChild;
 use App\Models\documents_title;
@@ -22,7 +23,8 @@ class SettingsController extends Controller
         $donorSetting = donorSettings::first();
         $child_documents = DocumentTitleChild::all();
         $staff_documents = DocumentTitlesStaff::all();
-        return view('admin.settings.index', compact('settings', 'child_documents', 'donorSetting', 'staff_documents'));
+        $forms = enquiryForms::orderBy('id', 'desc')->paginate(5);
+        return view('admin.settings.index', compact('settings', 'child_documents', 'donorSetting', 'staff_documents', 'forms'));
     }
 
     public function store(Request $req)

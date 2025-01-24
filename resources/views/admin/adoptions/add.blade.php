@@ -11,19 +11,37 @@
     <!-- <h3 class="mt-4">Add New Application</h3> -->
 
     <div class="card bg-white p-3 mt-4 border-0 shadow-sm rounded">
-        <div class="student-buttons pt-3">
-            <!-- Centered Pills -->
-            <ul class="nav nav-pills nav-justified flex-wrap" id="menuTabs" style="white-space: nowrap;">
+        <div class="pt-3">
+            <ul class="nav nav-pills nav-justified" id="menuTabs" style="white-space: nowrap;">
+                <!-- Personal Info Tab -->
                 <li class="nav-item">
-                    <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">Personal Info</a>
+                    <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">
+                        <i class="bi bi-person-fill"></i> Personal Info
+                    </a>
                 </li>
+
+                <!-- Parents & Guardian Info Tab -->
                 <li class="nav-item">
-                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">Parents & Guardian
-                        Info</a>
+                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">
+                        <i class="bi bi-person-lines-fill"></i> Parents & Guardian Info
+                    </a>
                 </li>
+
+                <!-- Documents Tab -->
                 <li class="nav-item">
-                    <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">Documents </a>
+                    <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">
+                        <i class="bi bi-file-earmark"></i> Documents
+                    </a>
                 </li>
+
+                <!-- Dynamic Tabs from Forms -->
+                @foreach ($forms as $key => $list)
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
+                            <i class="bi bi-file-earmark-post"></i> {{ $list->name }}
+                        </a>
+                    </li>
+                @endforeach
             </ul>
             <hr class="w-100 my-4" style="font-weight : 200px;">
         </div>
@@ -31,7 +49,6 @@
         <form method="post" action="{{route('enquiry.store')}}" enctype="multipart/form-data">
             @csrf
             <div class="tab-content">
-
                 <!-- Home Tab -->
                 <div class="tab-pane fade show active" style="width: 100%;" id="home">
                     <div class="p-3">
@@ -63,7 +80,7 @@
                                                             {{ $list->title }}
                                                         </option>
                                                     @empty
-                                                        <option value="">Please add at least one enquiry type 
+                                                        <option value="">Please add at least one enquiry type
                                                         </option>
                                                     @endforelse
                                                 </select>
@@ -696,11 +713,158 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="text-end mt-3">
-                <button class="btn btn-primary btn-sm" type="submit">
-                    <i class="fa fa-save"></i> Save
-                </button>
+
+                <!-- dynamic tabs start over here -->
+                @foreach ($forms as $key => $list)
+                    <div class="tab-pane fade" id="form{{ $key }}" role="tabpanel">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <input type="hidden" name="forms[{{ $key }}][form_id]" value="{{ $list->id }}">
+                                <div class="card bg-light border-0 shadow-none" style="height: auto;">
+                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
+                                        <p class="text-muted fw-bold">{{ $list->name }}</p>
+                                        <hr class="w-100" style="border-width: 2px;">
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            @foreach ($enquiryFormsData as $enquiryKey => $formData)
+                                                <!--  input type text -->
+                                                @if ($formData->form_id === $list->id && $formData->type === 'text')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required != null)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control mb-2" id="{{ $formData->name }}"
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            @if ($formData->required != null) required @endif
+                                                            placeholder="{{ $formData->label }}">
+                                                    </div>
+                                                @endif
+
+                                                <!--  input type date -->
+
+                                                @if($formData->form_id === $list->id && $formData->type === 'date')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required != null)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+                                                        <input type="date" class="form-control mb-2" id="{{ $formData->name }}"
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            @if ($formData->required != null) required @endif
+                                                            placeholder="{{ $formData->label }}">
+                                                    </div>
+                                                @endif
+
+                                                <!--  input type file -->
+
+                                                @if($formData->form_id === $list->id && $formData->type === 'file')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required != null)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+                                                        <input type="file" class="form-control mb-2" id="{{ $formData->name }}"
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            @if ($formData->required != null) required @endif
+                                                            placeholder="{{ $formData->label }}">
+                                                    </div>
+                                                @endif
+
+
+                                                <!-- input type number -->
+
+                                                @if($formData->form_id === $list->id && $formData->type === 'number')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required != null)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+                                                        <input type="number" class="form-control mb-2" id="{{ $formData->name }}"
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            @if ($formData->required != null) required @endif
+                                                            placeholder="{{ $formData->label }}">
+                                                    </div>
+                                                @endif
+
+
+                                                <!-- button -->
+                                                @if($formData->form_id === $list->id && $formData->type === 'button')
+                                                    <div class="col-md-6">
+                                                        <button
+                                                            class="btn mt-2 {{ $formData->className }} mb-2">{{ $formData->label }}</button>
+                                                    </div>
+                                                @endif
+
+
+                                                <!-- textarea -->
+                                                @if($formData->form_id === $list->id && $formData->type === 'textarea')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required != null)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+                                                        <textarea
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            id="{{ $formData->name }}" class="form-control mb-2" @if ($formData->required != null) required @endif></textarea>
+                                                    </div>
+                                                @endif
+
+                                                <!-- Paragraph -->
+                                                @if($formData->form_id === $list->id && $formData->type === 'paragraph')
+                                                    <div class="col-md-6">
+                                                        <label for="{{ $formData->name }}" class="form-label">
+                                                            {{ $formData->label }}
+                                                            @if ($formData->required)
+                                                                <span class="text-danger">*</span>
+                                                            @endif
+                                                        </label>
+
+                                                        <input type="text" class="form-control mb-2" id="{{ $formData->name }}"
+                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->label }}]"
+                                                            @if ($formData->required != null) required @endif
+                                                            placeholder="{{ $formData->label }}">
+
+                                                    </div>
+                                                @endif
+
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+
+
+
+
+
+
+                <div class="text-end mt-3">
+                    <button class="btn btn-sm btn-success" type="button" id="nextButton">Next</button>
+
+                    <button class="btn btn-primary btn-sm d-none" id="adoptionFormBtn" type="submit">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+
+
+
             </div>
         </form>
     </div>
@@ -772,6 +936,69 @@
         $('.image-button').css('display', 'block');
     });
 </script>
+
+
+<!-- Next Btn Js -->
+<script>
+    function toggleButtons() {
+        // Find the active tab
+        var activeTab = $('.nav-pills .nav-link.active');
+
+        // Check if the active tab is the last tab
+        var isLastTab = activeTab.parent().is(':last-child');
+
+        if (isLastTab) {
+            // Hide the Next button and show the Save button
+            $('#nextButton').addClass('d-none');
+            $('#adoptionFormBtn').removeClass('d-none');
+        } else {
+            // Show the Next button and hide the Save button
+            $('#nextButton').removeClass('d-none');
+            $('#adoptionFormBtn').addClass('d-none');
+        }
+    }
+
+    // Handle Next button click
+    $('#nextButton').on('click', function () {
+        // Find the active tab and its corresponding pane
+        var activeTab = $('.nav-pills .nav-link.active');
+        var activePane = $(activeTab.attr('href'));
+
+        // Find the next tab and pane
+        var nextTab = activeTab.parent().next().find('.nav-link');
+        var nextPane = $(nextTab.attr('href'));
+
+        if (nextTab.length) {
+            // Remove active class from the current tab and pane
+            activeTab.removeClass('active');
+            activePane.removeClass('show active');
+
+            // Add active class to the next tab and pane
+            nextTab.addClass('active');
+            nextPane.addClass('show active');
+        }
+
+        // Toggle button visibility
+        toggleButtons();
+    });
+
+    // Handle manual tab change
+    $('.nav-pills .nav-link').on('click', function () {
+        toggleButtons();
+    });
+
+    // Initial toggle on page load
+    $(document).ready(function () {
+        toggleButtons();
+    });
+</script>
+
+
+
+
+
+
+
 
 <!-- Add JavaScript for Toggling -->
 <script>

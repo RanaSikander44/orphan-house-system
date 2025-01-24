@@ -453,7 +453,8 @@
     /* Css for the admission student pills menues */
 
     #menuTabs .nav-item a {
-        width: 74%;
+        width: 100%;
+        margin: 0px 5px;
     }
 
     .select2-container {
