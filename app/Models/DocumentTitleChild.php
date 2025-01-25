@@ -8,5 +8,6 @@ class DocumentTitleChild extends Model
 {
     protected $fillable = [
         'title',        // Add all other fields you want to mass assign
+        'required',        // Add all other fields you want to mass assign
     ];
 }
