@@ -29,8 +29,6 @@ use App\Models\User;
 use App\Models\Role;
 
 
-
-
 class AdoptionController extends Controller
 {
     public function index()
