@@ -40,8 +40,30 @@ class AdoptionController extends Controller
         $nannies = User::whereIn('role_id', $roles)->get();
         $schools = Schools::all();
 
-        $childrens = child::orderBy('id', 'desc')->paginate(10);
+        $childrens = child::orderBy('id', 'desc')->where('is_approved' , '0')->paginate(10);
         return view('admin.adoptions.index', compact('childrens', 'roles', 'nannies', 'schools'));
+    }
+
+
+    public function approvedChilds()
+    {   
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+
+        $childrens = child::orderBy('id', 'desc')->where('is_approved' , '1')->paginate(10);
+        return view('admin.adoptions.childList', compact('childrens', 'roles', 'nannies', 'schools'));
+
+    }
+
+
+    public function approveInquiery($id){
+        $child = child::find($id);
+        $child->is_approved = 1;
+        $child->update();
+
+
+        return redirect()->route('adoptions')->with('success', 'Inquiry Approved !');
     }
 
 
@@ -207,7 +229,7 @@ class AdoptionController extends Controller
                         $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
                         $destinationPath = public_path('backend/documents/childs/dynamicFields');
                         $input_value->move($destinationPath, $uniqueName);
-                        $formsData->input_value = 'backend/documents/childs/dynamicFields/'.$uniqueName;
+                        $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
                     } else {
                         // Handle non-file inputs
                         if (is_array($input_value)) {
