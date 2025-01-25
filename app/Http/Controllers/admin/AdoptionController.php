@@ -29,8 +29,6 @@ use App\Models\User;
 use App\Models\Role;
 
 
-
-
 class AdoptionController extends Controller
 {
     public function index()
@@ -40,8 +38,30 @@ class AdoptionController extends Controller
         $nannies = User::whereIn('role_id', $roles)->get();
         $schools = Schools::all();
 
-        $childrens = child::orderBy('id', 'desc')->paginate(10);
+        $childrens = child::orderBy('id', 'desc')->where('is_approved' , '0')->paginate(10);
         return view('admin.adoptions.index', compact('childrens', 'roles', 'nannies', 'schools'));
+    }
+
+
+    public function approvedChilds()
+    {   
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+
+        $childrens = child::orderBy('id', 'desc')->where('is_approved' , '1')->paginate(10);
+        return view('admin.adoptions.childList', compact('childrens', 'roles', 'nannies', 'schools'));
+
+    }
+
+
+    public function approveInquiery($id){
+        $child = child::find($id);
+        $child->is_approved = 1;
+        $child->update();
+
+
+        return redirect()->route('adoptions')->with('success', 'Inquiry Approved !');
     }
 
 
@@ -55,14 +75,15 @@ class AdoptionController extends Controller
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        $forms = enquiryForms::where('status' , '1')->get();
+        $forms = enquiryForms::where('status', '1')->get();
         $enquiryFormsIDs = enquiryForms::pluck('id');
         $enquiryFormsData = enquiryFormData::whereIn('form_id', $enquiryFormsIDs)->orderBy('order')->get();
-        return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms' , 'enquiryFormsData'));
+        return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms', 'enquiryFormsData'));
     }
 
     public function store(Request $req)
     {
+
         $validator = Validator::make($req->all(), [
             'enquiry_type_id' => 'required',
             'enquiry_no' => 'required',
@@ -189,9 +210,6 @@ class AdoptionController extends Controller
         }
 
 
-
-        // child dynamic forms data saving here 
-
         if ($req->has('forms')) {
             foreach ($req->forms as $form) {
                 foreach ($form['inputs'] as $input_name => $input_value) {
@@ -201,15 +219,56 @@ class AdoptionController extends Controller
 
                     // Extract the part of the input_name after the last underscore
                     $lastUnderscorePos = strrpos($input_name, '_');
-                    $label = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+                    $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+                    $formsData->input_id = $inputId;
 
-                    $formsData->input_label = $label; // Store the extracted label
-                    $formsData->input_name = $input_name;
-                    $formsData->input_value = $input_value;
+                    // Check if the input value is an uploaded file
+                    if ($input_value instanceof \Illuminate\Http\UploadedFile) {
+                        $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
+                        $destinationPath = public_path('backend/documents/childs/dynamicFields');
+                        $input_value->move($destinationPath, $uniqueName);
+                        $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+                    } else {
+                        // Handle non-file inputs
+                        if (is_array($input_value)) {
+                            $input_value = json_encode($input_value); // Convert array to JSON string
+                        }
+                        $formsData->input_value = $input_value;
+                    }
+
                     $formsData->save();
                 }
             }
         }
+
+
+
+        // child dynamic forms data saving here 
+
+        // if ($req->has('forms')) {
+        //     foreach ($req->forms as $form) {
+        //         foreach ($form['inputs'] as $input_name => $input_value) {
+        //             $formsData = new ChildFormData();
+        //             $formsData->form_id = $form['form_id'];
+        //             $formsData->child_id = $application->id;
+
+        //             // Extract the part of the input_name after the last underscore
+        //             $lastUnderscorePos = strrpos($input_name, '_');
+        //             $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+        //             $formsData->input_id = $inputId;
+
+        //             // Handle input_value
+        //             if (is_array($input_value)) {
+        //                 $input_value = json_encode($input_value); // Convert array to JSON string
+        //             }
+        //             $formsData->input_value = $input_value;
+
+        //             $formsData->save();
+        //         }
+        //     }
+
+        // }
+
 
         if ($req->document_titles && $req->document_names) {
 
@@ -271,15 +330,15 @@ class AdoptionController extends Controller
         }
 
 
-        $forms = enquiryForms::all();
-        $formsData = ChildFormData::all();
+        $forms = enquiryForms::where('status', '1')->get();
+        $formsData = ChildFormData::where('child_id', $id)->get();
         return view('admin.adoptions.view', compact('child', 'parents', 'documents', 'nannyDetails', 'formsData', 'forms'));
     }
 
     public function studentEdit($id)
     {
         $cities = City::all();
-        $years = academicyear::all();
+        // $years = academicyear::all();
         $settings = settings::first();
         $schools = Schools::get();
         $enquiry_types = enquiry_types::where('status', '1')->get();
@@ -288,7 +347,7 @@ class AdoptionController extends Controller
         $documents = child_documents::where('child_id', $child->id)->get();
         $rooms = Dormitory::all();
         $grades = school_grades::all();
-        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'schools', 'enquiry_types', 'rooms', 'grades'));
+        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'schools', 'enquiry_types', 'rooms', 'grades'));
     }
 
 

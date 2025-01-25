@@ -10,4 +10,5 @@ class enquiryForms extends Model
     {
         return $this->hasMany(enquiryFormData::class, 'form_id');
     }
+
 }
