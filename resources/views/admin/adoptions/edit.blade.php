@@ -703,11 +703,13 @@
 
                                                     <div class="col-md-6">
                                                         <label for="file_{{ $index }}"
-                                                            class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}</label>
+                                                            class="mb-2 mt-2 text-muted">{{ $list->documentTitle->title }}
+                                                            @if($list->documentTitle->required === 1)<span
+                                                            class="text-danger">*</span> @endif </label>
                                                         <input type="text" class="d-none" name="document_titles[]"
                                                             value="{{ $list->documentTitle->id}}">
                                                         <input type="file" class="form-control" name="document_names[]"
-                                                            id="file_{{ $index }}">
+                                                            id="file_{{ $index }}" @if(empty($list->name) && ($list->documentTitle->required === 1)) required @endif>
                                                         <div class="docs">
                                                             <!-- Display the existing document name with a link to the file -->
                                                             @if($list->name)
@@ -730,6 +732,7 @@
 
                     </div>
                 </div>
+
             </div>
             <div class="text-end mt-3">
                 <button class="btn btn-primary btn-sm" type="submit">

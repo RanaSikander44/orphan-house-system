@@ -279,7 +279,7 @@ class AdoptionController extends Controller
     public function studentEdit($id)
     {
         $cities = City::all();
-        $years = academicyear::all();
+        // $years = academicyear::all();
         $settings = settings::first();
         $schools = Schools::get();
         $enquiry_types = enquiry_types::where('status', '1')->get();
@@ -288,7 +288,7 @@ class AdoptionController extends Controller
         $documents = child_documents::where('child_id', $child->id)->get();
         $rooms = Dormitory::all();
         $grades = school_grades::all();
-        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'schools', 'enquiry_types', 'rooms', 'grades'));
+        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'schools', 'enquiry_types', 'rooms', 'grades'));
     }
 
 
