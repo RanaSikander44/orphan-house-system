@@ -682,6 +682,8 @@
                     </div>
                 </div>
 
+
+                <!-- documents -->
                 <div class="tab-pane fade" id="menu2">
                     <div class="p-3">
                         <div class="row">
@@ -697,11 +699,11 @@
                                                 @foreach ($docs as $index => $list)
                                                     <div class="col-md-6">
                                                         <label for="file_{{ $index }}"
-                                                            class="mb-2 mt-2 text-muted">{{ $list->title }}</label>
+                                                            class="mb-2 mt-2 text-muted">{{ $list->title }} @if($list->required === 1)<span class="text-danger">*</span> @endif  </label>
                                                         <input type="text" class="d-none" name="document_titles[]"
                                                             value="{{ $list->id }}">
                                                         <input type="file" class="form-control" name="document_names[]"
-                                                            id="file_{{ $index }}">
+                                                            id="file_{{ $index }}" {{ $list->required === 1 ? 'required' : ''}}>
                                                     </div>
                                                 @endforeach
                                             </div>
