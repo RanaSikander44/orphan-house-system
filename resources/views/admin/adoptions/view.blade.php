@@ -74,7 +74,7 @@
                                 <button class="nav-link custom-btn" id="form-tab-{{ $form->id }}" data-bs-toggle="pill"
                                     data-bs-target="#form-content-{{ $form->id }}" type="button" role="tab"
                                     aria-controls="form-content-{{ $form->id }}" aria-selected="false">
-                                    <i class="bi bi-calendar-check me-2"></i>Form {{ $form->id }}
+                                    <i class="bi bi-calendar-check me-2"></i>{{ $form->name }}
                                 </button>
                             </li>
                         @endforeach
@@ -83,23 +83,46 @@
                     <hr>
                     <div class="tab-content" id="form-tabs-content">
                         @foreach ($formsData->groupBy('form_id') as $formId => $formDataGroup)
-                            <div class="tab-pane fade" id="form-content-{{ $formId }}" role="tabpanel"
-                                aria-labelledby="form-tab-{{ $formId }}">
-                                <div class="pt-0 p-4 rounded-3">
-                                    @foreach ($formDataGroup as $formData)
-                                        <div class="d-flex align-items-center py-2 border-bottom">
-                                            <div class="col-6">
-                                                <p>{{ $formData->input_label}}</p>
-                                            </div>
-                                            <div class="col-6 text-muted text-end">
-                                                <p class="mb-0">{{ $formData->input_value }}</p>
-                                            </div>
+                                    <div class="tab-pane fade" id="form-content-{{ $formId }}" role="tabpanel"
+                                        aria-labelledby="form-tab-{{ $formId }}">
+                                        <div class="pt-0 p-4 rounded-3">
+                                            @foreach ($formDataGroup as $formData)
+                                                                @if ($formData->inputForm && $formData->inputForm->label) {{-- Ensure inputForm and
+                                                                                    label exist --}}
+                                                                                    <div class="d-flex align-items-center py-2 border-bottom">
+                                                                                        <div class="col-6">
+                                                                                            <p>{{ $formData->inputForm->label }}</p>
+                                                                                        </div>
+                                                                                        <div class="col-6 text-muted text-end">
+                                                                                            <p class="mb-0">
+                                                                                                @if ($formData->inputForm->type === 'file')
+                                                                                                                                {{-- Check if the input is a file --}}
+                                                                                                                                @php
+                                                                                                                                    // Get the full file URL using the asset() helper
+                                                                                                                                    $fileUrl = asset($formData->input_value);
+                                                                                                                                @endphp
+                                                                                                                                <a href="{{ $fileUrl }}" download="downloaded_file"
+                                                                                                                                    class="btn btn-link p-0">
+                                                                                                                                    Download File
+                                                                                                                                </a>
+                                                                                                @else
+                                                                                                                            {{-- Display value as text --}}
+                                                                                                                            {{ is_array(json_decode($formData->input_value, true))
+                                                                                                    ? implode(', ', json_decode($formData->input_value, true))
+                                                                                                    : $formData->input_value 
+                                                                                                                                                                                }}
+                                                                                                @endif
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                @endif
+                                            @endforeach
+
                                         </div>
-                                    @endforeach
-                                </div>
-                            </div>
+                                    </div>
                         @endforeach
                     </div>
+
 
 
                     <!-- Pills Content -->
@@ -598,6 +621,20 @@
                 alert('Error deleting document: ' + error);
             }
         });
+    }
+</script>
+
+
+
+<script>
+    function downloadFile(fileUrl, fileName) {
+        // Create an anchor element to trigger the download
+        const a = document.createElement('a');
+        a.href = fileUrl;
+        a.download = fileName; // Use the original file name
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 </script>
 
