@@ -32,7 +32,7 @@ class ChildActiviesController extends Controller
 
     public function add()
     {
-        $children = child::all();
+        $children = child::where('is_approved', '1')->get();
         $roles = Role::where('name', 'Nanny')->pluck('id');
         $nannies = User::whereIn('role_id', $roles)->get();
         $schools = Schools::all();
@@ -91,7 +91,7 @@ class ChildActiviesController extends Controller
 
     public function edit($id)
     {
-        $children = child::all();
+        $children = child::where('is_approved', '1')->get();
         $activity = ChildActivity::findOrFail($id);
         $images = ChildActivityImages::where('activity_id', $activity->id)->get();
 
@@ -275,6 +275,7 @@ class ChildActiviesController extends Controller
             // Fetch children directly from the Child table
             $children = Child::with('school')
                 ->where('school_id', $req->school_id)
+                ->where('is_approved', '1')
                 ->get();
 
             $result = $children->map(function ($child) {
@@ -291,7 +292,7 @@ class ChildActiviesController extends Controller
         // If no conditions were met, return an error message
         if (empty($result)) {
 
-            $data = child::all();
+            $data = child::where('is_approved' , '1')->get();
             return response()->json($data);
 
         }

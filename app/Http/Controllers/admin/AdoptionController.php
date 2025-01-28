@@ -4,10 +4,13 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\academicyear;
+use App\Models\ChildFormData;
 use App\Models\documents_title;
 use App\Models\DocumentTitleChild;
 use App\Models\Dormitory;
 use App\Models\enquiry_types;
+use App\Models\enquiryFormData;
+use App\Models\enquiryForms;
 use App\Models\nannyChilds;
 use App\Models\school_grades;
 use App\Models\settings;
@@ -26,8 +29,6 @@ use App\Models\User;
 use App\Models\Role;
 
 
-
-
 class AdoptionController extends Controller
 {
     public function index()
@@ -37,8 +38,31 @@ class AdoptionController extends Controller
         $nannies = User::whereIn('role_id', $roles)->get();
         $schools = Schools::all();
 
-        $childrens = child::orderBy('id', 'desc')->paginate(10);
+        $childrens = child::orderBy('id', 'desc')->where('is_approved', '0')->paginate(10);
         return view('admin.adoptions.index', compact('childrens', 'roles', 'nannies', 'schools'));
+    }
+
+
+    public function approvedChilds()
+    {
+        $roles = Role::where('name', 'Nanny')->pluck('id');
+        $nannies = User::whereIn('role_id', $roles)->get();
+        $schools = Schools::all();
+
+        $childrens = child::orderBy('id', 'desc')->where('is_approved', '1')->paginate(10);
+        return view('admin.adoptions.childList', compact('childrens', 'roles', 'nannies', 'schools'));
+
+    }
+
+
+    public function approveInquiery($id)
+    {
+        $child = child::find($id);
+        $child->is_approved = 1;
+        $child->update();
+
+
+        return redirect()->route('adoptions')->with('success', 'Inquiry Approved !');
     }
 
 
@@ -52,7 +76,10 @@ class AdoptionController extends Controller
         $schools = Schools::get();
         $cities = City::all();
         $rooms = Dormitory::all();
-        return view('admin.adoptions.add', compact( 'newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms'));
+        $forms = enquiryForms::where('status', '1')->get();
+        $enquiryFormsIDs = enquiryForms::pluck('id');
+        $enquiryFormsData = enquiryFormData::whereIn('form_id', $enquiryFormsIDs)->orderBy('order')->get();
+        return view('admin.adoptions.add', compact('newEnquiryId', 'docs', 'settings', 'enquiry_types', 'cities', 'schools', 'rooms', 'forms', 'enquiryFormsData'));
     }
 
     public function store(Request $req)
@@ -184,6 +211,66 @@ class AdoptionController extends Controller
         }
 
 
+        if ($req->has('forms')) {
+            foreach ($req->forms as $form) {
+                foreach ($form['inputs'] as $input_name => $input_value) {
+                    $formsData = new ChildFormData();
+                    $formsData->form_id = $form['form_id'];
+                    $formsData->child_id = $application->id;
+
+                    // Extract the part of the input_name after the last underscore
+                    $lastUnderscorePos = strrpos($input_name, '_');
+                    $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+                    $formsData->input_id = $inputId;
+
+                    // Check if the input value is an uploaded file
+                    if ($input_value instanceof \Illuminate\Http\UploadedFile) {
+                        $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
+                        $destinationPath = public_path('backend/documents/childs/dynamicFields');
+                        $input_value->move($destinationPath, $uniqueName);
+                        $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+                    } else {
+                        // Handle non-file inputs
+                        if (is_array($input_value)) {
+                            $input_value = json_encode($input_value); // Convert array to JSON string
+                        }
+                        $formsData->input_value = $input_value;
+                    }
+
+                    $formsData->save();
+                }
+            }
+        }
+
+
+
+        // child dynamic forms data saving here 
+
+        // if ($req->has('forms')) {
+        //     foreach ($req->forms as $form) {
+        //         foreach ($form['inputs'] as $input_name => $input_value) {
+        //             $formsData = new ChildFormData();
+        //             $formsData->form_id = $form['form_id'];
+        //             $formsData->child_id = $application->id;
+
+        //             // Extract the part of the input_name after the last underscore
+        //             $lastUnderscorePos = strrpos($input_name, '_');
+        //             $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+        //             $formsData->input_id = $inputId;
+
+        //             // Handle input_value
+        //             if (is_array($input_value)) {
+        //                 $input_value = json_encode($input_value); // Convert array to JSON string
+        //             }
+        //             $formsData->input_value = $input_value;
+
+        //             $formsData->save();
+        //         }
+        //     }
+
+        // }
+
+
         if ($req->document_titles && $req->document_names) {
 
             $titles = $req->input('document_titles');
@@ -242,13 +329,17 @@ class AdoptionController extends Controller
         } else {
             $nannyDetails = null;
         }
-        return view('admin.adoptions.view', compact('child', 'parents', 'documents', 'nannyDetails'));
+
+
+        $forms = enquiryForms::where('status', '1')->get();
+        $formsData = ChildFormData::where('child_id', $id)->get();
+        return view('admin.adoptions.view', compact('child', 'parents', 'documents', 'nannyDetails', 'formsData', 'forms'));
     }
 
     public function studentEdit($id)
     {
         $cities = City::all();
-        $years = academicyear::all();
+        // $years = academicyear::all();
         $settings = settings::first();
         $schools = Schools::get();
         $enquiry_types = enquiry_types::where('status', '1')->get();
@@ -257,7 +348,16 @@ class AdoptionController extends Controller
         $documents = child_documents::where('child_id', $child->id)->get();
         $rooms = Dormitory::all();
         $grades = school_grades::all();
-        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'years', 'schools', 'enquiry_types', 'rooms', 'grades'));
+
+        $forms = enquiryForms::where('status', '1')->get();
+
+        // Fetch inputs for forms
+        $formData = EnquiryFormData::whereIn('form_id', $forms->pluck('id'))->get();
+
+        // Fetch saved values for the specific child
+        $childInputs = ChildFormData::where('child_id', $id)->get()->keyBy('input_id');
+
+        return view('admin.adoptions.edit', compact('child', 'cities', 'settings', 'parents', 'documents', 'schools', 'enquiry_types', 'rooms', 'grades', 'forms', 'formData', 'childInputs'));
     }
 
 
@@ -362,7 +462,55 @@ class AdoptionController extends Controller
             $parent->father_phone_no = $req->father_phone_no;
         }
 
+
         $parent->save();
+
+
+        if ($req->has('forms')) {
+            foreach ($req->forms as $form) {
+                // Ensure 'inputs' key exists in the form array
+                if (isset($form['inputs']) && is_array($form['inputs'])) {
+                    foreach ($form['inputs'] as $input_name => $input_value) {
+                        // Extract the input ID from the name
+                        $lastUnderscorePos = strrpos($input_name, '_');
+                        $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+
+                        // Check if an entry already exists for this input ID and child
+                        $formsData = ChildFormData::where('form_id', $form['form_id'])
+                            ->where('child_id', $application->id)
+                            ->where('input_id', $inputId)
+                            ->first();
+
+                        if (!$formsData) {
+                            $formsData = new ChildFormData(); // Create a new instance if not found
+                            $formsData->form_id = $form['form_id'];
+                            $formsData->child_id = $application->id;
+                            $formsData->input_id = $inputId;
+                        }
+
+                        // Handle file uploads
+                        if ($input_value instanceof \Illuminate\Http\UploadedFile) {
+                            $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
+                            $destinationPath = public_path('backend/documents/childs/dynamicFields');
+                            $input_value->move($destinationPath, $uniqueName);
+                            $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+                        } else {
+                            // Handle non-file inputs
+                            if (is_array($input_value)) {
+                                $input_value = json_encode($input_value); // Convert array to JSON string
+                            }
+                            $formsData->input_value = $input_value;
+                        }
+
+                        $formsData->save(); // Save the updated or new record
+                    }
+                } else {
+                    // Optionally, log or handle forms without 'inputs' key
+                    \Log::warning('Form missing "inputs" key', ['form' => $form]);
+                }
+            }
+        }
+
 
         if ($req->has('document_titles')) {
             $titles = $req->input('document_titles');

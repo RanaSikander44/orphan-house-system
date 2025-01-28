@@ -68,6 +68,12 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
+                                        <a class="dropdown-item" href="{{ route('enquiry.approve.child', $list->id) }}"
+                                            title="Approve Child">
+                                            <i class="fa fa-check" style="color: green;"></i> Approve
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item" href="{{ route('enquiry.view', $list->id) }}"
                                             title="View Enquiry">
                                             <i class="fa fa-eye"></i> View
@@ -79,6 +85,7 @@
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
                                     </li>
+
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);" title="Delete Enquiry"
                                             onclick="deleteChl()">
@@ -233,7 +240,7 @@
 
 
             $('#clear-filters').click(function () {
-                $('#select-child-nanny').val('').trigger('change');  
+                $('#select-child-nanny').val('').trigger('change');
                 $('#select-child-school').val('').trigger('change');
             });
 

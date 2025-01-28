@@ -25,9 +25,9 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $users_count = user::count();
-        $childs = child::count();
+        $childs = child::where('is_approved' , '1')->count();
+        $enquiry = child::where('is_approved' , '0')->count();
         $totalActivities = ChildActivity::count();
-        $parents = ParentModel::count();
 
         $latestActivity = ChildActivity::whereDate('activity_date', Carbon::today())
             ->orderByDesc('created_at')
@@ -53,6 +53,6 @@ class DashboardController extends Controller
 
 
 
-        return view('admin.dashboard', compact('users_count', 'childs', 'totalActivities' , 'latestActivity', 'parents', 'imagesOfCActivity', 'notifications'));
+        return view('admin.dashboard', compact('users_count', 'childs', 'totalActivities' , 'latestActivity', 'enquiry', 'imagesOfCActivity', 'notifications'));
     }
 }

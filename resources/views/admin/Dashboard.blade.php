@@ -17,9 +17,19 @@
                                 <h5 class="ms-3 mt-3">Childs</h5>
                                 <p class="ms-3 mt-2">Total Childs</p>
                                 <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="{{ route('adoptions') }}">{{ $childs }}</a>
+                                    href="{{ route('enquiry.child.list') }}">{{ $childs }}</a>
                             </div>
                         </div>
+
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white rounded-2 bg-gradient" style="border: none;">
+                                <h5 class="ms-3 mt-3">Inquiries</h5>
+                                <p class="ms-3 mt-2">Total Inquiries</p>
+                                <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
+                                    href="{{ route('adoptions') }}">{{ $enquiry }}</a>
+                            </div>
+                        </div>
+
                         <div class="col-md-3">
                             <div class="card text-white rounded-2 bg-gradient"
                                 style="border: none; background-color: #DC4BF1;">
@@ -38,15 +48,6 @@
                                     href="{{ route('activity.index') }}">{{ $totalActivities }}</a>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card bg-primary text-white rounded-2 bg-gradient" style="border: none;">
-                                <h5 class="ms-3 mt-3">Parents</h5>
-                                <p class="ms-3 mt-2">Total Parents</p>
-                                <a class="h5 text-white fw-bold stretched-link ms-3 mb-3 text-decoration-none"
-                                    href="#">{{ $parents }}</a>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ use App\Models\child;
 use App\Models\child_documents;
 use App\Models\DocumentTitlesStaff;
 use App\Models\donorSettings;
+use App\Models\enquiryForms;
 use App\Models\settings;
 use App\Models\DocumentTitleChild;
 use App\Models\documents_title;
@@ -22,7 +23,8 @@ class SettingsController extends Controller
         $donorSetting = donorSettings::first();
         $child_documents = DocumentTitleChild::all();
         $staff_documents = DocumentTitlesStaff::all();
-        return view('admin.settings.index', compact('settings', 'child_documents', 'donorSetting', 'staff_documents'));
+        $forms = enquiryForms::orderBy('id', 'desc')->paginate(5);
+        return view('admin.settings.index', compact('settings', 'child_documents', 'donorSetting', 'staff_documents', 'forms'));
     }
 
     public function store(Request $req)
@@ -44,13 +46,18 @@ class SettingsController extends Controller
         if ($req->has('child_documents_title') && is_array($req->child_documents_title)) {
             foreach ($req->child_documents_title as $id => $title) {
                 if (!empty($title)) {
+                    // Determine if the document is required (default to 0 if not specified)
+                    $isRequired = isset($req->child_documents_required[$id]) && $req->child_documents_required[$id] == 'on' ? 1 : 0;
+
                     if ($id) {
+                        // Update or create the document
                         $document = DocumentTitleChild::updateOrCreate(
                             ['id' => $id],
-                            ['title' => $title]
-                        );
+                            ['title' => $title, 'required' => $isRequired]
+                        );  
 
-                        $children = child::all();
+                        // Link document to all children
+                        $children = Child::all();
                         foreach ($children as $child) {
                             if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
                                 child_documents::create([
@@ -60,12 +67,14 @@ class SettingsController extends Controller
                                 ]);
                             }
                         }
-
                     } else {
+                        // Create a new document
                         $document = DocumentTitleChild::create([
                             'title' => $title,
+                            'required' => $isRequired,
                         ]);
 
+                        // Link document to all children
                         $children = Child::all();
                         foreach ($children as $child) {
                             if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
@@ -80,6 +89,7 @@ class SettingsController extends Controller
                 }
             }
         }
+
 
 
         // child new documents end here code by Rana Sikander
