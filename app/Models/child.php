@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Schema;
 class child extends Model
 {
     public function academicyear()
@@ -36,6 +36,65 @@ class child extends Model
 
     public function donorReq()
     {
-       return  $this->belongsTo(donorChildReq::class, 'id', 'child_id');
+        return $this->belongsTo(donorChildReq::class, 'id', 'child_id');
     }
+
+
+
+
+    // Model Events
+    protected static function booted(): void
+    {
+
+        static::deleted(function ($child) {
+
+            // after deleting the child , child documents ,
+            // child activities , child activity images ,
+            //  child form data , donor child req , enquiry form options , parent model , nanny childs
+            // will be deleted
+
+            if (Schema::hasColumn('child_documents', 'child_id')) {
+                child_documents::where('child_id', $child->id)->delete();
+            }
+
+
+            if (Schema::hasColumn('parents', 'child_id')) {
+                ParentModel::where('child_id', $child->id)->delete();
+            }
+
+
+            if (Schema::hasColumn('child_activities', 'child_id')) {
+                $activities = ChildActivity::where('child_id', $child->id)->get();
+
+                foreach ($activities as $activity) {
+                    ChildActivityImages::where('activity_id', $activity->id)->delete();
+                    $activity->delete();
+                }
+            }
+
+
+            if (Schema::hasColumn('child_form_data', 'child_id')) {
+                $form = ChildFormData::where('child_id', $child->id)->get();
+
+                foreach ($form as $data) {
+                    // Delete related enquiry form options
+                    $options = enquiryFormOptions::where('field_id', $data->id)->get();
+                    foreach ($options as $option) {
+                        $option->delete();
+                    }
+
+                    // Delete the form data
+                    $data->delete();
+                }
+            }
+
+
+
+        });
+
+    }
+
+
+
+
 }
