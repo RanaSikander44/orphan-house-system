@@ -12,39 +12,48 @@
 
     <div class="card bg-white p-3 mt-4 border-0 shadow-sm rounded">
         <div class="pt-3">
-            <ul class="nav nav-pills nav-justified" id="menuTabs" style="white-space: nowrap;">
-                <!-- Personal Info Tab -->
-                <li class="nav-item">
-                    <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">
-                        <i class="bi bi-person-fill"></i> Personal Info
-                    </a>
-                </li>
 
-                <!-- Parents & Guardian Info Tab -->
-                <li class="nav-item">
-                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">
-                        <i class="bi bi-person-lines-fill"></i> Parents & Guardian Info
-                    </a>
-                </li>
-
-                <!-- Documents Tab -->
-                <li class="nav-item">
-                    <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">
-                        <i class="bi bi-file-earmark"></i> Documents
-                    </a>
-                </li>
-
-                <!-- Dynamic Tabs from Forms -->
-                @foreach ($forms as $key => $list)
-                    <li class="nav-item mb-2">
-                        <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
-                            <i class="bi bi-file-earmark-post"></i> {{ $list->name }}
+            <div class="row w-100">
+                <ul class="nav nav-pills d-flex flex-wrap" id="menuTabs" style="white-space: nowrap; padding-left: 0;">
+                    <!-- Personal Info Tab -->
+                    <li class="nav-item col-3 text-center">
+                        <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">
+                            <i class="bi bi-person-fill"></i> Personal Info
                         </a>
                     </li>
-                @endforeach
-            </ul>
-            <hr class="w-100 my-4" style="font-weight : 200px;">
+
+                    <!-- Parents & Guardian Info Tab -->
+                    <li class="nav-item col-3  text-center">
+                        <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">
+                            <i class="bi bi-person-lines-fill"></i> Parents & Guardian Info
+                        </a>
+                    </li>
+
+                    <!-- Documents Tab -->
+                    <li class="nav-item col-3  text-center">
+                        <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">
+                            <i class="bi bi-file-earmark"></i> Documents
+                        </a>
+                    </li>
+
+                    <!-- Dynamic Tabs from Forms -->
+                    @foreach ($forms as $key => $list)
+                        <li class="nav-item col-3  text-center">
+                            <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
+                                <i class="bi bi-file-earmark-post"></i> {{ $list->name }}
+                            </a>
+                        </li>
+                    @endforeach
+
+                </ul>
+                <hr class="w-100 my-4" style="font-weight : 200px;">
+            </div>
         </div>
+
+
+
+
+
         <!-- Tab Content -->
         <form method="post" action="{{route('enquiry.store')}}" enctype="multipart/form-data">
             @csrf
@@ -150,10 +159,13 @@
                                                 <label for="" class="text-muted mb-2">Status of Adoption <span
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="status_of_adoption">
-                                                    <option value="Forwarded" {{ old('status_of_adoption') == 'Forwarded' ? 'selected' : '' }}>Forwarded</option>
+                                                    <option value="Forwarded" {{ old('status_of_adoption') == 'Forwarded' ? 'selected' : '' }}>
+                                                        Forwarded</option>
                                                     <option value="Not Processed" {{ old('status_of_adoption') == 'Not Processed' ? 'selected' : '' }}>Not Processed</option>
-                                                    <option value="Rejected" {{ old('status_of_adoption') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
-                                                    <option value="Reserved" {{ old('status_of_adoption') == 'Reserved' ? 'selected' : '' }}>Reserved</option>
+                                                    <option value="Rejected" {{ old('status_of_adoption') == 'Rejected' ? 'selected' : '' }}>
+                                                        Rejected</option>
+                                                    <option value="Reserved" {{ old('status_of_adoption') == 'Reserved' ? 'selected' : '' }}>
+                                                        Reserved</option>
                                                     <option value="Forward for Consideration" {{ old('status_of_adoption') == 'Forward for Consideration' ? 'selected' : '' }}>Forward for Consideration</option>
                                                 </select>
                                                 @error('status_of_adoption')
@@ -406,7 +418,8 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperSchool">
                                                     <select class="select2School" id="SchoolSelect" name="school_id">
-                                                        <option value="" class="form-control">--Select School--</option>
+                                                        <option value="" class="form-control">--Select School--
+                                                        </option>
                                                         @foreach ($schools as $list)
                                                             <option value="{{ $list->id }}" {{ old('school_id') }}>
                                                                 {{ $list->name }}
@@ -595,7 +608,8 @@
 
                                             <!-- Last Name -->
                                             <div class="col-6">
-                                                <label for="mother_last_name" class="text-muted mb-2">Last Name</label>
+                                                <label for="mother_last_name" class="text-muted mb-2">Last
+                                                    Name</label>
                                                 <input type="text" class="form-control" name="mother_last_name"
                                                     id="mother_last_name" value="{{ old('mother_last_name') }}">
                                             </div>
@@ -617,7 +631,8 @@
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="mother_phone" class="text-muted mb-2">Phone Number</label>
+                                                <label for="mother_phone" class="text-muted mb-2">Phone
+                                                    Number</label>
                                                 <input type="text" class="form-control" name="mother_phone_no"
                                                     id="mother_phone" value="{{ old('mother_phone_no') }}">
                                             </div>
@@ -646,7 +661,8 @@
 
                                             <!-- Last Name -->
                                             <div class="col-6">
-                                                <label for="father_last_name" class="text-muted mb-2">Last Name</label>
+                                                <label for="father_last_name" class="text-muted mb-2">Last
+                                                    Name</label>
                                                 <input type="text" class="form-control" name="father_last_name"
                                                     id="father_last_name" value="{{ old('father_last_name') }}">
                                             </div>
@@ -668,7 +684,8 @@
 
                                             <!-- Phone Number -->
                                             <div class="col-6 mt-3">
-                                                <label for="father_phone" class="text-muted mb-2">Phone Number</label>
+                                                <label for="father_phone" class="text-muted mb-2">Phone
+                                                    Number</label>
                                                 <input type="text" class="form-control" name="father_phone_no"
                                                     id="father_phone" value="{{ old('father_phone_no') }}">
                                             </div>
@@ -699,7 +716,9 @@
                                                 @foreach ($docs as $index => $list)
                                                     <div class="col-md-6">
                                                         <label for="file_{{ $index }}"
-                                                            class="mb-2 mt-2 text-muted">{{ $list->title }} @if($list->required === 1)<span class="text-danger">*</span> @endif  </label>
+                                                            class="mb-2 mt-2 text-muted">{{ $list->title }}
+                                                            @if($list->required === 1)<span class="text-danger">*</span>
+                                                            @endif </label>
                                                         <input type="text" class="d-none" name="document_titles[]"
                                                             value="{{ $list->id }}">
                                                         <input type="file" class="form-control" name="document_names[]"
@@ -734,7 +753,8 @@
                                                 @if ($formData->form_id === $list->id)
                                                     @if ($formData->type === 'header')
                                                         <div class="col-md-6">
-                                                            <{{ $formData->sub_type }} class="text-muted">{{ $formData->label }}</{{ $formData->sub_type }}> 
+                                                            <{{ $formData->sub_type }}
+                                                                class="text-muted">{{ $formData->label }}</{{ $formData->sub_type }}>
                                                         </div>
                                                     @elseif ($formData->type === 'text' || $formData->type === 'autocomplete')
                                                         <div class="col-md-6">
@@ -759,30 +779,31 @@
                                                                 placeholder="{{ $formData->label }}">
                                                         </div>
                                                     @elseif ($formData->type === 'file')
-                                                            <div class="col-md-6">
-                                                                <label for="{{ $formData->name }}" class="form-label">
-                                                                    {{ $formData->label }}
-                                                                    @if ($formData->required) <span class="text-danger">*</span> @endif
-                                                                </label>
-                                                                <input type="file" class="form-control mb-2" id="{{ $formData->name }}"
-                                                                    name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
-                                                                    @if ($formData->required) required @endif>
-                                                            </div>
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <input type="file" class="form-control mb-2" id="{{ $formData->name }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
+                                                                @if ($formData->required) required @endif>
+                                                        </div>
                                                     @elseif ($formData->type === 'number')
-                                                    <div class="col-md-6">
-                                                        <label for="{{ $formData->name }}" class="form-label">
-                                                            {{ $formData->label }}  
-                                                            @if ($formData->required) <span class="text-danger">*</span> @endif
-                                                        </label>
-                                                        <input type="number" class="form-control mb-2" id="{{ $formData->id }}"
-                                                            name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
-                                                            @if ($formData->required) required @endif
-                                                            placeholder="{{ $formData->label }}">
-                                                    </div>
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required) <span class="text-danger">*</span> @endif
+                                                            </label>
+                                                            <input type="number" class="form-control mb-2" id="{{ $formData->id }}"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
+                                                                @if ($formData->required) required @endif
+                                                                placeholder="{{ $formData->label }}">
+                                                        </div>
 
                                                     @elseif ($formData->type === 'button')
                                                         <div class="col-md-6">
-                                                            <button class="btn mt-2 {{ $formData->className }} mb-2">{{ $formData->label }}</button>
+                                                            <button
+                                                                class="btn mt-2 {{ $formData->className }} mb-2">{{ $formData->label }}</button>
                                                         </div>
                                                     @elseif ($formData->type === 'textarea')
                                                         <div class="col-md-6">
@@ -790,7 +811,8 @@
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
-                                                            <textarea name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
+                                                            <textarea
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
                                                                 id="{{ $formData->id }}" class="form-control mb-2" @if ($formData->required) required @endif></textarea>
                                                         </div>
                                                     @elseif ($formData->type === 'select')
@@ -802,9 +824,11 @@
                                                             <select class="form-control mb-2" id="{{ $formData->id }}"
                                                                 name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
                                                                 @if ($formData->required) required @endif>
-                                                                <option value="" disabled selected>Select {{ $formData->label }}</option>
+                                                                <option value="" disabled selected>Select {{ $formData->label }}
+                                                                </option>
                                                                 @foreach ($formData->optionsForm as $option)
-                                                                    <option value="{{ $option->value }}" @if ($option->selected) selected @endif>
+                                                                    <option value="{{ $option->value }}" @if ($option->selected) selected
+                                                                    @endif>
                                                                         {{ $option->label }}
                                                                     </option>
                                                                 @endforeach
@@ -823,9 +847,9 @@
                                                                             type="{{ $formData->type === 'checkbox-group' ? 'checkbox' : 'radio' }}"
                                                                             name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]{{ $formData->type === 'checkbox-group' ? '[]' : '' }}"
                                                                             value="{{ $option->value }}"
-                                                                            id="{{ $formData->name }}_{{ $option->value }}"
-                                                                            @if ($option->selected) checked @endif>
-                                                                        <label class="form-check-label" for="{{ $formData->name }}_{{ $option->value }}">
+                                                                            id="{{ $formData->name }}_{{ $option->value }}" @if ($option->selected) checked @endif>
+                                                                        <label class="form-check-label"
+                                                                            for="{{ $formData->name }}_{{ $option->value }}">
                                                                             {{ $option->label }}
                                                                         </label>
                                                                     </div>
@@ -834,24 +858,22 @@
                                                         </div>
 
                                                     @elseif ($formData->type === 'paragraph')
-                                                            <div class="col-md-6">
-                                                                <label for="{{ $formData->name }}" class="form-label">
-                                                                    {{ $formData->label }}
-                                                                    @if ($formData->required)
-                                                                        <span class="text-danger">*</span>
-                                                                    @endif
-                                                                </label>
-                                                                <textarea 
-                                                                    class="form-control mb-2" 
-                                                                    name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]" 
-                                                                    id="{{ $formData->name }}" 
-                                                                    rows="6" 
-                                                                    placeholder="Enter your paragraph here..." 
-                                                                    @if ($formData->required) required @endif
-                                                                >{{ old("forms.$key.inputs.$formData->name", $formData->value ?? '') }}</textarea>
-                                                            </div>
+                                                        <div class="col-md-6">
+                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                                {{ $formData->label }}
+                                                                @if ($formData->required)
+                                                                    <span class="text-danger">*</span>
+                                                                @endif
+                                                            </label>
+                                                            <textarea class="form-control mb-2"
+                                                                name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
+                                                                id="{{ $formData->name }}" rows="6"
+                                                                placeholder="Enter your paragraph here..." @if ($formData->required)
+                                                                    required
+                                                                @endif>{{ old("forms.$key.inputs.$formData->name", $formData->value ?? '') }}</textarea>
+                                                        </div>
                                                     @endif
-    
+
                                                 @endif
                                             @endforeach
                                         </div>
@@ -863,8 +885,8 @@
                 @endforeach
 
                 <div class="text-end mt-3">
-                    <button class="btn btn-sm btn-success" type="button" id="nextButton">Next</button>
-                    <button class="btn btn-primary btn-sm d-none" id="adoptionFormBtn" type="submit">
+                    <button class="btn btn-sm btn-primary" type="button" id="nextButton">Next</button>
+                    <button class="btn btn-success btn-sm d-none" id="adoptionFormBtn" type="submit">
                         <i class="fa fa-save"></i> Save
                     </button>
                 </div>
@@ -939,69 +961,6 @@
         $('.image-button').css('display', 'block');
     });
 </script>
-
-
-<!-- Next Btn Js -->
-<script>
-    function toggleButtons() {
-        // Find the active tab
-        var activeTab = $('.nav-pills .nav-link.active');
-
-        // Check if the active tab is the last tab
-        var isLastTab = activeTab.parent().is(':last-child');
-
-        if (isLastTab) {
-            // Hide the Next button and show the Save button
-            $('#nextButton').addClass('d-none');
-            $('#adoptionFormBtn').removeClass('d-none');
-        } else {
-            // Show the Next button and hide the Save button
-            $('#nextButton').removeClass('d-none');
-            $('#adoptionFormBtn').addClass('d-none');
-        }
-    }
-
-    // Handle Next button click
-    $('#nextButton').on('click', function () {
-        // Find the active tab and its corresponding pane
-        var activeTab = $('.nav-pills .nav-link.active');
-        var activePane = $(activeTab.attr('href'));
-
-        // Find the next tab and pane
-        var nextTab = activeTab.parent().next().find('.nav-link');
-        var nextPane = $(nextTab.attr('href'));
-
-        if (nextTab.length) {
-            // Remove active class from the current tab and pane
-            activeTab.removeClass('active');
-            activePane.removeClass('show active');
-
-            // Add active class to the next tab and pane
-            nextTab.addClass('active');
-            nextPane.addClass('show active');
-        }
-
-        // Toggle button visibility
-        toggleButtons();
-    });
-
-    // Handle manual tab change
-    $('.nav-pills .nav-link').on('click', function () {
-        toggleButtons();
-    });
-
-    // Initial toggle on page load
-    $(document).ready(function () {
-        toggleButtons();
-    });
-</script>
-
-
-
-
-
-
-
 
 <!-- Add JavaScript for Toggling -->
 <script>
@@ -1079,6 +1038,7 @@
     });
 </script>
 
+<script src="{{ asset('backend/js/adoption.js') }}"></script>
 
 
 @endsection

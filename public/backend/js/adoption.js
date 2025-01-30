@@ -25,3 +25,80 @@ $('#DateOfBirth').on('change', function () {
         $('#ChildAge').val(age);
     }
 });
+
+
+
+// Adoption Next Button Functionality
+
+function toggleButtons() {
+    var activeTab = $('.nav-pills .nav-link.active');
+
+    var isLastTab = activeTab.parent().is(':last-child');
+
+    if (isLastTab) {
+        $('#nextButton').addClass('d-none');
+        $('#UpdateNextBtn').addClass('d-none');
+        $('#adoptionFormBtn').removeClass('d-none');
+    } else {
+        $('#nextButton').removeClass('d-none');
+        $('#adoptionFormBtn').addClass('d-none');
+    }
+}
+
+$('#nextButton').on('click', function () {
+    var activeTab = $('.nav-pills .nav-link.active');
+    var activePane = $(activeTab.attr('href'));
+
+    var nextTab = activeTab.parent().next().find('.nav-link');
+    var nextPane = $(nextTab.attr('href'));
+
+    if (nextTab.length) {
+        activeTab.removeClass('active');
+        if (activeTab.find('.fa-check-double').length) {
+            activeTab.find('.fa-check-double').remove();
+            activeTab.append('<i class="fa-solid fa-check-double"></i>');
+        } else {
+            activeTab.append('<i class="fa-solid fa-check-double"></i>');
+        }
+        activePane.removeClass('show active');
+
+        nextTab.addClass('active');
+        nextPane.addClass('show active');
+    }
+
+    toggleButtons();
+});
+
+
+$('#UpdateNextBtn').on('click', function () {
+    var activeTab = $('.nav-pills .nav-link.active');
+    var activePane = $(activeTab.attr('href'));
+
+    var nextTab = activeTab.parent().next().find('.nav-link');
+    var nextPane = $(nextTab.attr('href'));
+
+    if (nextTab.length) {
+        activeTab.removeClass('active');
+        // if (activeTab.find('.fa-check-double').length) {
+        //     activeTab.find('.fa-check-double').remove();
+        //     activeTab.append('<i class="fa-solid fa-check-double"></i>');
+        // } else {
+        //     activeTab.append('<i class="fa-solid fa-check-double"></i>');
+        // }
+        activePane.removeClass('show active');
+
+        nextTab.addClass('active');
+        nextPane.addClass('show active');
+    }
+
+    toggleButtons();
+});
+
+$('.nav-pills .nav-link').on('click', function () {
+    toggleButtons();
+});
+
+$(document).ready(function () {
+    toggleButtons();
+});
+

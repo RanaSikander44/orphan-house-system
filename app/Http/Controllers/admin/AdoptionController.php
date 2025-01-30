@@ -468,48 +468,107 @@ class AdoptionController extends Controller
 
         if ($req->has('forms')) {
             foreach ($req->forms as $form) {
-                // Ensure 'inputs' key exists in the form array
                 if (isset($form['inputs']) && is_array($form['inputs'])) {
                     foreach ($form['inputs'] as $input_name => $input_value) {
-                        // Extract the input ID from the name
                         $lastUnderscorePos = strrpos($input_name, '_');
                         $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
 
-                        // Check if an entry already exists for this input ID and child
                         $formsData = ChildFormData::where('form_id', $form['form_id'])
                             ->where('child_id', $application->id)
                             ->where('input_id', $inputId)
                             ->first();
 
                         if (!$formsData) {
-                            $formsData = new ChildFormData(); // Create a new instance if not found
+                            $formsData = new ChildFormData();
                             $formsData->form_id = $form['form_id'];
                             $formsData->child_id = $application->id;
                             $formsData->input_id = $inputId;
                         }
 
-                        // Handle file uploads
-                        if ($input_value instanceof \Illuminate\Http\UploadedFile) {
-                            $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
-                            $destinationPath = public_path('backend/documents/childs/dynamicFields');
-                            $input_value->move($destinationPath, $uniqueName);
-                            $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+                        // Fetch existing file paths if available
+                        $existingFiles = json_decode($formsData->input_value, true);
+                        $existingFiles = is_array($existingFiles) ? $existingFiles : [];
+
+                        // Handle file uploads (single & multiple)
+                        if ($input_value instanceof \Illuminate\Http\UploadedFile || is_array($input_value)) {
+                            $newFiles = [];
+
+                            if (is_array($input_value)) {
+                                foreach ($input_value as $file) {
+                                    if ($file instanceof \Illuminate\Http\UploadedFile) {
+                                        $uniqueName = uniqid() . '.' . $file->getClientOriginalExtension();
+                                        $destinationPath = public_path('backend/documents/childs/dynamicFields');
+                                        $file->move($destinationPath, $uniqueName);
+                                        $newFiles[] = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+                                    }
+                                }
+                            } else {
+                                // Single file case
+                                $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
+                                $destinationPath = public_path('backend/documents/childs/dynamicFields');
+                                $input_value->move($destinationPath, $uniqueName);
+                                $newFiles[] = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+                            }
+
+                            // Merge new files with existing ones if multiple uploads are allowed
+                            $formsData->input_value = json_encode(array_merge($existingFiles, $newFiles));
                         } else {
                             // Handle non-file inputs
-                            if (is_array($input_value)) {
-                                $input_value = json_encode($input_value); // Convert array to JSON string
-                            }
-                            $formsData->input_value = $input_value;
+                            $formsData->input_value = is_array($input_value) ? json_encode($input_value) : $input_value;
                         }
 
-                        $formsData->save(); // Save the updated or new record
+                        $formsData->save();
                     }
                 } else {
-                    // Optionally, log or handle forms without 'inputs' key
                     \Log::warning('Form missing "inputs" key', ['form' => $form]);
                 }
             }
         }
+
+        // if ($req->has('forms')) {
+        //     foreach ($req->forms as $form) {
+        //         // Ensure 'inputs' key exists in the form array
+        //         if (isset($form['inputs']) && is_array($form['inputs'])) {
+        //             foreach ($form['inputs'] as $input_name => $input_value) {
+        //                 // Extract the input ID from the name
+        //                 $lastUnderscorePos = strrpos($input_name, '_');
+        //                 $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
+
+        //                 // Check if an entry already exists for this input ID and child
+        //                 $formsData = ChildFormData::where('form_id', $form['form_id'])
+        //                     ->where('child_id', $application->id)
+        //                     ->where('input_id', $inputId)
+        //                     ->first();
+
+        //                 if (!$formsData) {
+        //                     $formsData = new ChildFormData(); // Create a new instance if not found
+        //                     $formsData->form_id = $form['form_id'];
+        //                     $formsData->child_id = $application->id;
+        //                     $formsData->input_id = $inputId;
+        //                 }
+
+        //                 // Handle file uploads
+        //                 if ($input_value instanceof \Illuminate\Http\UploadedFile) {
+        //                     $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
+        //                     $destinationPath = public_path('backend/documents/childs/dynamicFields');
+        //                     $input_value->move($destinationPath, $uniqueName);
+        //                     $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
+        //                 } else {
+        //                     // Handle non-file inputs
+        //                     if (is_array($input_value)) {
+        //                         $input_value = json_encode($input_value); // Convert array to JSON string
+        //                     }
+        //                     $formsData->input_value = $input_value;
+        //                 }
+
+        //                 $formsData->save(); // Save the updated or new record
+        //             }
+        //         } else {
+        //             // Optionally, log or handle forms without 'inputs' key
+        //             \Log::warning('Form missing "inputs" key', ['form' => $form]);
+        //         }
+        //     }
+        // }
 
 
         if ($req->has('document_titles')) {
@@ -534,7 +593,17 @@ class AdoptionController extends Controller
                 }
             }
         }
-        return redirect()->route('adoptions')->with('success', 'Inquiry Updated!');
+
+        if ($id) {
+            $is_approved = child::where('id', $id)->first('is_approved');
+            if ($is_approved->is_approved == 1) {
+                $RedirectRoute = 'enquiry.child.list';
+            } else {
+                $RedirectRoute = 'adoptions';
+            }
+        }
+
+        return redirect()->route($RedirectRoute)->with('success', 'Inquiry Updated!');
     }
 
 
