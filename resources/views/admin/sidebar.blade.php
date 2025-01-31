@@ -8,7 +8,7 @@
         <div class="sidebar-content">
             <div class="sidebar-brand">
                 <a href="{{ route('dashboard') }}">
-                    <img src="{{ asset('backend/images/wisdom-logo.png.webp') }}" style="width: 60%; height: auto;"
+                    <img src="{{ asset('backend/images/roshnilogo.jpg') }}" style="width: 60%; height: auto;"
                         alt="Wisdom Logo">
                 </a>
                 <div id="close-sidebar" class="sidebarToggle">

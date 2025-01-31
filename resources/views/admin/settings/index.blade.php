@@ -490,23 +490,24 @@
         });
 
         $('.add-document').click(function () {
-            var newIndex = $('.document-group').length + 1;
+            var uniqueId = new Date().getTime(); // Generate a unique ID for each input
 
             var newDocument = `
-                            <div class="document-group mb-3 d-flex">
-                                <div class="input-group ">
-                                    <input type="text" class="form-control" name="child_documents_title[]" placeholder="Enter document title">
-                                    <button type="button" class="btn btn-sm btn-danger remove-document">×</button>
-                                </div>
-                                <div class="form-check ms-2">
-                                        <input type="checkbox" class="form-check-input" name="child_documents_required[]">
-                                        <label class="form-check-label">Required</label>
-                                </div>
-                            </div>
-                        `;
+                <div class="document-group mb-3 d-flex">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="child_documents_title[new_${uniqueId}]" placeholder="Enter document title">
+                        <button type="button" class="btn btn-sm btn-danger remove-document">×</button>
+                    </div>
+                    <div class="form-check ms-2">
+                        <input type="checkbox" class="form-check-input" name="child_documents_required[new_${uniqueId}]">
+                        <label class="form-check-label">Required</label>
+                    </div>
+                </div>
+            `;
 
             $('.documents').append(newDocument);
         });
+
 
         $('.documents').on('click', '.remove-document', function () {
             if ($('.document-group').length > 1) {

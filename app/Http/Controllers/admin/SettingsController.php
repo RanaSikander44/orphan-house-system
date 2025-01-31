@@ -39,68 +39,89 @@ class SettingsController extends Controller
             ]
         );
 
-
-
-        // this code will add new document title and allows also to the already added childs to add new documents 
-
         if ($req->has('child_documents_title') && is_array($req->child_documents_title)) {
+            $children = Child::all(); // Fetch all children once
+
             foreach ($req->child_documents_title as $id => $title) {
-                if (!empty($title)) {
-                    // Determine if the document is required (default to 0 if not specified)
-                    $isRequired = isset($req->child_documents_required[$id]) && $req->child_documents_required[$id] == 'on' ? 1 : 0;
-
-                    if ($id) {
-                        // Update or create the document
-                        $document = DocumentTitleChild::updateOrCreate(
-                            ['id' => $id],
-                            ['title' => $title, 'required' => $isRequired]
-                        );  
-
-                        // Link document to all children
-                        $children = Child::all();
-                        foreach ($children as $child) {
-                            if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
-                                child_documents::create([
-                                    'child_id' => $child->id,
-                                    'title' => $document->id,
-                                    'name' => null,
-                                ]);
-                            }
-                        }
-                    } else {
-                        // Create a new document
-                        $document = DocumentTitleChild::create([
+                if (strpos($id, 'new_') !== false) {
+                    // Create new document
+                    $document = DocumentTitleChild::create([
+                        'title' => $title,
+                        'required' => isset($req->child_documents_required[$id]) ? '1' : '0'
+                    ]);
+                } else {
+                    // Update existing document
+                    $document = DocumentTitleChild::find($id);
+                    if ($document) {
+                        $document->update([
                             'title' => $title,
-                            'required' => $isRequired,
+                            'required' => isset($req->child_documents_required[$id]) ? '1' : '0'
                         ]);
-
-                        // Link document to all children
-                        $children = Child::all();
-                        foreach ($children as $child) {
-                            if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
-                                child_documents::create([
-                                    'child_id' => $child->id,
-                                    'title' => $document->id,
-                                    'name' => null,
-                                ]);
-                            }
-                        }
                     }
                 }
+
+                foreach ($children as $child) {
+                    if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
+                        child_documents::create([
+                            'child_id' => $child->id,
+                            'title' => $document->id,
+                            'name' => null,
+                        ]);
+                    }
+                }
+
+                // Assign new documents to children
+                // foreach ($children as $child) {
+                //     child_documents::updateOrCreate(
+                //         ['child_id' => $child->id, 'title' => $document->id],
+                //         ['name' => null] // Default name is null
+                //     );
+                // }
             }
         }
 
+        // this code will add new document title and allows also to the already added childs to add new documents 
 
+        // if ($req->has('child_documents_title') && is_array($req->child_documents_title)) {
+        //     foreach ($req->child_documents_title as $id => $title) {
+        //         if (!empty($title)) {
+        //             // Determine if the document is required (default to 0 if not specified)
+        //             $isRequired = isset($req->child_documents_required[$id]) && $req->child_documents_required[$id] == 'on' ? 1 : 0;
+
+        //             if ($id) {
+        //                 // Update or create the document
+        //                 $document = DocumentTitleChild::updateOrCreate(
+        //                     ['id' => $id],
+        //                     ['title' => $title, 'required' => $isRequired]
+        //                 );
+        //             } else {
+        //                 // Create a new document
+        //                 $document = DocumentTitleChild::create([
+        //                     'title' => $title,
+        //                     'required' => $isRequired,
+        //                 ]);
+        //             }
+
+        //             // Link document to all children
+        //             $children = Child::all();
+        //             foreach ($children as $child) {
+        //                 if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
+        //                     child_documents::create([
+        //                         'child_id' => $child->id,
+        //                         'title' => $document->id,
+        //                         'name' => null,
+        //                     ]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // child new documents end here code by Rana Sikander
 
 
 
-
-
         // Staff Titles
-
-
         if ($req->has('staff_document_title') && is_array($req->staff_document_title)) {
             foreach ($req->staff_document_title as $id => $title) {
                 // Skip empty titles
