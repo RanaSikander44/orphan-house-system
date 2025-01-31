@@ -47,7 +47,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="border rounded p-4 shadow form-container">
-                    <h3 class="text-center form-heading">Login</h3>
+                    <h3 class="text-center form-heading">Login</h3> 
                     <form id="loginForm" action="{{ route('loginMatch') }}" method="POST">
                         @csrf
                         <div class="mb-4">
@@ -61,7 +61,8 @@
                                 placeholder="Enter your password" required>
                         </div>
                         <div class="d-flex justify-content-end mb-2">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn w-100 text-white"
+                                style="background-color:#e28029;">Login</button>
                         </div>
                     </form>
                 </div>

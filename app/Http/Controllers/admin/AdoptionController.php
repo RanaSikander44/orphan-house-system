@@ -615,6 +615,9 @@ class AdoptionController extends Controller
                     'id' => $child->id,
                     'first_name' => $child->first_name,
                     'last_name' => $child->last_name,
+                    'enquiry_no' => $child->enquiry_no,
+                    'adoption_date' => $child->adoption_date ?? null,
+                    'status_of_adoption' => $child->status_of_adoption ?? 'N/A',
                     'age' => $child->age,
                     'school_name' => $child->school->name ?? 'No School',
                 ];
@@ -624,10 +627,8 @@ class AdoptionController extends Controller
 
         // If no conditions were met, return an error message
         if (empty($result)) {
-
             $data = child::all();
             return response()->json($data);
-
         }
 
         // Return the result
