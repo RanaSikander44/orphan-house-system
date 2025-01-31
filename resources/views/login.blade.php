@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Management System</title>
+    <title>Login To Roshni Crm Portal</title>
+    <link rel="shortcut icon" href="{{ asset('backend/images/roshnilogo.jpg') }}" />
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery Toast Plugin -->
@@ -45,7 +47,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="border rounded p-4 shadow form-container">
-                    <h3 class="text-center form-heading">Login</h3>
+                    <h3 class="text-center form-heading">Login</h3> 
                     <form id="loginForm" action="{{ route('loginMatch') }}" method="POST">
                         @csrf
                         <div class="mb-4">
@@ -59,7 +61,8 @@
                                 placeholder="Enter your password" required>
                         </div>
                         <div class="d-flex justify-content-end mb-2">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn w-100 text-white"
+                                style="background-color:#e28029;">Login</button>
                         </div>
                     </form>
                 </div>

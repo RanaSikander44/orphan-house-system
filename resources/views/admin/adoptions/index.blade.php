@@ -88,7 +88,7 @@
 
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);" title="Delete Enquiry"
-                                            onclick="deleteChl()">
+                                            onclick="deleteChl({{ $list->id }})">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
                                     </li>
@@ -122,7 +122,7 @@
 @endsection
 
 <script>
-    function deleteChl() {
+    function deleteChl(id) {
         Swal.fire({
             text: "You won't be able to revert this!",
             showCancelButton: true,
@@ -132,9 +132,9 @@
             cancelButtonColor: '#3085d6',
         }).then((result) => {
             if (result.isConfirmed) {
-                // Make the AJAX request
-                window.location.href = "{{ route('enquiry.delete', $list->id ?? '') }}";
-
+                // Redirect to delete route with the dynamic ID
+                let deleteUrl = "{{ route('enquiry.delete', ':id') }}".replace(':id', id);
+                window.location.href = deleteUrl;
             }
         });
     }

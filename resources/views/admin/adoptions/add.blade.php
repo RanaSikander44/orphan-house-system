@@ -883,7 +883,7 @@
                 @endforeach
 
                 <div class="text-end mt-3">
-                    <button class="btn btn-sm btn-primary" type="button" id="nextButton">Next</button>
+                    <!-- <button class="btn btn-sm btn-primary" type="button" id="nextButton">Next</button> -->
                     <button class="btn btn-success btn-sm d-none" id="adoptionFormBtn" type="submit">
                         <i class="fa fa-save"></i> Save
                     </button>
