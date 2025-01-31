@@ -197,6 +197,42 @@ class UserController extends Controller
     //     // Redirect back with a success message
 //     return redirect()->route('users.index')->with('success', 'User deleted successfully');
 // }
+    
+
+
+//change password
+
+public function ChangePasswordForm(){
+    return view('changepassword');
+}
+
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required|string',
+        'new_password' => 'required|string|confirmed|min:6',
+    ]);
+
+    $auth = Auth::user();
+
+    if (!Hash::check($request->current_password, $auth->password)) {
+        return back()->withErrors(['current_password' => 'Current Password is Invalid'])
+                     ->withInput();
+    }
+
+    if ($request->current_password === $request->new_password) {
+        return back()->withErrors(['new_password' => 'New Password cannot be the same as your current password.'])
+                     ->withInput();
+    }
+
+    $user = User::find($auth->id);
+    $user->password = Hash::make($request->new_password);  // Hash new password before saving
+    $user->save();
+
+    return redirect()->route('dashboard')->with('success', 'Password Changed Successfully');
+}
+
+
 
 
     public function dashboard()

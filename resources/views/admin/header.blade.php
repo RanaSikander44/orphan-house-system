@@ -88,13 +88,27 @@
                         style="width  : 40%;">sign out</a>
                 </div>
             </li>
-            <li class="third-li">
+            {{-- <li class="third-li">
                 <i class="fa-solid fa-lock my-lock"></i>
                 <ul class="px-2">
                     <li class="fw-bold text-capitalize">security</li>
                     <li>change your password <span class="my-cng text-dark">change</span></li>
                 </ul>
-            </li>
+            </li> --}}
+
+            <style>
+                .my-cng {
+                   text-decoration: none; 
+                  }
+                 </style>
+   
+               <li class="third-li">
+                   <i class="fa-solid fa-lock my-lock"></i>
+                   <ul class="px-2">
+                       <li class="fw-bold text-capitalize">security</li>
+                       <li>change your password <a href="{{ route('password.change') }}" class="my-cng text-dark">change</a></li>
+                   </ul>
+               </li>
         </ul>
     </div>
 </div>

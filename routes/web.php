@@ -235,3 +235,7 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+//change password
+Route::get('/password/change', [UserController::class, 'ChangePasswordForm'])->name('password.change');
+Route::put('/password/update', [UserController::class, 'updatePassword'])->name('password.update');
+
