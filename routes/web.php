@@ -105,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
     Route::post('enquiry/filter/school', [AdoptionController::class, 'schooldata'])->name('filter.school');
     Route::post('chids/filter', [AdoptionController::class, 'filter'])->name('filter.childs');
+    Route::post('chids/delete/docs', [AdoptionController::class, 'deleteChildFormDocs'])->name('delete.doc.child');
 
 
 

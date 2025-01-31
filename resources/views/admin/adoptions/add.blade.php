@@ -49,11 +49,7 @@
                 <hr class="w-100 my-4" style="font-weight : 200px;">
             </div>
         </div>
-
-
-
-
-
+        
         <!-- Tab Content -->
         <form method="post" action="{{route('enquiry.store')}}" enctype="multipart/form-data">
             @csrf
@@ -85,7 +81,7 @@
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="enquiry_type_id">
                                                     @forelse($enquiry_types as $list)
-                                                        <option value="{{ $list->id }}" {{ old('enquiry_type_id') == $list->id ? 'selected' : '' }}>
+                                                        <option value="{{ $list->id }}" {{ old('enquiry_type_id') == $list->id ? 'selected' : '' }} required>
                                                             {{ $list->title }}
                                                         </option>
                                                     @empty
@@ -103,7 +99,7 @@
                                                 <label for="" class="text-muted mb-2">Enquiry Number <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control bg-light" name="enquiry_no"
-                                                    value="{{ old('enquiry_no', $newEnquiryId) }}" readonly>
+                                                    value="{{ old('enquiry_no', $newEnquiryId) }}" readonly required>
                                                 @error('enquiry_no')
                                                     <span class="text-danger">This Field is Required.</span>
                                                 @enderror
@@ -113,7 +109,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Source of Information <span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="source_of_information">
+                                                <select class="select2" name="source_of_information" required>
                                                     <option value="Website" {{ old('source_of_information') == 'Website' ? 'selected' : '' }}>Website</option>
                                                     <option value="Personal Reference" {{ old('source_of_information') == 'Personal Reference' ? 'selected' : '' }}>Personal Reference</option>
                                                     <option value="Member Shared" {{ old('source_of_information') == 'Member Shared' ? 'selected' : '' }}>Member Shared</option>
@@ -130,7 +126,7 @@
                                                 <label for="" class="text-muted mb-2">Enquiry Date <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector"
-                                                    name="adoption_date" value="{{ old('adoption_date') }}">
+                                                    name="adoption_date" value="{{ old('adoption_date') }}" required>
                                                 @error('adoption_date')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -140,7 +136,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">City<span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="city_id">
+                                                <select class="select2" name="city_id" required>
                                                     @forelse ($cities as $list)
                                                         <option value="{{ $list->id }}" {{ old('city_id') == $list->id ? 'selected' : '' }}>
                                                             {{ $list->name}}
@@ -158,7 +154,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Status of Adoption <span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="status_of_adoption">
+                                                <select class="select2" name="status_of_adoption" required>
                                                     <option value="Forwarded" {{ old('status_of_adoption') == 'Forwarded' ? 'selected' : '' }}>
                                                         Forwarded</option>
                                                     <option value="Not Processed" {{ old('status_of_adoption') == 'Not Processed' ? 'selected' : '' }}>Not Processed</option>
@@ -193,7 +189,7 @@
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="first_name"
-                                                    value="{{ old('first_name') }}">
+                                                    value="{{ old('first_name') }}" required>
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -204,7 +200,7 @@
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="last_name"
-                                                    value="{{ old('last_name') }}">
+                                                    value="{{ old('last_name') }}" required>
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -215,7 +211,7 @@
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector" name="dob"
-                                                    id="DateOfBirth" value="{{ old('dob') }}">
+                                                    id="DateOfBirth" value="{{ old('dob') }}" required>
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -241,7 +237,7 @@
                                                 <label for="" class="text-muted mb-2">Gender <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
-                                                    <select class="select2gender" name="gender">
+                                                    <select class="select2gender" name="gender" required>
                                                         <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
                                                         <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
                                                         <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Others</option>
@@ -264,7 +260,7 @@
                                                 <label for="" class="text-muted mb-2">Religion <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperreg">
-                                                    <select class="select2reg" name="religion">
+                                                    <select class="select2reg" name="religion" required>
                                                         <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>Islam</option>
                                                         <option value="Hinduism" {{ old('religion') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
                                                         <option value="Sikhism" {{ old('religion') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
@@ -417,7 +413,8 @@
                                                 <label for="" class="text-muted mb-2">Select School<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperSchool">
-                                                    <select class="select2School" id="SchoolSelect" name="school_id">
+                                                    <select class="select2School" id="SchoolSelect" name="school_id"
+                                                        required>
                                                         <option value="" class="form-control">--Select School--
                                                         </option>
                                                         @foreach ($schools as $list)
@@ -436,7 +433,8 @@
                                                 <label for="" class="text-muted mb-2">Select Grade<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperGrade">
-                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id">
+                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id"
+                                                        required>
                                                         <option value="">--Select Grade--</option>
                                                     </select>
                                                 </div>
@@ -463,7 +461,7 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperDormitory">
                                                     <select class="select2Dormitory form-control" id="DormitorySelect"
-                                                        name="room_id">
+                                                        name="room_id" required>
                                                         @foreach ($rooms as $list)
                                                             <option value="{{ $list->id }}" {{ old('room_id') }}>
                                                                 {{ $list->title }}
@@ -777,16 +775,16 @@
                                                                 name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
                                                                 @if ($formData->required) required @endif
                                                                 placeholder="{{ $formData->label }}">
-                                                        </div>
+                                                        </div>  
                                                     @elseif ($formData->type === 'file')
                                                         <div class="col-md-6">
                                                             <label for="{{ $formData->name }}" class="form-label">
-                                                                {{ $formData->label }}
+                                                                {{ $formData->label }} 
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
                                                             <input type="file" class="form-control mb-2" id="{{ $formData->name }}"
                                                                 name="forms[{{ $key }}][inputs][{{ $formData->name }}_{{ $formData->id }}]"
-                                                                @if ($formData->required) required @endif>
+                                                                @if ($formData->required) required @endif {{ $formData->multiple ? 'multiple' : '' }}>
                                                         </div>
                                                     @elseif ($formData->type === 'number')
                                                         <div class="col-md-6">

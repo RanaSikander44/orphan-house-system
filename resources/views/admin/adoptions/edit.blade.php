@@ -16,21 +16,21 @@
                     <!-- Personal Info Tab -->
                     <li class="nav-item col-3 text-center">
                         <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">
-                            Personal Info <i class="fa-solid fa-check-double"></i>
+                            Personal Info
                         </a>
                     </li>
 
                     <!-- Parents & Guardian Info Tab -->
                     <li class="nav-item col-3 text-center">
                         <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">
-                            Parents & Guardian Info <i class="fa-solid fa-check-double"></i>
+                            Parents & Guardian Info
                         </a>
                     </li>
 
                     <!-- Documents Tab -->
                     <li class="nav-item col-3  text-center">
                         <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">
-                            Documents <i class="fa-solid fa-check-double"></i>
+                            Documents
                         </a>
                     </li>
 
@@ -38,7 +38,7 @@
                     @foreach ($forms as $key => $list)
                         <li class="nav-item col-3 text-center">
                             <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
-                                {{ $list->name }} <i class="fa-solid fa-check-double"></i>
+                                {{ $list->name }}
                             </a>
                         </li>
                     @endforeach
@@ -77,7 +77,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Enquiry Type <span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="enquiry_type_id">
+                                                <select class="select2" name="enquiry_type_id" required>
                                                     @forelse($enquiry_types as $list)
                                                         <option value="{{ $list->id }}" {{$child->enquiry_id == $list->id ? 'selected' : ''   }}>
                                                             {{ $list->title }}
@@ -97,7 +97,7 @@
                                                 <label for="" class="text-muted mb-2">Enquiry Number <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control bg-light" name="enquiry_no"
-                                                    value="{{ $child->enquiry_no}}" readonly>
+                                                    value="{{ $child->enquiry_no}}" required readonly>
 
                                                 @error('enquiry_no')
                                                     <span class="text-danger">This Field is Required.</span>
@@ -110,7 +110,7 @@
                                                     Source of Information <span class="text-danger">*</span>
                                                 </label>
                                                 <select class="select2" name="source_of_information"
-                                                    id="source_of_information">
+                                                    id="source_of_information" required>
                                                     <option value="Website" {{ (old('source_of_information', $child->source_of_information) == 'Website') ? 'selected' : '' }}>
                                                         Website
                                                     </option>
@@ -137,7 +137,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Adoption Date <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector"
+                                                <input type="text" required class="form-control dateselector"
                                                     name="adoption_date"
                                                     value="{{ old('adoption_date', $child->adoption_date) }}">
                                                 @error('adoption_date')
@@ -149,7 +149,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">City<span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="city_id">
+                                                <select class="select2" name="city_id" required>
                                                     @forelse ($cities as $list)
                                                         <option value="{{ $list->id }}" {{$child->city_id == $list->id ? 'selected' : ''  }}>
                                                             {{ $list->name}}
@@ -170,7 +170,7 @@
                                                     Status of Adoption <span class="text-danger">*</span>
                                                 </label>
                                                 <select class="select2" name="status_of_adoption"
-                                                    id="status_of_adoption">
+                                                    id="status_of_adoption" required>
                                                     <option value="Forwarded" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forwarded' ? 'selected' : '' }}>
                                                         Forwarded
                                                     </option>
@@ -213,7 +213,7 @@
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="first_name"
-                                                    value="{{ old('first_name', $child->first_name) }}">
+                                                    value="{{ old('first_name', $child->first_name) }}" required>
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -224,7 +224,7 @@
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="last_name"
-                                                    value="{{ old('last_name', $child->last_name) }}">
+                                                    value="{{ old('last_name', $child->last_name) }}" required>
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -235,7 +235,7 @@
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector" name="dob"
-                                                    id="DateOfBirth" value="{{ old('dob', $child->dob) }}">
+                                                    id="DateOfBirth" value="{{ old('dob', $child->dob) }}" required>
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -246,7 +246,8 @@
                                                 <label for="" class="text-muted mb-2">Age <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control bg-light" name="age"
-                                                    id="ChildAge" readonly value="{{ old('age', $child->age) }}">
+                                                    id="ChildAge" readonly value="{{ old('age', $child->age) }}"
+                                                    required>
                                                 <input type="text" class="d-none"
                                                     value="{{ $settings->min_age_of_child }}" id="minAge">
                                                 <input type="text" class="d-none"
@@ -261,7 +262,7 @@
                                                 <label for="" class="text-muted mb-2">Gender <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
-                                                    <select class="select2gender" name="gender">
+                                                    <select class="select2gender" name="gender" required>
                                                         <option value="Male" {{ old('gender', $child->gender) == 'Male' ? 'selected' : '' }}>Male</option>
                                                         <option value="Female" {{ old('gender', $child->gender) == 'Female' ? 'selected' : '' }}>Female
                                                         </option>
@@ -286,7 +287,7 @@
                                                 <label for="" class="text-muted mb-2">Religion <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperreg">
-                                                    <select class="select2reg" name="religion">
+                                                    <select class="select2reg" name="religion" required>
                                                         <option value="Islam" {{ old('religion', $child->religion ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
                                                         <option value="Hinduism" {{ old('religion', $child->religion ?? '') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
                                                         <option value="Sikhism" {{ old('religion', $child->religion ?? '') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
@@ -431,7 +432,8 @@
                                                 <label for="" class="text-muted mb-2">Select School<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperSchool">
-                                                    <select class="select2School" id="SchoolSelect" name="school_id">
+                                                    <select class="select2School" id="SchoolSelect" name="school_id"
+                                                        required>
                                                         <option value="" class="form-control">--Select School--</option>
                                                         @foreach ($schools as $list)
                                                             <option value="{{ $list->id }}" {{ old('school_id', $list->id ? 'selected' : '') }}>
@@ -449,7 +451,8 @@
                                                 <label for="" class="text-muted mb-2">Select Grade<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperGrade">
-                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id">
+                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id"
+                                                        required>
                                                         <option value="">--Select Grade--</option>
                                                     </select>
                                                 </div>
@@ -476,7 +479,7 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperDormitory">
                                                     <select class="select2Dormitory form-control" id="DormitorySelect"
-                                                        name="room_id">
+                                                        name="room_id" required>
                                                         @foreach ($rooms as $list)
                                                             <option value="{{ $list->id }}" {{ old('room_id', $list->room_id ? 'selected' : '') }}>
                                                                 {{ $list->title }}
@@ -882,11 +885,12 @@
                                                                                                                                     </label>
                                                                                                                                     <div class="mb-2">
                                                                                                                                         @php
-                                                                                                                                            // Decode the stored values as an array for checkboxes or get the stored value for radio groups
-                                                                                                                                            $storedValues = $childInputs[$formDatum->id]->input_value
+                                                                                                                                            // Check if the key exists before accessing it
+                                                                                                                                            $storedValues = isset($childInputs[$formDatum->id]) && $childInputs[$formDatum->id]->input_value
                                                                                                                                                 ? json_decode($childInputs[$formDatum->id]->input_value, true)
                                                                                                                                                 : [];
                                                                                                                                         @endphp
+
 
                                                                                                                                         @foreach ($formDatum->optionsForm as $option)
                                                                                                                                             <div class="form-check">
@@ -905,9 +909,10 @@
                                                                                                                                                         type="radio"
                                                                                                                                                         name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
                                                                                                                                                         value="{{ $option->value }}"
-                                                                                                                                                        id="{{ $formDatum->name }}_{{ $option->value }}" @if ($childInputs[$formDatum->id]->input_value === $option->value)
+                                                                                                                                                        id="{{ $formDatum->name }}_{{ $option->value }}" @if (isset($childInputs[$formDatum->id]) && $childInputs[$formDatum->id]->input_value === $option->value)
                                                                                                                                                         checked @endif>
                                                                                                                                                 @endif
+
                                                                                                                                                 <label class="form-check-label"
                                                                                                                                                     for="{{ $formDatum->name }}_{{ $option->value }}">
                                                                                                                                                     {{ $option->label }}

@@ -25,7 +25,7 @@
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- favicon -->
-    <link rel="shortcut icon" href="{{ asset('backend/images/wistech-fav-1.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('backend/images/roshnilogo.jpg') }}" />
 
 
 

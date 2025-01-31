@@ -35,8 +35,6 @@
                         </div>
                     </div>
 
-
-
                 </div>
             </div>
         </div>
@@ -45,24 +43,24 @@
             <div class="card border-0 shadow-none rounded-3">
                 <div class="card-body p-3">
                     <!-- Add flexbox utilities to the nav -->
-                    <ul class="nav nav-pills mb-4 justify-content-around" id="infoTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn active" id="academic-tab" data-bs-toggle="pill"
+                    <ul class="nav nav-pills mb-4 justify-content-around row row-cols-3 g-3" id="infoTabs"
+                        role="tablist">
+                        <li class="nav-item col" role="presentation">
+                            <button class="nav-link custom-btn active w-100" id="academic-tab" data-bs-toggle="pill"
                                 data-bs-target="#academic" type="button" role="tab" aria-controls="academic"
                                 aria-selected="true">
                                 <i class="bi bi-award me-2"></i>Profile
                             </button>
                         </li>
-                        <!-- Parent Tab Link -->
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn" id="parents-tab" data-bs-toggle="pill"
+                        <li class="nav-item col" role="presentation">
+                            <button class="nav-link custom-btn w-100" id="parents-tab" data-bs-toggle="pill"
                                 data-bs-target="#parents-info" type="button" role="tab" aria-controls="parents-info"
                                 aria-selected="false">
                                 <i class="bi bi-file-earmark-text me-2"></i>Parents Info
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link custom-btn" id="documents" data-bs-toggle="pill"
+                        <li class="nav-item col" role="presentation">
+                            <button class="nav-link custom-btn w-100" id="documents" data-bs-toggle="pill"
                                 data-bs-target="#other" type="button" role="tab" aria-controls="other"
                                 aria-selected="false">
                                 <i class="bi bi-calendar-check me-2"></i>Documents
@@ -70,10 +68,10 @@
                         </li>
 
                         @foreach ($forms as $form)
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link custom-btn" id="form-tab-{{ $form->id }}" data-bs-toggle="pill"
-                                    data-bs-target="#form-content-{{ $form->id }}" type="button" role="tab"
-                                    aria-controls="form-content-{{ $form->id }}" aria-selected="false">
+                            <li class="nav-item col" role="presentation">
+                                <button class="nav-link custom-btn w-100" id="form-tab-{{ $form->id }}"
+                                    data-bs-toggle="pill" data-bs-target="#form-content-{{ $form->id }}" type="button"
+                                    role="tab" aria-controls="form-content-{{ $form->id }}" aria-selected="false">
                                     <i class="bi bi-calendar-check me-2"></i>{{ $form->name }}
                                 </button>
                             </li>
@@ -81,49 +79,87 @@
                     </ul>
 
                     <hr>
+
                     <div class="tab-content" id="form-tabs-content">
                         @foreach ($formsData->groupBy('form_id') as $formId => $formDataGroup)
                                     <div class="tab-pane fade" id="form-content-{{ $formId }}" role="tabpanel"
                                         aria-labelledby="form-tab-{{ $formId }}">
                                         <div class="pt-0 p-4 rounded-3">
                                             @foreach ($formDataGroup as $formData)
-                                                                @if ($formData->inputForm && $formData->inputForm->label) {{-- Ensure inputForm and
-                                                                                    label exist --}}
-                                                                                    <div class="d-flex align-items-center py-2 border-bottom">
+                                                                @if ($formData->inputForm && $formData->inputForm->label)
+                                                                                    <div class="row align-items-center py-2 border-bottom">
                                                                                         <div class="col-6">
-                                                                                            <p>{{ $formData->inputForm->label }}</p>
+                                                                                            <p class="fw-bold">{{ $formData->inputForm->label }}</p>
                                                                                         </div>
                                                                                         <div class="col-6 text-muted text-end">
                                                                                             <p class="mb-0">
                                                                                                 @if ($formData->inputForm->type === 'file')
-                                                                                                                                {{-- Check if the input is a file --}}
                                                                                                                                 @php
-                                                                                                                                    // Get the full file URL using the asset() helper
-                                                                                                                                    $fileUrl = asset($formData->input_value);
+                                                                                                                                    $filePaths = json_decode($formData->input_value, true);
+                                                                                                                                    $isMultiple = is_array($filePaths) && count($filePaths) > 1;
                                                                                                                                 @endphp
-                                                                                                                                <a href="{{ $fileUrl }}" download="downloaded_file"
-                                                                                                                                    class="btn btn-link p-0">
-                                                                                                                                    Download File
-                                                                                                                                </a>
+
+                                                                                                                                @if ($isMultiple)
+                                                                                                                                    <button class="btn btn-link p-0"
+                                                                                                                                        onclick="toggleFilesTable(this, 'table-{{ $formData->id }}')"><i
+                                                                                                                                            class="fa-regular fa-eye"></i></button>
+                                                                                                                                @else
+                                                                                                                                    @php $fileUrl = asset($formData->input_value); @endphp
+                                                                                                                                    <a href="{{ $fileUrl }}" download class="btn btn-link p-0">Download File</a>
+                                                                                                                                @endif
                                                                                                 @else
                                                                                                                             {{-- Display value as text --}}
                                                                                                                             {{ is_array(json_decode($formData->input_value, true))
                                                                                                     ? implode(', ', json_decode($formData->input_value, true))
-                                                                                                    : $formData->input_value 
-                                                                                                                                                                                }}
+                                                                                                    : $formData->input_value }}
                                                                                                 @endif
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
+
+                                                                                    {{-- Table (Initially Hidden) - Placed Right Below the Row --}}
+                                                                                    @if ($isMultiple)
+                                                                                        <div class="row d-none" id="table-{{ $formData->id }}">
+                                                                                            <div class="col-12">
+                                                                                                <table class="table table-striped table-bordered mt-2">
+                                                                                                    <thead>
+                                                                                                        <tr>
+                                                                                                            <th colspan="3" class="text-center">
+                                                                                                                {{ $formData->inputForm->label }} Files
+                                                                                                            </th>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <th>#</th>
+                                                                                                            <th>File</th>
+                                                                                                            <th>Action</th>
+                                                                                                        </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody>
+                                                                                                        @foreach ($filePaths as $index => $filePath)
+                                                                                                            @php $fileUrl = asset($filePath); @endphp
+                                                                                                            <tr  id="file-row-{{ $formData->id }}-{{ $index }}" >
+                                                                                                                <td>{{ $index + 1 }}</td>
+                                                                                                                <td>{{ basename($filePath) }}</td>
+                                                                                                                <td><a href="{{ $fileUrl }}" download
+                                                                                                                        class="btn btn-sm btn-primary">Download</a>
+                                                                                                                    <button class="btn btn-sm btn-danger"
+                                                                                                                        onclick="deleteFile('{{ $formData->id }}', '{{ $index }}', '{{ $filePath }}')">
+                                                                                                                        Delete
+                                                                                                                    </button>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        @endforeach
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    @endif
                                                                 @endif
                                             @endforeach
-
                                         </div>
                                     </div>
                         @endforeach
                     </div>
-
-
 
                     <!-- Pills Content -->
                     <div class="tab-content" id="infoTabsContent">
@@ -638,5 +674,44 @@
     }
 </script>
 
+<script>
+    function toggleFilesTable(button, tableId) {
+        let table = document.getElementById(tableId);
+        if (table) {
+            table.classList.toggle('d-none');
+        }
+    }
+
+
+    function deleteFile(formDataId, fileIndex, filePath) {
+        if (!confirm("Are you sure you want to delete this file?")) return;
+
+        let route = '{{ route('delete.doc.child') }}';
+
+        $.ajax({
+            url: route,
+            type: "POST",
+            data: {
+                form_data_id: formDataId,
+                file_index: fileIndex,
+                file_path: filePath,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                if (response.success) {
+                    $("#file-row-" + formDataId + "-" + fileIndex).remove(); // Remove row from table
+                    alert("File deleted successfully.");
+                } else {
+                    alert("Failed to delete file.");
+                }
+            },
+            error: function () {
+                alert("Error occurred while deleting file.");
+            }
+        });
+    }
+
+
+</script>
 
 @endsection

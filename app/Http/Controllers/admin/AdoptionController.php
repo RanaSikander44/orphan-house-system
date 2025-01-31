@@ -697,6 +697,39 @@ class AdoptionController extends Controller
 
 
 
+    public function deleteChildFormDocs(Request $request)
+    {
+        $formData = ChildFormData::find($request->form_data_id);
+
+        if (!$formData) {
+            return response()->json(['success' => false, 'message' => 'Form data not found.']);
+        }
+
+        // Decode the JSON stored in the database
+        $files = json_decode($formData->input_value, true);
+
+        // Remove the selected file
+        if (isset($files[$request->file_index])) {
+            $fileToDelete = $files[$request->file_index];
+            unset($files[$request->file_index]); // Remove file from array
+
+            // OPTIONAL: Delete file from storage
+            if (file_exists(public_path($fileToDelete))) {
+                unlink(public_path($fileToDelete)); // Delete file physically
+            }
+
+            // Re-index array & convert back to JSON
+            $updatedFiles = array_values($files);
+            $formData->input_value = json_encode($updatedFiles);
+            $formData->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'File not found in records.']);
+    }
+
+
 
 
     // public function filter(Request $req)
