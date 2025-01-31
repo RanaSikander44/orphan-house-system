@@ -957,7 +957,7 @@
             </div>
 
             <div class="text-end mt-3">
-                <button class="btn btn-sm btn-primary" type="button" id="UpdateNextBtn">Next</button>
+                <!-- <button class="btn btn-sm btn-primary" type="button" id="UpdateNextBtn">Next</button> -->
                 <button class="btn btn-success btn-sm d-none" id="adoptionFormBtn" type="submit">
                     <i class="fa fa-save"></i> Update
                 </button>

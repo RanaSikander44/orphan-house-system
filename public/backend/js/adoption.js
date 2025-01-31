@@ -24,29 +24,23 @@ $('#DateOfBirth').on('change', function () {
     } else {
         $('#ChildAge').val(age);
     }
-});
+}); 
 
 
 $(document).ready(function () {
-    // Function to toggle buttons based on the current tab's position
     function toggleButtons(tabId) {
-        // Check if the current tab is the last one by using the ID of the tab
         var totalTabs = $('.nav-pills .nav-item').length;
         var currentTabIndex = $('#menuTabs .nav-item').index($('#' + tabId).parent()) + 1;
 
-        // Check if it is the last tab
         if (currentTabIndex === totalTabs) {
-            $('#nextButton').addClass('d-none');
-            $('#UpdateNextBtn').addClass('d-none');
+            $('#nextButton, #UpdateNextBtn').addClass('d-none');
             $('#adoptionFormBtn').removeClass('d-none');
         } else {
-            $('#nextButton').removeClass('d-none');
-            $('#UpdateNextBtn').removeClass('d-none');
+            $('#nextButton, #UpdateNextBtn').removeClass('d-none');
             $('#adoptionFormBtn').addClass('d-none');
         }
     }
 
-    // Function to validate fields in the active tab pane
     function validateFields(activePane) {
         var isValid = true;
 
@@ -54,7 +48,6 @@ $(document).ready(function () {
             var $this = $(this);
             var value = $this.val().trim();
 
-            // Handle file inputs separately
             if ($this.attr('type') === 'file') {
                 if ($this.get(0).files.length === 0) {
                     isValid = false;
@@ -62,18 +55,14 @@ $(document).ready(function () {
                 } else {
                     removeError($this);
                 }
-            }
-            // Handle select inputs separately
-            else if ($this.is('select')) {
+            } else if ($this.is('select')) {
                 if ($this.val() === "" || $this.val() === null) {
                     isValid = false;
                     showError($this, "Please select an option.");
                 } else {
                     removeError($this);
                 }
-            }
-            // Handle all other input types
-            else {
+            } else {
                 if (value === '') {
                     isValid = false;
                     showError($this, "This field is required.");
@@ -86,7 +75,6 @@ $(document).ready(function () {
         return isValid;
     }
 
-    // Show validation error
     function showError(element, message) {
         element.addClass('is-invalid');
         if (element.next('.invalid-feedback').length === 0) {
@@ -94,50 +82,52 @@ $(document).ready(function () {
         }
     }
 
-    // Remove validation error
     function removeError(element) {
         element.removeClass('is-invalid');
         element.next('.invalid-feedback').remove();
     }
 
-    // Next and Update Button Click - Validate Before Moving
-    $('#nextButton, #UpdateNextBtn ,#adoptionFormBtn , #adoptionFormBtn').on('click', function (e) {
+    // 🛑 Stop forward tab switching if validation fails, but allow moving back
+    $('.nav-pills .nav-link').on('show.bs.tab', function (e) {
+        var activeTab = $('.nav-pills .nav-link.active');
+        var activePane = $(activeTab.attr('href'));
+        var currentIndex = $('.nav-pills .nav-link').index(activeTab);
+        var targetIndex = $('.nav-pills .nav-link').index($(this));
+
+        // Only validate if moving forward
+        if (targetIndex > currentIndex && !validateFields(activePane)) {
+            e.preventDefault(); // 🚨 Stops moving forward
+            return false;
+        }
+
+        toggleButtons($(this).attr('id'));
+    });
+
+    // Next/Update Button Click - Move only if valid
+    $('#nextButton, #UpdateNextBtn, #adoptionFormBtn').on('click', function (e) {
         var activeTab = $('.nav-pills .nav-link.active');
         var activePane = $(activeTab.attr('href'));
 
-        // Prevent moving forward if validation fails
         if (!validateFields(activePane)) {
-            e.preventDefault();  // Stop default action
-            return false;  // Exit function
+            e.preventDefault();
+            return false;
         }
 
         var nextTab = activeTab.parent().next().find('.nav-link');
-        var nextPane = $(nextTab.attr('href'));
 
         if (nextTab.length) {
-            activeTab.removeClass('active');
-            activePane.removeClass('show active');
-            nextTab.addClass('active');
-            nextPane.addClass('show active');
+            nextTab.tab('show');  // ✅ Manually trigger Bootstrap tab switch
         }
-
-        toggleButtons(nextTab.attr('id'));  // Update button visibility based on the next tab
     });
 
-    // Handle tab click to update button visibility
-    $('.nav-pills .nav-link').on('click', function () {
-        var tabId = $(this).attr('id');
-        toggleButtons(tabId);  // Toggle button visibility based on clicked tab
-    });
-
-    // Remove error messages when user starts typing or selecting
     $(document).on('input change', 'input[required], select[required], textarea[required]', function () {
         removeError($(this));
     });
 
-    // Initialize button visibility based on the first tab when page loads
-    toggleButtons('homeTab');  // You can pass any tab ID you want to initialize the buttons with
+    toggleButtons('homeTab');
 });
+
+
 
 
 
