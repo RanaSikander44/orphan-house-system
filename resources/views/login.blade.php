@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Management System</title>
+    <title>Login To Roshni Crm Portal</title>
+    <link rel="shortcut icon" href="{{ asset('backend/images/roshnilogo.jpg') }}" />
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery Toast Plugin -->
