@@ -870,7 +870,7 @@
                                                                                                                 <option value="" disabled selected>Select {{ $formDatum->label }}
                                                                                                                 </option>
                                                                                                                 @foreach ($formDatum->optionsForm as $option)
-                                                                                                                    <option value="{{ $option->value }}" @if ($childInputs[$formDatum->id]->input_value == $option->value) selected
+                                                                                                                    <option value="{{ $option->value }}" @if (isset($childInputs[$formDatum->id]) && $childInputs[$formDatum->id]->input_value == $option->value) selected
                                                                                                                     @endif>
                                                                                                                         {{ $option->label }}
                                                                                                                     </option>

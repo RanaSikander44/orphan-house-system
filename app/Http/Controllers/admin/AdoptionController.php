@@ -468,107 +468,48 @@ class AdoptionController extends Controller
 
         if ($req->has('forms')) {
             foreach ($req->forms as $form) {
+                // Ensure 'inputs' key exists in the form array
                 if (isset($form['inputs']) && is_array($form['inputs'])) {
                     foreach ($form['inputs'] as $input_name => $input_value) {
+                        // Extract the input ID from the name
                         $lastUnderscorePos = strrpos($input_name, '_');
                         $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
 
+                        // Check if an entry already exists for this input ID and child
                         $formsData = ChildFormData::where('form_id', $form['form_id'])
                             ->where('child_id', $application->id)
                             ->where('input_id', $inputId)
                             ->first();
 
                         if (!$formsData) {
-                            $formsData = new ChildFormData();
+                            $formsData = new ChildFormData(); // Create a new instance if not found
                             $formsData->form_id = $form['form_id'];
                             $formsData->child_id = $application->id;
                             $formsData->input_id = $inputId;
                         }
 
-                        // Fetch existing file paths if available
-                        $existingFiles = json_decode($formsData->input_value, true);
-                        $existingFiles = is_array($existingFiles) ? $existingFiles : [];
-
-                        // Handle file uploads (single & multiple)
-                        if ($input_value instanceof \Illuminate\Http\UploadedFile || is_array($input_value)) {
-                            $newFiles = [];
-
-                            if (is_array($input_value)) {
-                                foreach ($input_value as $file) {
-                                    if ($file instanceof \Illuminate\Http\UploadedFile) {
-                                        $uniqueName = uniqid() . '.' . $file->getClientOriginalExtension();
-                                        $destinationPath = public_path('backend/documents/childs/dynamicFields');
-                                        $file->move($destinationPath, $uniqueName);
-                                        $newFiles[] = 'backend/documents/childs/dynamicFields/' . $uniqueName;
-                                    }
-                                }
-                            } else {
-                                // Single file case
-                                $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
-                                $destinationPath = public_path('backend/documents/childs/dynamicFields');
-                                $input_value->move($destinationPath, $uniqueName);
-                                $newFiles[] = 'backend/documents/childs/dynamicFields/' . $uniqueName;
-                            }
-
-                            // Merge new files with existing ones if multiple uploads are allowed
-                            $formsData->input_value = json_encode(array_merge($existingFiles, $newFiles));
+                        // Handle file uploads
+                        if ($input_value instanceof \Illuminate\Http\UploadedFile) {
+                            $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
+                            $destinationPath = public_path('backend/documents/childs/dynamicFields');
+                            $input_value->move($destinationPath, $uniqueName);
+                            $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
                         } else {
                             // Handle non-file inputs
-                            $formsData->input_value = is_array($input_value) ? json_encode($input_value) : $input_value;
+                            if (is_array($input_value)) {
+                                $input_value = json_encode($input_value); // Convert array to JSON string
+                            }
+                            $formsData->input_value = $input_value;
                         }
 
-                        $formsData->save();
+                        $formsData->save(); // Save the updated or new record
                     }
                 } else {
+                    // Optionally, log or handle forms without 'inputs' key
                     \Log::warning('Form missing "inputs" key', ['form' => $form]);
                 }
             }
         }
-
-        // if ($req->has('forms')) {
-        //     foreach ($req->forms as $form) {
-        //         // Ensure 'inputs' key exists in the form array
-        //         if (isset($form['inputs']) && is_array($form['inputs'])) {
-        //             foreach ($form['inputs'] as $input_name => $input_value) {
-        //                 // Extract the input ID from the name
-        //                 $lastUnderscorePos = strrpos($input_name, '_');
-        //                 $inputId = $lastUnderscorePos !== false ? substr($input_name, $lastUnderscorePos + 1) : $input_name;
-
-        //                 // Check if an entry already exists for this input ID and child
-        //                 $formsData = ChildFormData::where('form_id', $form['form_id'])
-        //                     ->where('child_id', $application->id)
-        //                     ->where('input_id', $inputId)
-        //                     ->first();
-
-        //                 if (!$formsData) {
-        //                     $formsData = new ChildFormData(); // Create a new instance if not found
-        //                     $formsData->form_id = $form['form_id'];
-        //                     $formsData->child_id = $application->id;
-        //                     $formsData->input_id = $inputId;
-        //                 }
-
-        //                 // Handle file uploads
-        //                 if ($input_value instanceof \Illuminate\Http\UploadedFile) {
-        //                     $uniqueName = uniqid() . '.' . $input_value->getClientOriginalExtension();
-        //                     $destinationPath = public_path('backend/documents/childs/dynamicFields');
-        //                     $input_value->move($destinationPath, $uniqueName);
-        //                     $formsData->input_value = 'backend/documents/childs/dynamicFields/' . $uniqueName;
-        //                 } else {
-        //                     // Handle non-file inputs
-        //                     if (is_array($input_value)) {
-        //                         $input_value = json_encode($input_value); // Convert array to JSON string
-        //                     }
-        //                     $formsData->input_value = $input_value;
-        //                 }
-
-        //                 $formsData->save(); // Save the updated or new record
-        //             }
-        //         } else {
-        //             // Optionally, log or handle forms without 'inputs' key
-        //             \Log::warning('Form missing "inputs" key', ['form' => $form]);
-        //         }
-        //     }
-        // }
 
 
         if ($req->has('document_titles')) {
@@ -593,142 +534,8 @@ class AdoptionController extends Controller
                 }
             }
         }
-
-        if ($id) {
-            $is_approved = child::where('id', $id)->first('is_approved');
-            if ($is_approved->is_approved == 1) {
-                $RedirectRoute = 'enquiry.child.list';
-            } else {
-                $RedirectRoute = 'adoptions';
-            }
-        }
-
-        return redirect()->route($RedirectRoute)->with('success', 'Inquiry Updated!');
+        return redirect()->route('adoptions')->with('success', 'Inquiry Updated!');
     }
-
-
-    public function studentDelete($id)
-    {
-        $student = child::find($id);
-        $student->delete();
-        return redirect()->route('adoptions')->with('success', 'child Deleted Successfully');
-    }
-
-
-    public function deldoc($id)
-    {
-        $documents = child_documents::findOrFail($id);
-        $documents->name = Null;
-        $documents->update();
-
-        return response()->json([
-            'success' => 'Document has deleted !',
-        ]);
-    }
-
-
-    public function filter(Request $req)
-    {
-        // Helper function to map child data consistently
-        $mapChildData = function ($child) {
-            return [
-                'id' => $child->id ?? null,
-                'enquiry_no' => $child->enquiry_no ?? 'N/A',
-                'first_name' => $child->first_name ?? 'N/A',
-                'last_name' => $child->last_name ?? 'N/A',
-                'academicyear_title' => $child->academicyear->title ?? 'N/A',
-                'adoption_date' => $child->adoption_date ?? null,
-                'status_of_adoption' => $child->status_of_adoption ?? 'N/A',
-                'age' => $child->age ?? 'Unknown Age',
-                'school_name' => $child->school->name ?? 'No School',
-            ];
-        };
-
-        // Initialize the result collection
-        $result = collect();
-
-        // Case: Both `nanny_id` and `school_id` are provided
-        if ($req->nanny_id !== 'null' && $req->school_id !== 'null') {
-            $nanny = Staff::where('user_id', $req->nanny_id)->first();
-
-            if ($nanny) {
-                $children = NannyChilds::with(['child.school', 'child.academicyear'])
-                    ->where('nanny_id', $nanny->id)
-                    ->whereHas('child', function ($query) use ($req) {
-                        $query->where('school_id', $req->school_id);
-                    })
-                    ->get();
-
-                $result = $children->map(fn($nannyChild) => $mapChildData($nannyChild->child));
-            }
-        }
-
-        // Case: Only `nanny_id` is provided
-        if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
-            $nanny = Staff::where('user_id', $req->nanny_id)->first();
-
-            if ($nanny) {
-                $children = NannyChilds::with(['child.school', 'child.academicyear'])
-                    ->where('nanny_id', $nanny->id)
-                    ->get();
-
-                $result = $children->map(fn($nannyChild) => $mapChildData($nannyChild->child));
-            }
-        }
-
-        // Case: Only `school_id` is provided
-        if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
-            $children = Child::with(['school', 'academicyear'])
-                ->where('school_id', $req->school_id)
-                ->get();
-
-            $result = $children->map(fn($child) => $mapChildData($child));
-        }
-
-        // Case: No filters or both filters are null
-        if ($req->nanny_id === 'null' && $req->school_id === 'null') {
-            $children = Child::with(['school', 'academicyear'])->get();
-            $result = $children->map(fn($child) => $mapChildData($child));
-        }
-
-        // Return filtered data or all data if no filters matched
-        return response()->json($result);
-    }
-
-
-
-    public function deleteChildFormDocs(Request $request)
-    {
-        $formData = ChildFormData::find($request->form_data_id);
-
-        if (!$formData) {
-            return response()->json(['success' => false, 'message' => 'Form data not found.']);
-        }
-
-        // Decode the JSON stored in the database
-        $files = json_decode($formData->input_value, true);
-
-        // Remove the selected file
-        if (isset($files[$request->file_index])) {
-            $fileToDelete = $files[$request->file_index];
-            unset($files[$request->file_index]); // Remove file from array
-
-            // OPTIONAL: Delete file from storage
-            if (file_exists(public_path($fileToDelete))) {
-                unlink(public_path($fileToDelete)); // Delete file physically
-            }
-
-            // Re-index array & convert back to JSON
-            $updatedFiles = array_values($files);
-            $formData->input_value = json_encode($updatedFiles);
-            $formData->save();
-
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json(['success' => false, 'message' => 'File not found in records.']);
-    }
-
 
 
 
