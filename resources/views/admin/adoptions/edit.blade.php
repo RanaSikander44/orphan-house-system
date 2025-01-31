@@ -9,30 +9,45 @@
 <div class="container-fluid px-4">
 
     <div class="card bg-white p-3 mt-4 border-0 shadow-sm rounded">
-        <div class="student-buttons pt-3">
-            <!-- Centered Pills -->
-            <ul class="nav nav-pills nav-justified flex-wrap" id="menuTabs" style="white-space: nowrap;">
-                <li class="nav-item">
-                    <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">Personal Info</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">Parents & Guardian
-                        Info</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">Documents </a>
-                </li>
 
-                @foreach ($forms as $key => $list)
-                    <li class="nav-item mb-2">
-                        <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
-                            <i class="bi bi-file-earmark-post"></i> {{ $list->name }}
+        <div class="pt-3">
+            <div class="row" style="width : 100%;">
+                <ul class="nav nav-pills d-flex flex-wrap" id="menuTabs" style="white-space: nowrap; padding-left: 0;">
+                    <!-- Personal Info Tab -->
+                    <li class="nav-item col-3 text-center">
+                        <a class="nav-link active" id="homeTab" data-bs-toggle="pill" href="#home">
+                            Personal Info
                         </a>
                     </li>
-                @endforeach
-            </ul>
-            <hr class="w-100 my-4" style="font-weight : 200px;">
+
+                    <!-- Parents & Guardian Info Tab -->
+                    <li class="nav-item col-3 text-center">
+                        <a class="nav-link" id="menu1Tab" data-bs-toggle="pill" href="#menu1">
+                            Parents & Guardian Info
+                        </a>
+                    </li>
+
+                    <!-- Documents Tab -->
+                    <li class="nav-item col-3  text-center">
+                        <a class="nav-link" id="menu2Tab" data-bs-toggle="pill" href="#menu2">
+                            Documents
+                        </a>
+                    </li>
+
+                    <!-- Dynamic Tabs from Forms -->
+                    @foreach ($forms as $key => $list)
+                        <li class="nav-item col-3 text-center">
+                            <a class="nav-link" id="formTab{{ $key }}" data-bs-toggle="pill" href="#form{{ $key }}">
+                                {{ $list->name }}
+                            </a>
+                        </li>
+                    @endforeach
+
+                </ul>
+                <hr class="w-100 my-4" style="font-weight : 200px;">
+            </div>
         </div>
+
         <!-- Tab Content -->
         <form method="post" action="{{route('enquiry.update', $child->id)}}" enctype="multipart/form-data">
             @csrf
@@ -62,7 +77,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Enquiry Type <span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="enquiry_type_id">
+                                                <select class="select2" name="enquiry_type_id" required>
                                                     @forelse($enquiry_types as $list)
                                                         <option value="{{ $list->id }}" {{$child->enquiry_id == $list->id ? 'selected' : ''   }}>
                                                             {{ $list->title }}
@@ -82,7 +97,7 @@
                                                 <label for="" class="text-muted mb-2">Enquiry Number <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control bg-light" name="enquiry_no"
-                                                    value="{{ $child->enquiry_no}}" readonly>
+                                                    value="{{ $child->enquiry_no}}" required readonly>
 
                                                 @error('enquiry_no')
                                                     <span class="text-danger">This Field is Required.</span>
@@ -95,7 +110,7 @@
                                                     Source of Information <span class="text-danger">*</span>
                                                 </label>
                                                 <select class="select2" name="source_of_information"
-                                                    id="source_of_information">
+                                                    id="source_of_information" required>
                                                     <option value="Website" {{ (old('source_of_information', $child->source_of_information) == 'Website') ? 'selected' : '' }}>
                                                         Website
                                                     </option>
@@ -122,7 +137,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">Adoption Date <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" class="form-control dateselector"
+                                                <input type="text" required class="form-control dateselector"
                                                     name="adoption_date"
                                                     value="{{ old('adoption_date', $child->adoption_date) }}">
                                                 @error('adoption_date')
@@ -134,7 +149,7 @@
                                             <div class="col-6 mt-3">
                                                 <label for="" class="text-muted mb-2">City<span
                                                         class="text-danger">*</span></label>
-                                                <select class="select2" name="city_id">
+                                                <select class="select2" name="city_id" required>
                                                     @forelse ($cities as $list)
                                                         <option value="{{ $list->id }}" {{$child->city_id == $list->id ? 'selected' : ''  }}>
                                                             {{ $list->name}}
@@ -155,7 +170,7 @@
                                                     Status of Adoption <span class="text-danger">*</span>
                                                 </label>
                                                 <select class="select2" name="status_of_adoption"
-                                                    id="status_of_adoption">
+                                                    id="status_of_adoption" required>
                                                     <option value="Forwarded" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forwarded' ? 'selected' : '' }}>
                                                         Forwarded
                                                     </option>
@@ -198,7 +213,7 @@
                                                 <label for="" class="text-muted mb-2">First Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="first_name"
-                                                    value="{{ old('first_name', $child->first_name) }}">
+                                                    value="{{ old('first_name', $child->first_name) }}" required>
                                                 @error('first_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -209,7 +224,7 @@
                                                 <label for="" class="text-muted mb-2">Last Name <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="last_name"
-                                                    value="{{ old('last_name', $child->last_name) }}">
+                                                    value="{{ old('last_name', $child->last_name) }}" required>
                                                 @error('last_name')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -220,7 +235,7 @@
                                                 <label for="" class="text-muted mb-2">Date Of Birth <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control dateselector" name="dob"
-                                                    id="DateOfBirth" value="{{ old('dob', $child->dob) }}">
+                                                    id="DateOfBirth" value="{{ old('dob', $child->dob) }}" required>
                                                 @error('dob')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -231,7 +246,8 @@
                                                 <label for="" class="text-muted mb-2">Age <span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" class="form-control bg-light" name="age"
-                                                    id="ChildAge" readonly value="{{ old('age', $child->age) }}">
+                                                    id="ChildAge" readonly value="{{ old('age', $child->age) }}"
+                                                    required>
                                                 <input type="text" class="d-none"
                                                     value="{{ $settings->min_age_of_child }}" id="minAge">
                                                 <input type="text" class="d-none"
@@ -246,7 +262,7 @@
                                                 <label for="" class="text-muted mb-2">Gender <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrappergender">
-                                                    <select class="select2gender" name="gender">
+                                                    <select class="select2gender" name="gender" required>
                                                         <option value="Male" {{ old('gender', $child->gender) == 'Male' ? 'selected' : '' }}>Male</option>
                                                         <option value="Female" {{ old('gender', $child->gender) == 'Female' ? 'selected' : '' }}>Female
                                                         </option>
@@ -271,7 +287,7 @@
                                                 <label for="" class="text-muted mb-2">Religion <span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperreg">
-                                                    <select class="select2reg" name="religion">
+                                                    <select class="select2reg" name="religion" required>
                                                         <option value="Islam" {{ old('religion', $child->religion ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
                                                         <option value="Hinduism" {{ old('religion', $child->religion ?? '') == 'Hinduism' ? 'selected' : '' }}>Hinduism</option>
                                                         <option value="Sikhism" {{ old('religion', $child->religion ?? '') == 'Sikhism' ? 'selected' : '' }}>Sikhism</option>
@@ -416,7 +432,8 @@
                                                 <label for="" class="text-muted mb-2">Select School<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperSchool">
-                                                    <select class="select2School" id="SchoolSelect" name="school_id">
+                                                    <select class="select2School" id="SchoolSelect" name="school_id"
+                                                        required>
                                                         <option value="" class="form-control">--Select School--</option>
                                                         @foreach ($schools as $list)
                                                             <option value="{{ $list->id }}" {{ old('school_id', $list->id ? 'selected' : '') }}>
@@ -434,7 +451,8 @@
                                                 <label for="" class="text-muted mb-2">Select Grade<span
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperGrade">
-                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id">
+                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id"
+                                                        required>
                                                         <option value="">--Select Grade--</option>
                                                     </select>
                                                 </div>
@@ -461,7 +479,7 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="cp_wrapperDormitory">
                                                     <select class="select2Dormitory form-control" id="DormitorySelect"
-                                                        name="room_id">
+                                                        name="room_id" required>
                                                         @foreach ($rooms as $list)
                                                             <option value="{{ $list->id }}" {{ old('room_id', $list->room_id ? 'selected' : '') }}>
                                                                 {{ $list->title }}
@@ -757,158 +775,176 @@
                                     <div class="card-body">
                                         <div class="row">
                                             @foreach ($formData as $enquiryKey => $formDatum)
-                                                @if ($formDatum->form_id === $list->id)
-                                                    @if ($formDatum->type === 'header')
-                                                        <div class="col-md-6">
-                                                            <{{ $formDatum->sub_type }} class="text-muted">{{ $formDatum->label }}</{{ $formDatum->sub_type }}> 
-                                                        </div>
-                                                    @elseif ($formDatum->type === 'text' || $formDatum->type === 'autocomplete')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <input type="text" class="form-control mb-2" id="{{ $formDatum->id }}"
-                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                @if ($formDatum->required) required @endif
-                                                                placeholder="{{ $formDatum->label }}"
-                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
-                                                        </div>
-                                                    @elseif ($formDatum->type === 'date')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <input type="date" class="form-control mb-2" id="{{ $formDatum->id }}"
-                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                @if ($formDatum->required) required @endif
-                                                                placeholder="{{ $formDatum->label }}"
-                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
-                                                        </div>
-                                                    @elseif ($formDatum->type === 'file')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <input type="file" class="form-control mb-2" id="{{ $formDatum->name }}"
-                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                @if ($formDatum->required) required @endif
-                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
+                                                                        @if ($formDatum->form_id === $list->id)
+                                                                                                    @if ($formDatum->type === 'header')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <{{ $formDatum->sub_type }} class="text-muted">{{ $formDatum->label }}</{{ $formDatum->sub_type }}>
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'text' || $formDatum->type === 'autocomplete')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                {{ $formDatum->label }}
+                                                                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                            </label>
+                                                                                                            <input type="text" class="form-control mb-2" id="{{ $formDatum->id }}"
+                                                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                @if ($formDatum->required) required @endif
+                                                                                                                placeholder="{{ $formDatum->label }}"
+                                                                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'date')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                {{ $formDatum->label }}
+                                                                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                            </label>
+                                                                                                            <input type="date" class="form-control mb-2" id="{{ $formDatum->id }}"
+                                                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                @if ($formDatum->required) required @endif
+                                                                                                                placeholder="{{ $formDatum->label }}"
+                                                                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'file')
+                                                                                                                                <div class="col-md-6">
+                                                                                                                                    <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                                        {{ $formDatum->label }}
+                                                                                                                                        @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                                                    </label>
+                                                                                                                                    <input type="file" class="form-control mb-2" id="{{ $formDatum->name }}"
+                                                                                                                                        name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                                        @if (empty($childInputs[$formDatum->id]->input_value) && $formDatum->required) required @endif
+                                                                                                                                        value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}"
+                                                                                                                                        {{ $formDatum->multiple == 1 ? "multiple" : '' }}>
 
-                                                                <a href="{{ asset($childInputs[$formDatum->id]->input_value) }}" download="{{ basename($childInputs[$formDatum->id]->input_value) }}">
-                                                                    Current Document
-                                                                </a>
-                                                                                                                        
-                                                            </div>
-                                                    @elseif ($formDatum->type === 'number')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <input type="number" class="form-control mb-2" id="{{ $formDatum->id }}"
-                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                @if ($formDatum->required) required @endif
-                                                                placeholder="{{ $formDatum->label }}"
-                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
-                                                        </div>
-                                                    @elseif ($formDatum->type === 'button')
-                                                        <div class="col-md-6">
-                                                            <button class="btn mt-2 {{ $formDatum->className }} mb-2">{{ $formDatum->label }}</button>
-                                                        </div>
-                                                    @elseif ($formDatum->type === 'textarea')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <textarea name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                id="{{ $formDatum->id }}" class="form-control mb-2" @if ($formDatum->required) required @endif>{{ old("forms.$key.inputs.$formDatum->name", $childInputs[$formDatum->id]->input_value ?? '') }}</textarea>
-                                                        </div>
-                                                    @elseif ($formDatum->type === 'select')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <select class="form-control mb-2" id="{{ $formDatum->id }}"
-                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                @if ($formDatum->required) required @endif>
-                                                                <option value="" disabled selected>Select {{ $formDatum->label }}</option>
-                                                                @foreach ($formDatum->optionsForm as $option)
-                                                                    <option value="{{ $option->value }}" @if ($option->selected) selected @endif>
-                                                                        {{ $option->label }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        @elseif ($formDatum->type === 'checkbox-group' || $formDatum->type === 'radio-group')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formDatum->name }}" class="form-label">
-                                                                {{ $formDatum->label }}
-                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
-                                                            </label>
-                                                            <div class="mb-2">
-                                                                @php
-                                                                    // Decode the stored values as an array for checkboxes or get the stored value for radio groups
-                                                                    $storedValues = $childInputs[$formDatum->id]->input_value 
-                                                                        ? json_decode($childInputs[$formDatum->id]->input_value, true) 
-                                                                        : [];
-                                                                @endphp
+                                                                                                                                    @php
+                                                                                                                                        $files = $childInputs[$formDatum->id]->input_value ?? '';
+                                                                                                                                        $files = is_json($files) ? json_decode($files, true) : [$files]; // Ensure it's an array
+                                                                                                                                    @endphp
 
-                                                                @foreach ($formDatum->optionsForm as $option)
-                                                                    <div class="form-check">
-                                                                        @if ($formDatum->type === 'checkbox-group')
-                                                                            <!-- Checkbox Group -->
-                                                                            <input class="form-check-input {{ $formDatum->required ? 'required-group' : '' }}"
-                                                                                type="checkbox"
-                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}][]"
-                                                                                value="{{ $option->value }}"
-                                                                                id="{{ $formDatum->name }}_{{ $option->value }}"
-                                                                                @if (in_array($option->value, $storedValues)) checked @endif>
-                                                                        @elseif ($formDatum->type === 'radio-group')
-                                                                            <!-- Radio Group (only allow one selection) -->
-                                                                            <input class="form-check-input {{ $formDatum->required ? 'required-group' : '' }}"
-                                                                                type="radio"
-                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
-                                                                                value="{{ $option->value }}"
-                                                                                id="{{ $formDatum->name }}_{{ $option->value }}"
-                                                                                @if ( $childInputs[$formDatum->id]->input_value === $option->value) checked @endif>
+                                                                                                                                    @if (!empty($files) && is_array($files))
+                                                                                                                                        <div class="mt-2">
+                                                                                                                                            <strong>Uploaded Document{{ count($files) > 1 ? 's' : '' }}:</strong>
+                                                                                                                                            <span>{{ count($files) }}</span>
+                                                                                                                                        </div>
+                                                                                                                                    @endif
+
+
+                                                                                                                                </div>
+                                                                                                    @elseif ($formDatum->type === 'number')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                {{ $formDatum->label }}
+                                                                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                            </label>
+                                                                                                            <input type="number" class="form-control mb-2" id="{{ $formDatum->id }}"
+                                                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                @if ($formDatum->required) required @endif
+                                                                                                                placeholder="{{ $formDatum->label }}"
+                                                                                                                value="{{ old('forms.' . $key . '.inputs.' . $formDatum->name . '_' . $formDatum->id, $childInputs[$formDatum->id]->input_value ?? '') }}">
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'button')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <button
+                                                                                                                class="btn mt-2 {{ $formDatum->className }} mb-2">{{ $formDatum->label }}</button>
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'textarea')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                {{ $formDatum->label }}
+                                                                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                            </label>
+                                                                                                            <textarea
+                                                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                id="{{ $formDatum->id }}" class="form-control mb-2" @if ($formDatum->required) required
+                                                                                                                @endif>{{ old("forms.$key.inputs.$formDatum->name", $childInputs[$formDatum->id]->input_value ?? '') }}</textarea>
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'select')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                {{ $formDatum->label }}
+                                                                                                                @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                            </label>
+                                                                                                            <select class="form-control mb-2" id="{{ $formDatum->id }}"
+                                                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                @if ($formDatum->required) required @endif>
+                                                                                                                <option value="" disabled selected>Select {{ $formDatum->label }}
+                                                                                                                </option>
+                                                                                                                @foreach ($formDatum->optionsForm as $option)
+                                                                                                                    <option value="{{ $option->value }}" @if (isset($childInputs[$formDatum->id]) && $childInputs[$formDatum->id]->input_value == $option->value) selected
+                                                                                                                    @endif>
+                                                                                                                        {{ $option->label }}
+                                                                                                                    </option>
+                                                                                                                @endforeach
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    @elseif ($formDatum->type === 'checkbox-group' || $formDatum->type === 'radio-group')
+                                                                                                                                <div class="col-md-6">
+                                                                                                                                    <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                                        {{ $formDatum->label }}
+                                                                                                                                        @if ($formDatum->required) <span class="text-danger">*</span> @endif
+                                                                                                                                    </label>
+                                                                                                                                    <div class="mb-2">
+                                                                                                                                        @php
+                                                                                                                                            // Check if the key exists before accessing it
+                                                                                                                                            $storedValues = isset($childInputs[$formDatum->id]) && $childInputs[$formDatum->id]->input_value
+                                                                                                                                                ? json_decode($childInputs[$formDatum->id]->input_value, true)
+                                                                                                                                                : [];
+                                                                                                                                        @endphp
+
+
+                                                                                                                                        @foreach ($formDatum->optionsForm as $option)
+                                                                                                                                            <div class="form-check">
+                                                                                                                                                @if ($formDatum->type === 'checkbox-group')
+                                                                                                                                                    <!-- Checkbox Group -->
+                                                                                                                                                    <input
+                                                                                                                                                        class="form-check-input {{ $formDatum->required ? 'required-group' : '' }}"
+                                                                                                                                                        type="checkbox"
+                                                                                                                                                        name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}][]"
+                                                                                                                                                        value="{{ $option->value }}"
+                                                                                                                                                        id="{{ $formDatum->name }}_{{ $option->value }}" @if (in_array($option->value, $storedValues)) checked @endif>
+                                                                                                                                                @elseif ($formDatum->type === 'radio-group')
+                                                                                                                                                    <!-- Radio Group (only allow one selection) -->
+                                                                                                                                                    <input
+                                                                                                                                                        class="form-check-input {{ $formDatum->required ? 'required-group' : '' }}"
+                                                                                                                                                        type="radio"
+                                                                                                                                                        name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                                                        value="{{ $option->value }}"
+                                                                                                                                                        id="{{ $formDatum->name }}_{{ $option->value }}" @if (isset($childInputs[$formDatum->id]) && $childInputs[$formDatum->id]->input_value === $option->value)
+                                                                                                                                                        checked @endif>
+                                                                                                                                                @endif
+
+                                                                                                                                                <label class="form-check-label"
+                                                                                                                                                    for="{{ $formDatum->name }}_{{ $option->value }}">
+                                                                                                                                                    {{ $option->label }}
+                                                                                                                                                </label>
+                                                                                                                                            </div>
+                                                                                                                                        @endforeach
+
+                                                                                                                                        @if ($formDatum->required)
+                                                                                                                                            <small class="text-danger d-none" id="checkboxGroupError">Please select
+                                                                                                                                                at least one option.</small>
+                                                                                                                                        @endif
+                                                                                                                                    </div>
+                                                                                                                                </div>
+
+
+                                                                                                    @elseif ($formDatum->type === 'paragraph')
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                {{ $formDatum->label }}
+                                                                                                                @if ($formDatum->required)
+                                                                                                                    <span class="text-danger">*</span>
+                                                                                                                @endif
+                                                                                                            </label>
+                                                                                                            <textarea class="form-control mb-2"
+                                                                                                                name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]"
+                                                                                                                id="{{ $formDatum->name }}" rows="6"
+                                                                                                                placeholder="Enter your paragraph here..." @if ($formDatum->required)
+                                                                                                                    required
+                                                                                                                @endif>{{ old("forms.$key.inputs.$formDatum->name", $childInputs[$formDatum->id]->input_value ?? '') }}</textarea>
+                                                                                                        </div>
+                                                                                                    @endif
                                                                         @endif
-                                                                        <label class="form-check-label" for="{{ $formDatum->name }}_{{ $option->value }}">
-                                                                            {{ $option->label }}
-                                                                        </label>
-                                                                    </div>  
-                                                                @endforeach
-
-                                                                @if ($formDatum->required)
-                                                                    <small class="text-danger d-none" id="checkboxGroupError">Please select at least one option.</small>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-
-
-                                                        @elseif ($formDatum->type === 'paragraph')
-                                                            <div class="col-md-6">
-                                                                <label for="{{ $formDatum->name }}" class="form-label">
-                                                                    {{ $formDatum->label }}
-                                                                    @if ($formDatum->required)
-                                                                        <span class="text-danger">*</span>
-                                                                    @endif
-                                                                </label>
-                                                                <textarea 
-                                                                    class="form-control mb-2" 
-                                                                    name="forms[{{ $key }}][inputs][{{ $formDatum->name }}_{{ $formDatum->id }}]" 
-                                                                    id="{{ $formDatum->name }}" 
-                                                                    rows="6" 
-                                                                    placeholder="Enter your paragraph here..." 
-                                                                    @if ($formDatum->required) required @endif
-                                                                >{{ old("forms.$key.inputs.$formDatum->name", $childInputs[$formDatum->id]->input_value ?? '') }}</textarea>
-                                                            </div>
-                                                        @endif
-                                                @endif
                                             @endforeach
                                         </div>
                                     </div>
@@ -918,12 +954,11 @@
                     </div>
                 @endforeach
 
-
-               
-
             </div>
+
             <div class="text-end mt-3">
-                <button class="btn btn-primary btn-sm" type="submit">
+                <button class="btn btn-sm btn-primary" type="button" id="UpdateNextBtn">Next</button>
+                <button class="btn btn-success btn-sm d-none" id="adoptionFormBtn" type="submit">
                     <i class="fa fa-save"></i> Update
                 </button>
             </div>
@@ -936,25 +971,25 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const requiredGroups = document.querySelectorAll(".required-group");
+        const requiredGroups = document.querySelectorAll(".required-group");
 
-    requiredGroups.forEach((group) => {
-        const groupName = group.name;
-        const errorElement = document.getElementById(`checkboxGroupError`);
-        
-        group.closest("form").addEventListener("submit", function (event) {
-            const groupInputs = document.querySelectorAll(`[name="${groupName}"]`);
-            const isChecked = Array.from(groupInputs).some((input) => input.checked);
+        requiredGroups.forEach((group) => {
+            const groupName = group.name;
+            const errorElement = document.getElementById(`checkboxGroupError`);
 
-            if (!isChecked) {
-                event.preventDefault(); 
-                errorElement.classList.remove("d-none");
-            } else {
-                errorElement.classList.add("d-none");
-            }
+            group.closest("form").addEventListener("submit", function (event) {
+                const groupInputs = document.querySelectorAll(`[name="${groupName}"]`);
+                const isChecked = Array.from(groupInputs).some((input) => input.checked);
+
+                if (!isChecked) {
+                    event.preventDefault();
+                    errorElement.classList.remove("d-none");
+                } else {
+                    errorElement.classList.add("d-none");
+                }
+            });
         });
     });
-});
 </script>
 
 
@@ -1107,5 +1142,5 @@
 </script>
 
 
-
+<script src="{{ asset('backend/js/adoption.js') }}"></script>
 @endsection

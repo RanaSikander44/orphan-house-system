@@ -11,5 +11,3 @@
     </div>
 </footer> -->
 
-
-<script src="{{ asset('backend/js/adoption.js') }}"></script>
