@@ -117,43 +117,7 @@
                                                                                         </div>
                                                                                     </div>
 
-                                                                                    {{-- Table (Initially Hidden) - Placed Right Below the Row --}}
-                                                                                    @if ($isMultiple)
-                                                                                        <div class="row d-none" id="table-{{ $formData->id }}">
-                                                                                            <div class="col-12">
-                                                                                                <table class="table table-striped table-bordered mt-2">
-                                                                                                    <thead>
-                                                                                                        <tr>
-                                                                                                            <th colspan="3" class="text-center">
-                                                                                                                {{ $formData->inputForm->label }} Files
-                                                                                                            </th>
-                                                                                                        </tr>
-                                                                                                        <tr>
-                                                                                                            <th>#</th>
-                                                                                                            <th>File</th>
-                                                                                                            <th>Action</th>
-                                                                                                        </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody>
-                                                                                                        @foreach ($filePaths as $index => $filePath)
-                                                                                                            @php $fileUrl = asset($filePath); @endphp
-                                                                                                            <tr  id="file-row-{{ $formData->id }}-{{ $index }}" >
-                                                                                                                <td>{{ $index + 1 }}</td>
-                                                                                                                <td>{{ basename($filePath) }}</td>
-                                                                                                                <td><a href="{{ $fileUrl }}" download
-                                                                                                                        class="btn btn-sm btn-primary">Download</a>
-                                                                                                                    <button class="btn btn-sm btn-danger"
-                                                                                                                        onclick="deleteFile('{{ $formData->id }}', '{{ $index }}', '{{ $filePath }}')">
-                                                                                                                        Delete
-                                                                                                                    </button>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        @endforeach
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    @endif
+                                                                                   
                                                                 @endif
                                             @endforeach
                                         </div>

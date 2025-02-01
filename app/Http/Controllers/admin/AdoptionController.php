@@ -109,10 +109,10 @@ class AdoptionController extends Controller
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
             'age' => 'required',
-            'city_id' => 'required',
-            'school_id' => 'required',
-            'room_id' => 'required',
-            'grade_id' => 'required',
+            // 'city_id' => 'required',
+            // 'school_id' => 'required',
+            // 'room_id' => 'required',
+            // 'grade_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -142,25 +142,25 @@ class AdoptionController extends Controller
         $application->blood_group = $req->blood_group;
         $application->height = $req->height;
         $application->weight = $req->weight;
-        $application->city_id = $req->city_id;
-        $application->age = $req->age;
-        $application->school_id = $req->school_id;
-        if ($req->has('room_id')) {
-            // Count the number of children currently assigned to the room
-            $totalChildInRoom = child::where('room_id', $req->room_id)->count();
+        // $application->city_id = $req->city_id;
+        // $application->age = $req->age;
+        // $application->school_id = $req->school_id;
+        // if ($req->has('room_id')) {
+        //     // Count the number of children currently assigned to the room
+        //     $totalChildInRoom = child::where('room_id', $req->room_id)->count();
 
-            // Fetch the dormitory details for the given room ID
-            $roomDetails = Dormitory::find($req->room_id);
+        //     // Fetch the dormitory details for the given room ID
+        //     $roomDetails = Dormitory::find($req->room_id);
 
-            // Check if the room exists and has a valid max number of beds
-            if ($roomDetails && $totalChildInRoom >= $roomDetails->max_number_bed) {
-                return redirect()->back()->withInput()->with('error', 'This room is full. Please choose a different room.');
-            } else {
-                $application->room_id = $req->room_id;
-            }
-        }
+        //     // Check if the room exists and has a valid max number of beds
+        //     if ($roomDetails && $totalChildInRoom >= $roomDetails->max_number_bed) {
+        //         return redirect()->back()->withInput()->with('error', 'This room is full. Please choose a different room.');
+        //     } else {
+        //         $application->room_id = $req->room_id;
+        //     }
+        // }
 
-        $application->grade_id = $req->grade_id;
+        // $application->grade_id = $req->grade_id;
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -387,10 +387,10 @@ class AdoptionController extends Controller
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
             'age' => 'required',
-            'city_id' => 'required',
-            'school_id' => 'required',
-            'room_id' => 'required',
-            'grade_id' => 'required'
+            // 'city_id' => 'required',
+            // 'school_id' => 'required',
+            // 'room_id' => 'required',
+            // 'grade_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -419,10 +419,10 @@ class AdoptionController extends Controller
         $application->blood_group = $req->blood_group;
         $application->height = $req->height;
         $application->weight = $req->weight;
-        $application->city_id = $req->city_id;
-        $application->school_id = $req->school_id;
-        $application->room_id = $req->room_id;
-        $application->grade_id = $req->grade_id;
+        // $application->city_id = $req->city_id;
+        // $application->school_id = $req->school_id;
+        // $application->room_id = $req->room_id;
+        // $application->grade_id = $req->grade_id;
 
         if ($image = $req->file('child_image')) {
             $uniqueName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -533,6 +533,14 @@ class AdoptionController extends Controller
                 }
             }
         }
+
+        if ($id) {
+            $child = child::where('id', $id)->first();
+            if ($child->is_approved == 1) {
+                return redirect()->route('enquiry.child.list')->with('success', 'Inquiry Updated!');
+            }
+        }
+
         return redirect()->route('adoptions')->with('success', 'Inquiry Updated!');
     }
 
@@ -555,9 +563,6 @@ class AdoptionController extends Controller
             'success' => 'Document has deleted !',
         ]);
     }
-
-
-
 
     public function filter(Request $req)
     {
@@ -627,13 +632,41 @@ class AdoptionController extends Controller
     }
 
 
+    public function AssignSchoolDormitory($id)
+    {
+        $child = child::where('id', $id)->first();
+        $schools = Schools::all();
+        $rooms = Dormitory::all();
+        return view('admin.adoptions.assign', compact('schools', 'rooms', 'child'));
+    }
 
 
+    public function assign(Request $req, $id)
+    {
+        $child = Child::find($id);
 
+        $child->school_id = $req->school_id;
+        $child->grade_id = $req->grade_id;
+        if ($req->has('room_id')) {
+            // Count the number of children currently assigned to the room
+            $totalChildInRoom = child::where('room_id', $req->room_id)->count();
 
+            // Fetch the dormitory details for the given room ID
+            $roomDetails = Dormitory::find($req->room_id);
 
+            // Check if the room exists and has a valid max number of beds
+            if ($roomDetails && $totalChildInRoom >= $roomDetails->max_number_bed) {
+                return redirect()->back()->withInput()->with('error', 'This room is full. Please choose a different room.');
+            } else {
+                $child->room_id = $req->room_id;
+            }
+        }
 
+        $child->save();
 
-
+        return redirect()
+            ->route('enquiry.child.list') // Replace with the actual route name you want to redirect to
+            ->with('success', 'Child assignment updated successfully.');
+    }
 
 }

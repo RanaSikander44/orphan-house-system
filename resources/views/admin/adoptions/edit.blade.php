@@ -416,86 +416,6 @@
 
                                 </div>
                             </div>
-
-                            <!-- School -->
-
-                            <div class="col-6 mt-4">
-                                <div class="card bg-light border-0 shadow-none">
-                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">School Information </p>
-                                        <hr class="w-100" style="font-weight: 200px;">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <!-- Religion -->
-                                            <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Select School<span
-                                                        class="text-danger">*</span></label>
-                                                <div class="cp_wrapperSchool">
-                                                    <select class="select2School" id="SchoolSelect" name="school_id"
-                                                        required>
-                                                        <option value="" class="form-control">--Select School--</option>
-                                                        @foreach ($schools as $list)
-                                                            <option value="{{ $list->id }}" {{ old('school_id', $list->id ? 'selected' : '') }}>
-                                                                {{ $list->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                @error('school_id')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Select Grade<span
-                                                        class="text-danger">*</span></label>
-                                                <div class="cp_wrapperGrade">
-                                                    <select class="select2Grade" id="SchoolGrade" name="grade_id"
-                                                        required>
-                                                        <option value="">--Select Grade--</option>
-                                                    </select>
-                                                </div>
-                                                @error('grade_id')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Dormitory -->
-                            <div class="col-6 mt-4">
-                                <div class="card bg-light border-0 shadow-none">
-                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">Dormitory Information </p>
-                                        <hr class="w-100" style="font-weight: 200px;">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Select Room<span
-                                                        class="text-danger">*</span></label>
-                                                <div class="cp_wrapperDormitory">
-                                                    <select class="select2Dormitory form-control" id="DormitorySelect"
-                                                        name="room_id" required>
-                                                        @foreach ($rooms as $list)
-                                                            <option value="{{ $list->id }}" {{ old('room_id', $list->room_id ? 'selected' : '') }}>
-                                                                {{ $list->title }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-
-                                                </div>
-                                                @error('room_id')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -782,7 +702,7 @@
                                                                                                         </div>
                                                                                                     @elseif ($formDatum->type === 'text' || $formDatum->type === 'autocomplete')
                                                                                                         <div class="col-md-6">
-                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                 {{ $formDatum->label }}
                                                                                                                 @if ($formDatum->required) <span class="text-danger">*</span> @endif
                                                                                                             </label>
@@ -794,7 +714,7 @@
                                                                                                         </div>
                                                                                                     @elseif ($formDatum->type === 'date')
                                                                                                         <div class="col-md-6">
-                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                 {{ $formDatum->label }}
                                                                                                                 @if ($formDatum->required) <span class="text-danger">*</span> @endif
                                                                                                             </label>
@@ -806,7 +726,7 @@
                                                                                                         </div>
                                                                                                     @elseif ($formDatum->type === 'file')
                                                                                                                                 <div class="col-md-6">
-                                                                                                                                    <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                                    <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                                         {{ $formDatum->label }}
                                                                                                                                         @if ($formDatum->required) <span class="text-danger">*</span> @endif
                                                                                                                                     </label>
@@ -823,16 +743,22 @@
 
                                                                                                                                     @if (!empty($files) && is_array($files))
                                                                                                                                         <div class="mt-2">
-                                                                                                                                            <strong>Uploaded Document{{ count($files) > 1 ? 's' : '' }}:</strong>
-                                                                                                                                            <span>{{ count($files) }}</span>
+                                                                                                                                            @foreach ($files as $file)
+                                                                                                                                                @if (!empty($file))
+                                                                                                                                                    <a href="{{ asset($file) }}" download>Current
+                                                                                                                                                        Document</a><br>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
                                                                                                                                         </div>
                                                                                                                                     @endif
+
+
 
 
                                                                                                                                 </div>
                                                                                                     @elseif ($formDatum->type === 'number')
                                                                                                         <div class="col-md-6">
-                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                 {{ $formDatum->label }}
                                                                                                                 @if ($formDatum->required) <span class="text-danger">*</span> @endif
                                                                                                             </label>
@@ -859,8 +785,8 @@
                                                                                                                 @endif>{{ old("forms.$key.inputs.$formDatum->name", $childInputs[$formDatum->id]->input_value ?? '') }}</textarea>
                                                                                                         </div>
                                                                                                     @elseif ($formDatum->type === 'select')
-                                                                                                        <div class="col-md-6">
-                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                        <div class="col-md-6 mt-3">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                 {{ $formDatum->label }}
                                                                                                                 @if ($formDatum->required) <span class="text-danger">*</span> @endif
                                                                                                             </label>
@@ -879,7 +805,7 @@
                                                                                                         </div>
                                                                                                     @elseif ($formDatum->type === 'checkbox-group' || $formDatum->type === 'radio-group')
                                                                                                                                 <div class="col-md-6">
-                                                                                                                                    <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                                                    <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                                         {{ $formDatum->label }}
                                                                                                                                         @if ($formDatum->required) <span class="text-danger">*</span> @endif
                                                                                                                                     </label>
@@ -930,7 +856,7 @@
 
                                                                                                     @elseif ($formDatum->type === 'paragraph')
                                                                                                         <div class="col-md-6">
-                                                                                                            <label for="{{ $formDatum->name }}" class="form-label">
+                                                                                                            <label for="{{ $formDatum->name }}" class="form-label text-muted">
                                                                                                                 {{ $formDatum->label }}
                                                                                                                 @if ($formDatum->required)
                                                                                                                     <span class="text-danger">*</span>
@@ -1018,18 +944,6 @@
         $('.select2Gg').select2({
             dropdownParent: $('.cp_wrapperGg')
         })
-
-        $('.select2School').select2({
-            dropdownParent: $('.cp_wrapperSchool')
-        })
-
-        $('.select2Dormitory').select2({
-            dropdownParent: $('.cp_wrapperDormitory')
-        })
-
-        $('.select2Grade').select2({
-            dropdownParent: $('.cp_wrapperGrade')
-        })
     });
 </script>
 
@@ -1093,51 +1007,6 @@
 <script>
     $(".dateselector").flatpickr({
         dateFormat: "Y-m-d", // Define the desired date format
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-
-        // Function to fetch grades based on the selected school
-        function fetchGrades(school_id, selectedGradeId = null) {
-            $.post({
-                url: '{{ route('find.school') }}',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    school_id: school_id
-                },
-
-                success: function (response) {
-                    let select = $('#SchoolGrade');
-                    select.empty();  // Clear the existing options
-                    // Add an option for selecting grade
-                    select.append('<option value="" class="form-control">--Select Grade--</option>');
-                    $.each(response.grades, function (index, grade) {
-                        // Check if the grade matches the selected grade_id (if provided)
-                        let selected = (grade.grade_id == selectedGradeId) ? 'selected' : '';
-                        select.append(`<option value="${grade.grade_id}" ${selected}>${grade.grade}</option>`);
-                    });
-                },
-
-                error: function (xhr, status, error) {
-                    alert('An error occurred: ' + error);
-                }
-            });
-        }
-
-        // Fetch grades based on the selected school when the select changes
-        $('#SchoolSelect').on('change', function () {
-            let school_id = $(this).val();
-            fetchGrades(school_id);
-        });
-
-        // Trigger the change event on page load to fetch grades for the pre-selected school (if any)
-        let selectedSchoolId = $('#SchoolSelect').val();  // Get the selected school ID
-        let selectedGradeId = '{{ $child->grade_id ?? '' }}';  // Pass the selected grade_id dynamically
-        if (selectedSchoolId) {
-            fetchGrades(selectedSchoolId, selectedGradeId);  // Fetch grades for the selected school and pre-select the grade
-        }
     });
 </script>
 

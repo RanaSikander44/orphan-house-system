@@ -63,7 +63,7 @@
                             <div class="col-6">
                                 <div class="card bg-light border-0 shadow-none" style="height : 450px;">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">Adoption Badge</p>
+                                        <p class="text-muted fw-bold">Enquiry Information</p>
                                         <hr class="w-100" style="font-weight: 200px;">
                                     </div>
                                     <div class="card-body">
@@ -150,9 +150,9 @@
                                                 @enderror
                                             </div>
 
-                                            <!-- Status of Adoption -->
+                                            <!-- Status of Enquiry -->
                                             <div class="col-6 mt-3">
-                                                <label for="" class="text-muted mb-2">Status of Adoption <span
+                                                <label for="" class="text-muted mb-2">Status of Enquiry <span
                                                         class="text-danger">*</span></label>
                                                 <select class="select2" name="status_of_adoption" required>
                                                     <option value="Forwarded" {{ old('status_of_adoption') == 'Forwarded' ? 'selected' : '' }}>
@@ -400,7 +400,7 @@
 
                             <!-- School -->
 
-                            <div class="col-6 mt-4">
+                            <!-- <div class="col-6 mt-4">
                                 <div class="card bg-light border-0 shadow-none">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
                                         <p class="text-muted fw-bold">School Information </p>
@@ -408,7 +408,6 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <!-- Religion -->
                                             <div class="col-6">
                                                 <label for="" class="text-muted mb-2">Select School<span
                                                         class="text-danger">*</span></label>
@@ -445,10 +444,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Dormitory -->
-                            <div class="col-6 mt-4">
+                            <!-- <div class="col-6 mt-4">
                                 <div class="card bg-light border-0 shadow-none">
                                     <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
                                         <p class="text-muted fw-bold">Dormitory Information </p>
@@ -477,7 +476,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                         </div>
@@ -756,7 +755,7 @@
                                                         </div>
                                                     @elseif ($formData->type === 'text' || $formData->type === 'autocomplete')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -767,7 +766,7 @@
                                                         </div>
                                                     @elseif ($formData->type === 'date')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -778,7 +777,7 @@
                                                         </div>  
                                                     @elseif ($formData->type === 'file')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }} 
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -788,7 +787,7 @@
                                                         </div>
                                                     @elseif ($formData->type === 'number')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -805,7 +804,7 @@
                                                         </div>
                                                     @elseif ($formData->type === 'textarea')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -814,8 +813,8 @@
                                                                 id="{{ $formData->id }}" class="form-control mb-2" @if ($formData->required) required @endif></textarea>
                                                         </div>
                                                     @elseif ($formData->type === 'select')
-                                                        <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                        <div class="col-md-6 mt-2">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -834,7 +833,7 @@
                                                         </div>
                                                     @elseif ($formData->type === 'checkbox-group' || $formData->type === 'radio-group')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required) <span class="text-danger">*</span> @endif
                                                             </label>
@@ -857,7 +856,7 @@
 
                                                     @elseif ($formData->type === 'paragraph')
                                                         <div class="col-md-6">
-                                                            <label for="{{ $formData->name }}" class="form-label">
+                                                            <label for="{{ $formData->name }}" class="form-label text-muted">
                                                                 {{ $formData->label }}
                                                                 @if ($formData->required)
                                                                     <span class="text-danger">*</span>

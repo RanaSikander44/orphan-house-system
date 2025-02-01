@@ -93,10 +93,12 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Students Applications
-    Route::get('adoptions', [AdoptionController::class, 'index'])->name('adoptions');
+    Route::get('enquiries', [AdoptionController::class, 'index'])->name('adoptions');
     Route::get('enquiry/add', [AdoptionController::class, 'add'])->name('enquiry.add');
     Route::get('enquiry/child/list', [AdoptionController::class, 'approvedChilds'])->name('enquiry.child.list');
     Route::get('enquiry/child/approve/{id}', [AdoptionController::class, 'approveInquiery'])->name('enquiry.approve.child');
+    Route::get('enquiry/child/assign-school-dormitory/{id}', [AdoptionController::class, 'AssignSchoolDormitory'])->name('enquiry.assign.school.dormitory');
+    Route::post('enquiry/child/assign/{id}', [AdoptionController::class, 'assign'])->name('enquiry.assign');
     Route::post('enquiry/store', [AdoptionController::class, 'store'])->name('enquiry.store');
     Route::get('enquiry/child-view/{id}', [AdoptionController::class, 'studentView'])->name('enquiry.view');
     Route::get('enquiry/child-edit/{id}', [AdoptionController::class, 'studentEdit'])->name('enquiry.edit');

@@ -38,6 +38,14 @@
                                             </a>
                                         </li>
                                         <li>
+                                            <a class="dropdown-item" href="{{ route('enquiry.assign.school.dormitory', $list->id) }}"
+                                                title="School & Dormitory">
+                                                <i class="fa-solid fa-hotel"></i> School & Dormitory
+                                            </a>
+                                        </li>
+
+
+                                        <li>
                                             <a class="dropdown-item" href="{{ route('enquiry.edit', $list->id)  }}"
                                                 title="Edit Enquiry">
                                                 <i class="fa fa-edit"></i> Edit
