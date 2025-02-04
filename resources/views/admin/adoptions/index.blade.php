@@ -10,31 +10,8 @@
             <div class="row">
                 <!-- Nanny Filter -->
                 <div class="col-md-4 mb-3">
-                    <label for="select-nanny" class="fw-bold mb-3">Filter by Nanny</label>
-                    <select name="nanny" id="select-child-nanny" class="form-control select2">
-                        <option value=""> -- Select Nanny -- </option>
-                        @foreach ($nannies as $list)
-                            <option value="{{ $list->id }}">{{ $list->first_name }} {{ $list->last_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- School Filter -->
-                <div class="col-md-4 mb-3">
-                    <label for="select-child-school" class="fw-bold mb-3">Filter by School</label>
-                    <select name="school" id="select-child-school" class="form-control select2">
-                        <option value="">-- Select School --</option>
-                        @foreach ($schools as $list)
-                            <option value="{{ $list->id }}">{{ $list->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Clear Filters -->
-                <div class="col-md-4 mb-3 d-flex align-items-end">
-                    <button id="clear-filters" class="btn btn-sm btn-primary">
-                        Clear All
-                    </button>
+                    <label for="search" class="fw-bold mb-2">Search Enquiries</label>
+                    <input type="search" class="form-control" placeholder="Search Here ..." id="SearchForEnquiries">
                 </div>
             </div>
         </div>
@@ -49,7 +26,7 @@
                     <th scope="col">Enquiry No</th>
                     <th scope="col">Name</th>
                     <th scope="col">Enquiry Date</th>
-                    <th scope="col">Status Of Adoption</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -59,7 +36,17 @@
                         <td>{{$list->enquiry_no}}</td>
                         <td>{{$list->first_name}} {{$list->last_name}}</td>
                         <td>{{ \Carbon\Carbon::parse($list->adoption_date)->format('d  M Y') }}</td>
-                        <td>{{ $list->status_of_adoption}}</td>
+                        <td>
+                            <span class="badge {{ $list->is_approved == 2 ? 'text-danger' : 'text-warning'}}">
+                                @if($list->is_approved == 0)
+                                    Pending
+                                @elseif($list->is_approved == 2)
+                                    Disapproved
+                                @else
+                                    Unknown
+                                @endif
+                            </span>
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -69,10 +56,18 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $list->id }}">
                                     <li>
                                         <a class="dropdown-item" href="{{ route('enquiry.approve.child', $list->id) }}"
-                                            title="Approve Child">
+                                            title="Approve Enquiry">
                                             <i class="fa fa-check" style="color: green;"></i> Approve
                                         </a>
                                     </li>
+                                    @if($list->is_approved == 0)
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('enquiry.disapprove', $list->id) }}"
+                                                title="Disapprove Enquiry">
+                                                <i class="fa fa-ban" style="color: red;"></i> Disapprove
+                                            </a>
+                                        </li>
+                                    @endif
                                     <li>
                                         <a class="dropdown-item" href="{{ route('enquiry.view', $list->id) }}"
                                             title="View Enquiry">
@@ -147,58 +142,81 @@
 
 
 <script>
-    window.routes = {
-        filterActivity: '{{ route('filter.childs') }}',
-        csrfToken: '{{ csrf_token() }}'
-    };
+
+    let csrf = '{{ csrf_token() }}';
 </script>
-
-
 
 <script>
     $(document).ready(function () {
-        $('#select-child-nanny, #select-child-school').on('change', function () {
-            let nannyId = $('#select-child-nanny').val();
-            let schoolId = $('#select-child-school').val();
-
-            let data = {
-                _token: window.routes.csrfToken,
-                nanny_id: nannyId ? nannyId : 'null',
-                school_id: schoolId ? schoolId : 'null'
-            };
+        $('#SearchForEnquiries').on('input', function () {
+            let input = $(this).val();
 
             $.post({
-                url: window.routes.filterActivity,
-                data: data,
+                url: '{{ route('filter.childs') }}',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    input: input
+                },
                 success: function (response) {
-                    // Clear the existing table rows
-                    $('#filtered-results').empty();
+                    let tableBody = $('#filtered-results'); // Target table body
+                    tableBody.empty(); // Clear previous results
 
-                    // Check if any data is returned
-                    if (response.length > 0) {
-                        // Iterate over each item in the response
-                        response.forEach(function (item) {
-                            let formattedDate = new Date(item.adoption_date).toLocaleDateString('en-GB', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric'
-                            });
+                    if (response.message) {
+                        // If there's a message, display it in the table
+                        tableBody.append(`<tr><td colspan="6" class="text-center">${response.message}</td></tr>`);
+                    } else {
+                        // Otherwise, display the results
+                        response.forEach(item => {
+                            let formattedDate = new Date(item.created_at).toLocaleDateString();
 
+                            // Determine approval status
+                            let approvalText, badgeClass;
+                            if (item.is_approved === 0) {
+                                approvalText = "Pending";
+                                badgeClass = "badge text-warning";
+                            } else if (item.is_approved === 2) {
+                                approvalText = "Disapproved";
+                                badgeClass = "badge text-danger";
+                            } else {
+                                approvalText = "Unknown";
+                                badgeClass = "badge badge-secondary";
+                            }
+
+                            // Conditionally add Disapprove button
+                            let disapproveButton = "";
+                            if (item.is_approved === 0) {
+                                disapproveButton = `
+                                    <li>
+                                        <a class="dropdown-item" href="/enquiry/disapprove/${item.id}"
+                                            title="Disapprove Enquiry">
+                                            <i class="fa fa-ban" style="color: red;"></i> Disapprove
+                                        </a>
+                                    </li>`;
+                            }
 
                             let row = `
                                 <tr>
                                     <td>${item.enquiry_no}</td>
-                                    <td>${item.first_name} ${item.last_name}</td>
+                                    <td>${item.first_name ?? ''} ${item.last_name ?? ''}</td>
                                     <td>${formattedDate}</td>
-                                    <td>${item.status_of_adoption}</td>
+                                    <td>
+                                        <span class="${badgeClass}">${approvalText}</span>
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                                id="dropdownMenuButton${item.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                data-bs-toggle="dropdown" aria-expanded="false">
                                                 Action
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton${item.id}">
-                                                 <li>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="/enquiry/child/approve/${item.id}"
+                                                        title="Approve Child">
+                                                        <i class="fa fa-check" style="color: green;"></i> Approve
+                                                    </a>
+                                                </li>
+                                                ${disapproveButton}
+                                                <li>
                                                     <a class="dropdown-item" href="/enquiry/child-view/${item.id}" title="View Enquiry">
                                                         <i class="fa fa-eye"></i> View
                                                     </a>
@@ -209,41 +227,113 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" href="javascript:void(0);" title="Delete Enquiry"
-                                                    onclick="deleteChl(${item.id})">
+                                                    <a class="dropdown-item" href="javascript:void(0);" title="Delete Enquiry" 
+                                                        onclick="deleteChl(${item.id})">
                                                         <i class="fa fa-trash"></i> Delete
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr>`;
 
-                            `;
-                            // Append the new row to the table
-                            $('#filtered-results').append(row);
+                            tableBody.append(row); // Append row to the table
                         });
-                    } else {
-                        // Display a message if no data is found
-                        $('#filtered-results').append(`
-                            <tr>
-                                <td class="text-center" colspan="12">No children found!</td>
-                            </tr>
-                        `);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                    alert('An error occurred while filtering data.');
                 }
             });
-
-
-            $('#clear-filters').click(function () {
-                $('#select-child-nanny').val('').trigger('change');
-                $('#select-child-school').val('').trigger('change');
-            });
-
         });
     });
+</script>
+
+
+<script>
+    // $('#select-child-nanny, #select-child-school').on('change', function () {
+    // let nannyId = $('#select-child-nanny').val();
+    // let schoolId = $('#select-child-school').val();
+
+    // let data = {
+    // _token: window.routes.csrfToken,
+    // nanny_id: nannyId ? nannyId : 'null',
+    // school_id: schoolId ? schoolId : 'null'
+    // };
+
+    // $.post({
+    // url: window.routes.filterActivity,
+    // data: data,
+    // success: function (response) {
+    // // Clear the existing table rows
+    // $('#filtered-results').empty();
+
+    // // Check if any data is returned
+    // if (response.length > 0) {
+    // // Iterate over each item in the response
+    // response.forEach(function (item) {
+    // let formattedDate = new Date(item.adoption_date).toLocaleDateString('en-GB', {
+    // day: '2-digit',
+    // month: 'short',
+    // year: 'numeric'
+    // });
+
+
+    // let row = `
+    // <tr>
+    // <td>${item.enquiry_no}</td>
+    // <td>${item.first_name} ${item.last_name}</td>
+    // <td>${formattedDate}</td>
+    // <td>
+    // <div class="dropdown">
+    // <button class="btn btn-primary btn-sm dropdown-toggle" type="button" // id="dropdownMenuButton${item.id}"
+    data - bs - toggle="dropdown" aria - expanded="false" >
+        // Action
+        // </button>
+        // <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton${item.id}">
+        // <li>
+        // <a class="dropdown-item" href="/enquiry/child-view/${item.id}" title="View Enquiry">
+        // <i class="fa fa-eye"></i> View
+        // </a>
+        // </li>
+        // <li>
+        // <a class="dropdown-item" href="/enquiry/child-edit/${item.id}" title="Edit Enquiry">
+        // <i class="fa fa-edit"></i> Edit
+        // </a>
+        // </li>
+        // <li>
+        // <a class="dropdown-item" href="javascript:void(0);" title="Delete Enquiry" //
+        onclick="deleteChl(${item.id})" >
+                        // <i class="fa fa-trash"></i> Delete
+                        // </a>
+                    // </li>
+                // </ul>
+            // </div>
+        // </td>
+    // </tr>
+
+// `;
+// // Append the new row to the table
+// $('#filtered-results').append(row);
+// });
+// } else {
+// // Display a message if no data is found
+// $('#filtered-results').append(`
+// <tr>
+    // <td class="text-center" colspan="12">No children found!</td>
+    // </tr>
+// `);
+// }
+// },
+// error: function (xhr, status, error) {
+// console.error('Error:', error);
+// alert('An error occurred while filtering data.');
+// }
+// });
+
+
+// $('#clear-filters').click(function () {
+// $('#select-child-nanny').val('').trigger('change');
+// $('#select-child-school').val('').trigger('change');
+// });
+
+// });
+});
 </script>

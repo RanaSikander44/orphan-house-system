@@ -12,7 +12,6 @@
                         <th scope="col">Enquiry No</th>
                         <th scope="col">Name</th>
                         <th scope="col">Enquiry Date</th>
-                        <th scope="col">Status Of Adoption</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -22,7 +21,6 @@
                             <td>{{$list->enquiry_no}}</td>
                             <td>{{$list->first_name}} {{$list->last_name}}</td>
                             <td>{{ \Carbon\Carbon::parse($list->adoption_date)->format('d  M Y') }}</td>
-                            <td>{{ $list->status_of_adoption}}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button"

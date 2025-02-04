@@ -162,36 +162,6 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-
-                                            <!-- Status of Adoption -->
-                                            <!-- Status of Adoption -->
-                                            <div class="col-6 mt-3">
-                                                <label for="status_of_adoption" class="text-muted mb-2">
-                                                    Status of Adoption <span class="text-danger">*</span>
-                                                </label>
-                                                <select class="select2" name="status_of_adoption"
-                                                    id="status_of_adoption" required>
-                                                    <option value="Forwarded" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forwarded' ? 'selected' : '' }}>
-                                                        Forwarded
-                                                    </option>
-                                                    <option value="Not Processed" {{ old('status_of_adoption', $child->status_of_adoption) == 'Not Processed' ? 'selected' : '' }}>
-                                                        Not Processed
-                                                    </option>
-                                                    <option value="Rejected" {{ old('status_of_adoption', $child->status_of_adoption) == 'Rejected' ? 'selected' : '' }}>
-                                                        Rejected
-                                                    </option>
-                                                    <option value="Reserved" {{ old('status_of_adoption', $child->status_of_adoption) == 'Reserved' ? 'selected' : '' }}>
-                                                        Reserved
-                                                    </option>
-                                                    <option value="Forward for Consideration" {{ old('status_of_adoption', $child->status_of_adoption) == 'Forward for Consideration' ? 'selected' : '' }}>
-                                                        Forward for Consideration
-                                                    </option>
-                                                </select>
-                                                @error('status_of_adoption')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
                                         </div>
 
                                     </div>
@@ -362,53 +332,6 @@
                                                     name="permanent_address" class="form-control" rows="3">
                                                  {{ $child->permanent_address }}
                                                 </textarea>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <!-- Medical Information -->
-                            <div class="col-6 mt-4">
-                                <div class="card bg-light border-0 shadow-none" style="height : 315px;">
-                                    <div class="card-header border-0 bg-light pb-0 pl-3 pr-3 pt-3">
-                                        <p class="text-muted fw-bold">Medical Information</p>
-                                        <hr class="w-100" style="font-weight: 200px;">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <!-- Academic Year -->
-                                            <div class="col-6 mb-2">
-                                                <label for="" class="text-muted mb-2">Blood Group</label>
-                                                <div class="cp_wrapperblgroup">
-                                                    <select class="select2blgroup" name="blood_group">
-                                                        <option value="A+" {{ old('blood_group', $child->blood_group ?? '') == 'A+' ? 'selected' : '' }}>A+</option>
-                                                        <option value="B+" {{ old('blood_group', $child->blood_group ?? '') == 'B+' ? 'selected' : '' }}>B+</option>
-                                                        <option value="AB+" {{ old('blood_group', $child->blood_group ?? '') == 'AB+' ? 'selected' : '' }}>AB+</option>
-                                                        <option value="O+" {{ old('blood_group', $child->blood_group ?? '') == 'O+' ? 'selected' : '' }}>O+</option>
-                                                        <option value="A-" {{ old('blood_group', $child->blood_group ?? '') == 'A-' ? 'selected' : '' }}>A-</option>
-                                                        <option value="B-" {{ old('blood_group', $child->blood_group ?? '') == 'B-' ? 'selected' : '' }}>B-</option>
-                                                        <option value="AB-" {{ old('blood_group', $child->blood_group ?? '') == 'AB-' ? 'selected' : '' }}>AB-</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-
-
-
-                                            <!-- Admission Date -->
-                                            <div class="col-6">
-                                                <label for="" class="text-muted mb-2">Height (In)</label>
-                                                <input type="number" class="form-control" name="height"
-                                                    value="{{ $child->height }}">
-                                            </div>
-                                            <div class="col-6 mt-3">
-                                                <label for="permanentAddress" class="text-muted mb-2">Weight
-                                                    (Kg)</label>
-                                                <input type="number" class="form-control" name="weight"
-                                                    value="{{ $child->weight }}">
                                             </div>
 
                                         </div>
@@ -883,7 +806,7 @@
             </div>
 
             <div class="text-end mt-3">
-                <!-- <button class="btn btn-sm btn-primary" type="button" id="UpdateNextBtn">Next</button> -->
+                <button class="btn btn-sm btn-primary" type="button" id="UpdateNextBtn">Next</button>
                 <button class="btn btn-success btn-sm d-none" id="adoptionFormBtn" type="submit">
                     <i class="fa fa-save"></i> Update
                 </button>

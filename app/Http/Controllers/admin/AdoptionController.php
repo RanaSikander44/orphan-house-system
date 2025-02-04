@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ChildFormData;
+use App\Models\DisapproveEnquiry;
 use App\Models\documents_title;
 use App\Models\DocumentTitleChild;
 use App\Models\Dormitory;
@@ -37,7 +38,7 @@ class AdoptionController extends Controller
         $nannies = User::whereIn('role_id', $roles)->get();
         $schools = Schools::all();
 
-        $childrens = child::orderBy('id', 'desc')->where('is_approved', '0')->paginate(10);
+        $childrens = child::orderBy('id', 'desc')->where('is_approved', '!=', '1')->paginate(10);
         return view('admin.adoptions.index', compact('childrens', 'roles', 'nannies', 'schools'));
     }
 
@@ -64,6 +65,26 @@ class AdoptionController extends Controller
         return redirect()->route('adoptions')->with('success', 'Inquiry Approved !');
     }
 
+    public function disapprove($id)
+    {
+        $child = child::findOrFail($id);
+        return view('admin.adoptions.disapprove', compact('child'));
+    }
+
+    public function disapproveEnquiry(Request $req, $id)
+    {
+        $child = child::where('id', $id)->first();
+        $child->is_approved = '2';
+        $child->update();
+
+        $reason = new DisapproveEnquiry();
+        $reason->enquiry_id = $id;
+        $reason->reason = $req->reason_disapprove;
+        $reason->save();
+
+        return redirect()->route('adoptions')->with('success', 'Enquiry Disapproved');
+    }
+
 
     public function add()
     {
@@ -88,7 +109,7 @@ class AdoptionController extends Controller
             'enquiry_type_id' => 'required',
             'enquiry_no' => 'required',
             'source_of_information' => 'required',
-            'status_of_adoption' => 'required',
+            // 'status_of_adoption' => 'required',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'caste' => 'nullable|string',
@@ -105,10 +126,10 @@ class AdoptionController extends Controller
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
             'permanent_address' => 'nullable|string',
-            'blood_group' => 'nullable|string',
-            'height' => 'nullable|numeric',
-            'weight' => 'nullable|numeric',
-            'age' => 'required',
+            // 'blood_group' => 'nullable|string',
+            // 'height' => 'nullable|numeric',
+            // 'weight' => 'nullable|numeric',
+            // 'age' => 'required',
             // 'city_id' => 'required',
             // 'school_id' => 'required',
             // 'room_id' => 'required',
@@ -126,7 +147,6 @@ class AdoptionController extends Controller
         $application->enquiry_id = $req->enquiry_type_id;
         $application->enquiry_no = $req->enquiry_no;
         $application->source_of_information = $req->source_of_information;
-        $application->status_of_adoption = $req->status_of_adoption;
         $application->adoption_date = $req->adoption_date;
         $application->first_name = $req->first_name;
         $application->last_name = $req->last_name;
@@ -139,9 +159,7 @@ class AdoptionController extends Controller
         $application->phone_no = $req->phone_no;
         $application->current_address = $req->current_address;
         $application->permanent_address = $req->permanent_address;
-        $application->blood_group = $req->blood_group;
-        $application->height = $req->height;
-        $application->weight = $req->weight;
+
         // $application->city_id = $req->city_id;
         // $application->age = $req->age;
         // $application->school_id = $req->school_id;
@@ -366,7 +384,6 @@ class AdoptionController extends Controller
             'enquiry_type_id' => 'required',
             'enquiry_no' => 'required',
             'source_of_information' => 'required',
-            'status_of_adoption' => 'required',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'caste' => 'nullable|string',
@@ -383,10 +400,6 @@ class AdoptionController extends Controller
             'phone_no' => 'nullable|string',
             'current_address' => 'nullable|string',
             'permanent_address' => 'nullable|string',
-            'blood_group' => 'nullable|string',
-            'height' => 'nullable|numeric',
-            'weight' => 'nullable|numeric',
-            'age' => 'required',
             // 'city_id' => 'required',
             // 'school_id' => 'required',
             // 'room_id' => 'required',
@@ -403,7 +416,6 @@ class AdoptionController extends Controller
         $application->enquiry_id = $req->enquiry_type_id;
         $application->enquiry_no = $req->enquiry_no;
         $application->source_of_information = $req->source_of_information;
-        $application->status_of_adoption = $req->status_of_adoption;
         $application->adoption_date = $req->adoption_date;
         $application->first_name = $req->first_name;
         $application->last_name = $req->last_name;
@@ -566,71 +578,24 @@ class AdoptionController extends Controller
 
     public function filter(Request $req)
     {
-        // Helper function to map child data consistently
-        $mapChildData = function ($child) {
-            return [
-                'id' => $child->id ?? null,
-                'enquiry_no' => $child->enquiry_no ?? 'N/A',
-                'first_name' => $child->first_name ?? 'N/A',
-                'last_name' => $child->last_name ?? 'N/A',
-                'adoption_date' => $child->adoption_date ?? null,
-                'status_of_adoption' => $child->status_of_adoption ?? 'N/A',
-                'age' => $child->age ?? 'Unknown Age',
-                'school_name' => $child->school->name ?? 'No School',
-            ];
-        };
+        $query = child::where('is_approved',  '!=' ,1);
 
-        // Initialize the result collection
-        $result = collect();
-
-        // Case: Both `nanny_id` and `school_id` are provided
-        if ($req->nanny_id !== 'null' && $req->school_id !== 'null') {
-            $nanny = Staff::where('user_id', $req->nanny_id)->first();
-
-            if ($nanny) {
-                $children = NannyChilds::with(['child.school',])
-                    ->where('nanny_id', $nanny->id)
-                    ->whereHas('child', function ($query) use ($req) {
-                        $query->where('school_id', $req->school_id);
-                    })
-                    ->get();
-
-                $result = $children->map(fn($nannyChild) => $mapChildData($nannyChild->child));
-            }
+        if (!empty($req->input)) {
+            $input = $req->input;
+            $query->where(function ($q) use ($input) {
+                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $input . '%']);
+            });
         }
 
-        // Case: Only `nanny_id` is provided
-        if ($req->nanny_id !== 'null' && $req->school_id === 'null') {
-            $nanny = Staff::where('user_id', $req->nanny_id)->first();
+        $results = $query->orderBy('id', 'desc')->get();
 
-            if ($nanny) {
-                $children = NannyChilds::with(['child.school'])
-                    ->where('nanny_id', $nanny->id)
-                    ->get();
-
-                $result = $children->map(fn($nannyChild) => $mapChildData($nannyChild->child));
-            }
+        if ($results->isEmpty()) {
+            return response()->json(['message' => 'No enquiry found']);
         }
 
-        // Case: Only `school_id` is provided
-        if ($req->school_id !== 'null' && $req->nanny_id === 'null') {
-            $children = Child::with(['school'])
-                ->where('school_id', $req->school_id)
-                ->get();
 
-            $result = $children->map(fn($child) => $mapChildData($child));
-        }
-
-        // Case: No filters or both filters are null
-        if ($req->nanny_id === 'null' && $req->school_id === 'null') {
-            $children = Child::with(['school'])->get();
-            $result = $children->map(fn($child) => $mapChildData($child));
-        }
-
-        // Return filtered data or all data if no filters matched
-        return response()->json($result);
+        return response()->json($results);
     }
-
 
     public function AssignSchoolDormitory($id)
     {

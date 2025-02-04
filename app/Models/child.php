@@ -40,6 +40,12 @@ class child extends Model
     }
 
 
+    public function DisapprovedReason()
+    {
+        return $this->belongsTo(DisapproveEnquiry::class, 'id', 'enquiry_id');
+    }
+
+
 
 
     // Model Events

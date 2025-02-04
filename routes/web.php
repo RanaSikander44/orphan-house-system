@@ -97,6 +97,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('enquiry/add', [AdoptionController::class, 'add'])->name('enquiry.add');
     Route::get('enquiry/child/list', [AdoptionController::class, 'approvedChilds'])->name('enquiry.child.list');
     Route::get('enquiry/child/approve/{id}', [AdoptionController::class, 'approveInquiery'])->name('enquiry.approve.child');
+    Route::get('enquiry/disapprove/{id}', [AdoptionController::class, 'disapprove'])->name('enquiry.disapprove');
+    Route::post('enquiry/disapprove/reason/{id}', [AdoptionController::class, 'disapproveEnquiry'])->name('enquiry.disapprove.child');
     Route::get('enquiry/child/assign-school-dormitory/{id}', [AdoptionController::class, 'AssignSchoolDormitory'])->name('enquiry.assign.school.dormitory');
     Route::post('enquiry/child/assign/{id}', [AdoptionController::class, 'assign'])->name('enquiry.assign');
     Route::post('enquiry/store', [AdoptionController::class, 'store'])->name('enquiry.store');
@@ -106,8 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('enquiry/child-delete/{id}', [AdoptionController::class, 'studentDelete'])->name('enquiry.delete');
     Route::delete('enquiry/child-view/delete-document/{id}', [AdoptionController::class, 'deldoc'])->name('delete.doc');
     Route::post('enquiry/filter/school', [AdoptionController::class, 'schooldata'])->name('filter.school');
-    Route::post('chids/filter', [AdoptionController::class, 'filter'])->name('filter.childs');
-    Route::post('chids/delete/docs', [AdoptionController::class, 'deleteChildFormDocs'])->name('delete.doc.child');
+    Route::post('childs/filter', [AdoptionController::class, 'filter'])->name('filter.childs');
+    Route::post('childs/delete/docs', [AdoptionController::class, 'deleteChildFormDocs'])->name('delete.doc.child');
 
 
 

@@ -35,6 +35,11 @@
                         </div>
                     </div>
 
+                    @if ($child->is_approved == 2)
+                        <p class="text-danger mt-2">
+                            This enquiry is disapproved because of {{ $child->DisapprovedReason->reason }}
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -117,7 +122,7 @@
                                                                                         </div>
                                                                                     </div>
 
-                                                                                   
+
                                                                 @endif
                                             @endforeach
                                         </div>
