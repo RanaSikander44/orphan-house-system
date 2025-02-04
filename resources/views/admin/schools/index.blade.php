@@ -9,7 +9,6 @@
             <thead class="bg-light">
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Fees</th>
                     <th scope="col">Address</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -19,7 +18,6 @@
                 @forelse($schools as $list)
                     <tr>
                         <td>{{ $list->name }} {{ $list->last_name }}</td>
-                        <td>{{ $list->fees }}</td>
                         <td>{{ $list->address }}</td>
                         <td>
                             <div class="dropdown">

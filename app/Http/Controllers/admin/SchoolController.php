@@ -35,7 +35,6 @@ class SchoolController extends Controller
     {
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'fees' => 'required|numeric',
             'address' => 'required|string|max:500',
         ]);
 
@@ -46,7 +45,6 @@ class SchoolController extends Controller
 
         $school = new Schools();
         $school->name = $request->name;
-        $school->fees = $request->fees;
         $school->address = $request->address;
         $school->save();
 
@@ -94,7 +92,6 @@ class SchoolController extends Controller
 
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'fees' => 'required|numeric',
             'address' => 'required|string|max:500',
         ]);
 
@@ -106,7 +103,6 @@ class SchoolController extends Controller
 
         $school = Schools::find($id);
         $school->name = $request->name;
-        $school->fees = $request->fees;
         $school->address = $request->address;
         $school->update();
 

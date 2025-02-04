@@ -271,57 +271,6 @@
                                             <p class="mb-0">{{ $child->source_of_information  }}</p>
                                         </div>
                                     </div>
-
-                                    <div class="d-flex align-items-center py-3 border-bottom">
-                                        <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Status of Adoption</h6>
-                                        </div>
-                                        <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->status_of_adoption }}</p>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="text-muted fw-bold text-center pt-5">Nanny Details</h5>
-                                    <div class="d-flex align-items-center py-3 border-bottom">
-                                        <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Nanny</h6>
-                                        </div>
-                                        <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $nannyDetails->first_name ?? '' }}
-                                                {{ $nannyDetails->last_name ?? 'Nanny Not Assigned' }}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="text-muted fw-bold text-center pt-5">School & Dormitory
-                                        Information</h5>
-
-                                    <div class="d-flex align-items-center py-3 border-bottom">
-                                        <div class="col-6">
-                                            <h6 class="mb-0 text-muted">School</h6>
-                                        </div>
-                                        <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->school->name ?? ''}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex align-items-center py-3 border-bottom">
-                                        <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Grade</h6>
-                                        </div>
-                                        <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->grade->grade ?? '' }}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex align-items-center py-3 border-bottom">
-                                        <div class="col-6">
-                                            <h6 class="mb-0 text-muted">Room</h6>
-                                        </div>
-                                        <div class="col-6 text-muted text-end">
-                                            <p class="mb-0">{{ $child->room->title ?? '' }}</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -504,7 +453,7 @@
                     <!-- Docs -->
                     <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="attendance-tab">
                         <div class="p-4 rounded-3 bg-white">
-                            <div class="pt-0 p-4 rounded-3">
+                            <div class="pt-0  rounded-3">
                                 <div class="row g-0">
                                     <div class="col-12">
                                         <table class="table table-striped">
@@ -555,6 +504,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

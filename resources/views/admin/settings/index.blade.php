@@ -28,7 +28,7 @@
                         <!-- Child Age Tab Content -->
                         <div class="tab1">
                             <div>
-                                <label for="charges_of_a_child" class="mb-2">Charges of a Child</label>
+                                <label for="charges_of_a_child" class="mb-2">Child Sponsor Cost</label>
                                 <input type="number" min="0" class="form-control" name="charges_of_a_child"
                                     value="{{ $settings->charges_of_a_child }}">
                             </div>

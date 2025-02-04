@@ -1,5 +1,5 @@
 @extends('admin.default')
-@section('Page-title', 'Edit Dormitory Room')
+@section('Page-title', 'Dormitory Rooms')
 @section('content')
 <div class="container-fluid px-4">
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">

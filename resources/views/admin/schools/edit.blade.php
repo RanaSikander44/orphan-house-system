@@ -18,9 +18,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="fees" class="form-label">School Fees</label>
-                        <input type="number" name="fees" id="fees" class="form-control" value="{{ $school->fees }}"
-                            placeholder="Enter fees amount" required>
+                        <label for="address" class="form-label">Address</label>
+                        <textarea name="address" class="form-control" id="" rows="4" cols="50">
+                            {{ $school->address }}
+                        </textarea>
                     </div>
 
                     <div class="col-md-6 mt-3">
@@ -50,14 +51,6 @@
                             <input type="hidden" name="grade[]" id="selected_grades"
                                 value="{{ implode(',', $assignedGrades) }}">
                         </div>
-                    </div>
-
-
-                    <div class="col-md-6 mt-3">
-                        <label for="address" class="form-label">Address</label>
-                        <textarea name="address" class="form-control" id="" rows="4" cols="50">
-                            {{ $school->address }}
-                        </textarea>
                     </div>
 
                 </div>
