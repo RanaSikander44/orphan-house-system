@@ -22,15 +22,16 @@
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <div class="card-body">
             <!-- Display error messages if there are any -->
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+           @if ($errors->any())
+    <div class="col-md-6">
+        <div class="alert alert-danger p-2">
+            @foreach ($errors->all() as $error)
+                <p class="mb-1">{{ $error }}</p>
+            @endforeach
+        </div>
+    </div>
+@endif
+
 
             <form method="POST" action="{{ route('password.update') }}">
                 @csrf

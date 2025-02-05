@@ -18,7 +18,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',  // Add role field to fillable as well
+        'role', 
+        'profile_photo',
+          // Add role field to fillable as well
     ];
     // Add mass-assignable fields
     // protected $fillable = ['name', 'email', 'password','role'];

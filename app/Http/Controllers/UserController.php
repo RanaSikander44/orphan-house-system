@@ -234,6 +234,68 @@ public function updatePassword(Request $request)
 
 
 
+//update Profile
+
+public function UpdateProfileForm()
+{
+    
+    $user = Auth::user();
+    
+    $fullName = $user->first_name . ' ' . $user->last_name;
+
+    return view('updateprofile', compact('user', 'fullName'));
+}
+
+public function updateProfile(Request $request)
+{
+    $request->validate([
+        'full_name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . Auth::id(),
+        'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+    ]);
+
+    if (!Auth::check()) {
+        return redirect()->route('login')->withErrors(['error' => 'Unauthorized access. Please log in.']);
+    }
+    $user = User::find(Auth::id());
+
+    if (!$user) {
+        return redirect()->route('dashboard')->withErrors(['error' => 'User not found.']);
+    }
+
+    // Split full name into first_name and last_name
+    $nameParts = explode(' ', $request->full_name, 2);
+    $user->first_name = $nameParts[0] ?? '';
+    $user->last_name = $nameParts[1] ?? null; // Use null instead of an empty string
+
+    $user->email = $request->email;
+
+    // Handle profile photo upload if provided
+    if ($request->hasFile('profile_photo')) {
+        $file = $request->file('profile_photo');
+
+        if (!$file->isValid()) {
+            return back()->withErrors(['profile_photo' => 'Invalid image file.']);
+        }
+
+        // Create a unique name for the image
+        $uniqueName = uniqid() . '.' . $file->getClientOriginalExtension();
+        
+        $destinationPath = public_path('uploads/profile_photos');
+        
+        // Move the uploaded file to the destination
+        $file->move($destinationPath, $uniqueName);
+        
+        // Save the image name in the database
+        $user->profile_photo = 'uploads/profile_photos/' . $uniqueName;
+    }
+    $user->save();
+    return redirect()->route('dashboard')->with('success', 'Profile Updated Successfully');
+}
+
+
+
+
 
     public function dashboard()
     {
