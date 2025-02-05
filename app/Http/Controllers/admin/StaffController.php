@@ -271,6 +271,8 @@ class StaffController extends Controller
     public function delete($id)
     {
         $staff = Staff::findOrFail($id)->first();
+        user::where('id', $staff->user_id)->delete();
+
         $staff->delete();
 
         $nanny = nannyChilds::where('nanny_id', $id)->get();

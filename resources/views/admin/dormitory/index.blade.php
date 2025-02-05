@@ -9,6 +9,7 @@
                     <th>#</th>
                     <th>Title</th>
                     <th>Max Number of bed</th>
+                    <th>Mother</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -21,6 +22,13 @@
                         <td>{{ $index++ }}</td>
                         <td>{{ $list->title }}</td>
                         <td>{{ $list->max_number_bed }}</td>
+                        <td>
+                            @if ($list->mother)
+                                {{ $list->mother->first_name }} {{ $list->mother->last_name }}
+                            @else
+                                Not Assigned
+                            @endif
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"

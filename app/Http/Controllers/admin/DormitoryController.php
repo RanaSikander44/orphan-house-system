@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Dormitory;
 
@@ -18,7 +19,8 @@ class DormitoryController extends Controller
 
     public function add()
     {
-        return view('admin.dormitory.add');
+        $nanny = User::where('role_id', '18')->get();
+        return view('admin.dormitory.add', compact('nanny'));
     }
 
 
@@ -29,13 +31,15 @@ class DormitoryController extends Controller
         $dormitory->max_number_bed = $req->max_number_bed;
         $dormitory->total_booked = '0';
         $dormitory->total_available = $req->max_number_bed;
+        $dormitory->nanny_id = $req->nanny_id;
         $dormitory->save();
         return redirect()->route('room-list')->with('success', 'New Room Added !');
     }
     public function edit($id)
     {
         $dormitory = Dormitory::findOrFail($id);
-        return view('admin.dormitory.edit', compact('dormitory'));
+        $nanny = User::where('role_id', '18')->get();
+        return view('admin.dormitory.edit', compact('dormitory' , 'nanny'));
     }
     public function update(Request $req, $id)
     {
@@ -44,6 +48,7 @@ class DormitoryController extends Controller
         $dormitory->max_number_bed = $req->max_number_bed;
         $dormitory->total_booked = '0';
         $dormitory->total_available = $req->max_number_bed;
+        $dormitory->nanny_id = $req->nanny_id;
         $dormitory->update();
         return redirect()->route('room-list')->with('success', 'Room Updated !');
     }
