@@ -360,11 +360,6 @@
             }
         });
     };
-</script>
-
-
-
-<script>
 
 
     const DelForms = (id) => {
@@ -404,7 +399,11 @@
         });
     };
 
+</script>
 
+
+
+<script>
     const deletedoc = (id) => {
         $.ajax({
             url: `{{ route('settings.child.delete', ':id') }}`.replace(':id', id),
@@ -515,22 +514,27 @@
             }
         });
 
-        // Add new document group
+
+        // Add a staff document (Now using unique ID)
         $('.staff-add-document').click(function () {
+            var uniqueId = Date.now(); // Generate unique ID for staff document
+
             var newDocument = `
-        <div class="document-group mb-3">
-            <div class="input-group">
-                <input type="text" class="form-control" name="staff_document_title[]" placeholder="Enter document title">
-                <button type="button" class="btn btn-sm btn-danger staff-remove-document">×</button>
-            </div>
-        </div>`;
+                <div class="document-group mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="staff_document_title[new_${uniqueId}]" placeholder="Enter document title">
+                        <button type="button" class="btn btn-sm btn-danger staff-remove-document">×</button>
+                    </div>
+                </div>`;
 
             $('.staff-documents').append(newDocument);
         });
 
-        // Remove document group
+        // Remove a staff document (Only if more than one exists)
         $('.staff-documents').on('click', '.staff-remove-document', function () {
-            $(this).closest('.document-group').remove();
+            if ($('.staff-documents .document-group').length > 1) {
+                $(this).closest('.document-group').remove();
+            }
         });
     });
 

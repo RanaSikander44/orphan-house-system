@@ -39,6 +39,8 @@ class SettingsController extends Controller
             ]
         );
 
+
+
         if ($req->has('child_documents_title') && is_array($req->child_documents_title)) {
             $children = Child::all(); // Fetch all children once
 
@@ -69,16 +71,9 @@ class SettingsController extends Controller
                         ]);
                     }
                 }
-
-                // Assign new documents to children
-                // foreach ($children as $child) {
-                //     child_documents::updateOrCreate(
-                //         ['child_id' => $child->id, 'title' => $document->id],
-                //         ['name' => null] // Default name is null
-                //     );
-                // }
             }
         }
+
 
         // this code will add new document title and allows also to the already added childs to add new documents 
 
@@ -93,78 +88,76 @@ class SettingsController extends Controller
         //                 $document = DocumentTitleChild::updateOrCreate(
         //                     ['id' => $id],
         //                     ['title' => $title, 'required' => $isRequired]
-        //                 );
+        //                 );  
+
+        //                 // Link document to all children
+        //                 $children = Child::all();
+        //                 foreach ($children as $child) {
+        //                     if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
+        //                         child_documents::create([
+        //                             'child_id' => $child->id,
+        //                             'title' => $document->id,
+        //                             'name' => null,
+        //                         ]);
+        //                     }
+        //                 }
         //             } else {
         //                 // Create a new document
         //                 $document = DocumentTitleChild::create([
         //                     'title' => $title,
         //                     'required' => $isRequired,
         //                 ]);
-        //             }
 
-        //             // Link document to all children
-        //             $children = Child::all();
-        //             foreach ($children as $child) {
-        //                 if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
-        //                     child_documents::create([
-        //                         'child_id' => $child->id,
-        //                         'title' => $document->id,
-        //                         'name' => null,
-        //                     ]);
+        //                 // Link document to all children
+        //                 $children = Child::all();
+        //                 foreach ($children as $child) {
+        //                     if (!child_documents::where('child_id', $child->id)->where('title', $document->id)->exists()) {
+        //                         child_documents::create([
+        //                             'child_id' => $child->id,
+        //                             'title' => $document->id,
+        //                             'name' => null,
+        //                         ]);
+        //                     }
         //                 }
         //             }
         //         }
         //     }
         // }
 
+
+
         // child new documents end here code by Rana Sikander
 
 
 
+
+
         // Staff Titles
+
+
         if ($req->has('staff_document_title') && is_array($req->staff_document_title)) {
             foreach ($req->staff_document_title as $id => $title) {
-                // Skip empty titles
                 if (!empty($title)) {
-                    if ($id) {
-                        // Update existing document if an ID exists
+                    if (strpos($id, 'new_') !== false) {
+                        // Create new document (for IDs starting with "new_")
+                        $document = DocumentTitlesStaff::create(['title' => $title]);
+                    } else {
+                        // Update existing document
                         $document = DocumentTitlesStaff::updateOrCreate(
-                            ['id' => $id],  // If document ID exists, it will update
+                            ['id' => $id],
                             ['title' => $title]
                         );
+                    }
 
-                        // Now, link this title to all staff who don't already have it
-                        $staffMembers = Staff::all();
-                        foreach ($staffMembers as $staff) {
-                            // Check if the document title is not already linked to this staff member
-                            if (!StaffDocuments::where('staff_id', $staff->id)->where('title', $document->id)->exists()) {
-                                // If not, create an entry for this staff and title
-                                StaffDocuments::create([
-                                    'staff_id' => $staff->id,
-                                    'title' => $document->id,
-                                    'name' => null,  // Default file name is null, can be updated later
-                                ]);
-                            }
-                        }
-
-                    } else {
-                        // Create new document if no ID exists (empty string passed)
-                        $document = DocumentTitlesStaff::create([
-                            'title' => $title,
-                        ]);
-
-                        // Now, link this new title to all staff who don't already have it
-                        $staffMembers = Staff::all();
-                        foreach ($staffMembers as $staff) {
-                            // Check if the document title is not already linked to this staff member
-                            if (!StaffDocuments::where('staff_id', $staff->id)->where('title', $document->id)->exists()) {
-                                // If not, create an entry for this staff and title
-                                StaffDocuments::create([
-                                    'staff_id' => $staff->id,
-                                    'title' => $document->id,
-                                    'name' => null,  // Default file name is null, can be updated later
-                                ]);
-                            }
+                    // Now, link this title to all staff who don't already have it
+                    $staffMembers = Staff::all();
+                    foreach ($staffMembers as $staff) {
+                        if (!StaffDocuments::where('staff_id', $staff->id)->where('title', $document->id)->exists()) {
+                            StaffDocuments::create([
+                                'staff_id' => $staff->id,
+                                'title' => $document->id,
+                                'name' => null,
+                            ]);
                         }
                     }
                 }
@@ -188,7 +181,6 @@ class SettingsController extends Controller
         // Redirect with success message
         return redirect()->route('settings')->with('success', 'Settings has been saved');
     }
-
 
     public function ChildDocDelete($id)
     {
