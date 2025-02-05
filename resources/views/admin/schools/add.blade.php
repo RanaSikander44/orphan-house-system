@@ -37,6 +37,7 @@
 
 
 
+
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
@@ -65,37 +66,54 @@
             gradeDropdownList.toggle();
         });
 
-        // Select grade
-        gradeDropdownList.on('click', 'li', function () {
+        // Select multiple grades
+        gradeDropdownList.on('click', 'li', function (event) {
+            event.stopPropagation(); // Prevent dropdown from closing
+
             const value = $(this).data('value');
             const text = $(this).text();
 
-            // Check if the grade is already selected
             if (!gradeSelectedValues.includes(value)) {
                 gradeSelectedValues.push(value);
 
                 // Add selected option to the container
                 gradeSelectedOptionsContainer.append(`
-                    <span class="bg-success text-white px-2 py-1 rounded mx-1 mb-1" data-value="${value}">
-                        ${text} <span class="remove-option text-white">&times;</span>
-                    </span>
-                `);
+                <span class="bg-success text-white px-2 py-1 rounded mx-1 mb-1" data-value="${value}">
+                    ${text} <span class="remove-option text-white">&times;</span>
+                </span>
+            `);
 
-                // Update the hidden input field with the selected values
-                $('#selected_grades').val(gradeSelectedValues.join(','));
+                // Show tick mark for selected grade
+                $(this).append('<span class="tick-mark text-success float-end">✔</span>');
+
+            } else {
+                // Remove from selected values
+                gradeSelectedValues.splice(gradeSelectedValues.indexOf(value), 1);
+
+                // Remove from selected container
+                gradeSelectedOptionsContainer.find(`[data-value="${value}"]`).remove();
+
+                // Remove tick mark
+                $(this).find('.tick-mark').remove();
             }
 
-            // Hide the dropdown after selection
-            gradeDropdownList.hide();
+            // Update the hidden input field with the selected values
+            $('#selected_grades').val(gradeSelectedValues.join(','));
         });
 
-        // Remove selected grade
-        gradeSelectedOptionsContainer.on('click', '.remove-option', function () {
+        // Remove selected grade when clicking on the remove button (×)
+        gradeSelectedOptionsContainer.on('click', '.remove-option', function (event) {
+            event.stopPropagation(); // Prevent dropdown from closing
             const value = $(this).parent().data('value');
+
+            // Remove from selected values
             gradeSelectedValues.splice(gradeSelectedValues.indexOf(value), 1);
             $(this).parent().remove();
 
-            // Update the hidden input field with the selected values
+            // Remove tick mark from the dropdown list
+            gradeDropdownList.find(`li[data-value="${value}"] .tick-mark`).remove();
+
+            // Update the hidden input field
             $('#selected_grades').val(gradeSelectedValues.join(','));
         });
 
@@ -106,4 +124,5 @@
             }
         });
     });
+
 </script>

@@ -74,20 +74,14 @@
         const gradeSelectBox = $('.custom-multi-select .select-box');
         const gradeDropdownList = $('.custom-multi-select .dropdown-list');
         const gradeSelectedOptionsContainer = $('.custom-multi-select .selected-options');
-        const gradeSelectedValues = $('#selected_grades').val().split(',');
+        let gradeSelectedValues = $('#selected_grades').val() ? $('#selected_grades').val().split(',') : [];
 
-        // Prevent adding already rendered grades from the Blade view again
+        // Mark already assigned grades with a tick
         gradeSelectedValues.forEach(value => {
-            // Check if the value already exists in the selected options container
-            if (!$('.selected-options').find(`[data-value="${value}"]`).length) {
-                const text = $('li[data-value="' + value + '"]').text();
-                gradeSelectedOptionsContainer.append(`
-                
-            `);
+            const listItem = $('li[data-value="' + value + '"]');
+            if (listItem.length) {
+                listItem.append('<span class="tick-mark text-success float-end">✔</span>');
             }
-
-            // Disable the grade in the dropdown if it's already selected
-            $('li[data-value="' + value + '"]').addClass('disabled').css('pointer-events', 'none');
         });
 
         // Toggle dropdown visibility
@@ -96,14 +90,14 @@
         });
 
         // Select grade
-        gradeDropdownList.on('click', 'li', function () {
+        gradeDropdownList.on('click', 'li', function (event) {
+            event.stopPropagation(); // Prevent dropdown from closing
+
             const value = $(this).data('value');
             const text = $(this).text();
 
-            // Check if the grade is already selected (either in selected list or already disabled)
-            if (!gradeSelectedValues.includes(value) && !$(this).hasClass('disabled')) {
-                // Add to the selected values
-                gradeSelectedValues.push(value);
+            if (!gradeSelectedValues.includes(value.toString())) {
+                gradeSelectedValues.push(value.toString());
 
                 // Add selected option to the container
                 gradeSelectedOptionsContainer.append(`
@@ -112,27 +106,37 @@
                 </span>
             `);
 
-                // Disable the grade in the dropdown after selection
-                $(this).addClass('disabled').css('pointer-events', 'none');
+                // Show tick mark for selected grade
+                $(this).append('<span class="tick-mark text-success float-end">✔</span>');
+            } else {
+                // Remove from selected values
+                gradeSelectedValues = gradeSelectedValues.filter(item => item !== value.toString());
 
-                // Update the hidden input field with the selected values
-                $('#selected_grades').val(gradeSelectedValues.join(','));
+                // Remove from selected container
+                gradeSelectedOptionsContainer.find(`[data-value="${value}"]`).remove();
+
+                // Remove tick mark
+                $(this).find('.tick-mark').remove();
             }
 
-            // Hide the dropdown after selection
-            gradeDropdownList.hide();
+            // Update the hidden input field
+            $('#selected_grades').val(gradeSelectedValues.join(','));
         });
 
-        // Remove selected grade
-        gradeSelectedOptionsContainer.on('click', '.remove-option', function () {
+        // Remove selected grade when clicking on remove button (×)
+        gradeSelectedOptionsContainer.on('click', '.remove-option', function (event) {
+            event.stopPropagation(); // Prevent dropdown from closing
+
             const value = $(this).parent().data('value');
-            gradeSelectedValues.splice(gradeSelectedValues.indexOf(value), 1);
+
+            // Remove from selected values
+            gradeSelectedValues = gradeSelectedValues.filter(item => item !== value.toString());
             $(this).parent().remove();
 
-            // Re-enable the grade in the dropdown when removed
-            $('li[data-value="' + value + '"]').removeClass('disabled').css('pointer-events', 'auto');
+            // Remove tick mark from the dropdown list
+            gradeDropdownList.find(`li[data-value="${value}"] .tick-mark`).remove();
 
-            // Update the hidden input field with the selected values
+            // Update the hidden input field
             $('#selected_grades').val(gradeSelectedValues.join(','));
         });
 
