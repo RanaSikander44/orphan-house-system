@@ -1,8 +1,17 @@
 @php
     use App\Models\Menu;
 
-    $sidebar = Menu::with('children')->whereNull('parent_id')->orderBy('order')->get();
+    $sidebar = Menu::with([
+        'children' => function ($query) {
+            $query->where('status', '1'); // Fetch only active submenus
+        }
+    ])
+        ->whereNull('parent_id')
+        ->where('status', '1') // Ensure parent menu is also active
+        ->orderBy('order')
+        ->get();
 @endphp
+
 <div class="page-wrapper chiller-theme toggled">
     <nav id="sidebare" class="sidebar-wrapper bg-white">
         <div class="sidebar-content">

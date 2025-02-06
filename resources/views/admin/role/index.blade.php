@@ -4,14 +4,6 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <!-- <h3 class="mt-4">Roles</h3> -->
-
-    <!-- Add New Role Button -->
-    <!-- <button class="btn btn-sm btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addRoleModal">
-            Add New Role
-        </button> -->
-
-    <!-- Role List -->
     <div class="card bg-white px-4 py-3 mt-4 border-0 shadow-sm rounded">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="text-muted">Role List</h5>
