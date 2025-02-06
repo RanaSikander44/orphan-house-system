@@ -70,10 +70,13 @@
                 <span id="cross" class="" style="cursor : pointer;"><i class="fa-solid fa-xmark"></i></span>
             </li>
             <li class="avatar">
-                <div class="image"><img src="{{ asset('backend/images/default.jpg') }}" alt="avatar" class="rounded" />
+                <div class="image"
+                    style="width: 100px; height: 100px; border-radius: 0px; object-fit: cover; border: 2px solid #ddd; background-color: #f8f9fa;">
+                    <img src="{{ asset(Auth::user()->profile_photo) }}" alt="avatar" class="rounded"
+                        style="width: 100%; height: 100%; object-fit: cover;" />
                 </div>
                 <div class="name-login">
-                    <h5>{{ auth()->user()->first_name }} {{ auth()->user()->first_name }}</h5>
+                    <h5>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</h5>
                     <a href="#" class="d-flex align-items-center text-decoration-none">
                         <!-- Envelope Icon -->
                         <i class="fa-solid fa-envelope me-2" style="font-size: 1rem; color: #6c757d;"></i>
@@ -88,11 +91,37 @@
                         style="width  : 40%;">sign out</a>
                 </div>
             </li>
+
+            <style>
+                .my-cng {
+                    text-decoration: none;
+                }
+            </style>
+
+            <li class="third-li p-3">
+                <i class="fa-solid fa-user my-lock"></i>
+                <ul class="px-2">
+                    <li class="fw-bold text-capitalize">My Profile</li>
+                    <li>Update your profile information
+                        <a href="{{ route('profile.change') }}" class="mt-2 d-inline-block text-dark my-cng">Update</a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+            <style>
+                .my-cng {
+                    text-decoration: none;
+                }
+            </style>
+
             <li class="third-li">
                 <i class="fa-solid fa-lock my-lock"></i>
                 <ul class="px-2">
                     <li class="fw-bold text-capitalize">security</li>
-                    <li>change your password <span class="my-cng text-dark">change</span></li>
+                    <li>change your password <a href="{{ route('password.change') }}"
+                            class="my-cng text-dark">change</a></li>
                 </ul>
             </li>
         </ul>

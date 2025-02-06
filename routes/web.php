@@ -38,6 +38,7 @@ Route::post('registerSave', [UserController::class, 'register'])->name('register
 Route::view('login', 'login')->name('login');
 Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 
+
 // Dashboard route (protected)
 // Route::get('admin/dashboard', [UserController::class, 'dashboard'])->middleware('auth')->name('admin.Dashboard');
 
@@ -237,5 +238,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/payments', [PaymentController::class, 'index'])->name('payments');
 
 
+
+    Route::get('/password/change', [UserController::class, 'ChangePasswordForm'])->name('password.change');
+    Route::put('/password/update', [UserController::class, 'updatePassword'])->name('password.update');
+    //Update Profile
+    Route::get('/profile/change', [UserController::class, 'UpdateProfileForm'])->name('profile.change');
+    Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 });
 
